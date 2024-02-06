@@ -1,3 +1,13 @@
+#### 1. Introduction:
+- Description of the project and its objectives.
+- Overview of business requirements and expected outcomes.
+
+#### 2. Business Requirements Description:
+- Detailed description of functional and non-functional project requirements.
+- User and business process system functionality requirements.
+- Product requirements (functional and non-functional).
+
+#### 3. Data Requirements:
 ### Специфікація для управління інтернет-магазином
 
 #### 1. Управління товарами:
@@ -39,4 +49,20 @@
 #### 10. API для взаємодії з фронтендом:
 - RESTful API передачі даних між клієнтом і сервером.
 
-Будь ласка, поділіться цією специфікацією з вашим фронтенд-розробником для забезпечення зрозуміння та спільної роботи над проєктом.
+#### 4. Integration Requirements:
+- Description of integration with existing systems, if any.
+- Formats and protocols for interaction with other systems.
+
+#### 5. Interface Requirements:
+- Description of the user interface (GUI, CLI, etc.).
+- Requirements for usability and navigation.
+
+#### 6. Quality Assurance Requirements:
+- Acceptance criteria.
+- Requirements for performance, reliability, security, and others.
+
+#### 7. Documentation Requirements:
+- Requirements for system documentation (user documentation, technical documentation, etc.).
+
+#### 8. Glossary:
+- List of terms and their definitions.
