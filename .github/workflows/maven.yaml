@@ -35,8 +35,11 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag petshop
 
+      - name: LogIn Docker
+      - run: docker login -u ${{ LOGIN_DOCKER }} -p ${{ PASSWORD_DOCKER }}
+
       - name: Push the Docker image to Docker Hub
-        run: docker push docker.io/sanmartial/team38/general:petshop
+        run: docker push sanmartial/team38:petshop
 
 
 #      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
