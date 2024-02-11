@@ -35,8 +35,8 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag petshop
 
-      - name: LogIn Docker
-      - run: docker login -u ${{ LOGIN_DOCKER }} -p ${{ PASSWORD_DOCKER }}
+      - name: Log In Docker
+        run: docker login -u ${{ LOGIN_DOCKER }} -p ${{ PASSWORD_DOCKER }}
 
       - name: Push the Docker image to Docker Hub
         run: docker push sanmartial/team38:petshop
