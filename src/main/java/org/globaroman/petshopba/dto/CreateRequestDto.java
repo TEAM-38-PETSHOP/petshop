@@ -1,4 +1,4 @@
-package org.globaroman.petshopba;
+package org.globaroman.petshopba.dto;
 
 import lombok.Data;
 

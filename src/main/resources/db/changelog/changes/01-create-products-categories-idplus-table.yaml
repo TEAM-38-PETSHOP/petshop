@@ -1,0 +1,123 @@
+databaseChangeLog:
+  - changeSet:
+      id: createCategoriesTable
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(2055)
+
+  - changeSet:
+      id: createProductsTable
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: brand
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(2055)
+              - column:
+                  name: price
+                  type: DECIMAL(10,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: createProductsCategoriesTable
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: products_categories
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_product_id_categories
+                    references: products(id)
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_category_id_products
+                    references: categories(id)
+
+  - changeSet:
+      id: createAnimalsTable
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: animals
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(2055)
+
+  - changeSet:
+      id: createProductsAnimalsTable
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: products_animals
+            columns:
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_product_id_products_animals
+                    references: products(id)
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_animal_id_products_animals
+                    references: animals(id)
+
