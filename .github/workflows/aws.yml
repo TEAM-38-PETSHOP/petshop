@@ -3,7 +3,8 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches: [ "master" ]
-
+  pull_request:
+    branches: [ "master" ]
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: public.ecr.aws/d6h0o9z3/petshop-api
