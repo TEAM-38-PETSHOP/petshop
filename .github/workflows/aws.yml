@@ -3,8 +3,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: public.ecr.aws/d6h0o9z3/petshop-api
@@ -36,6 +35,9 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+#      - name: Build with Maven
+#        run: mvn -B package --file pom.xml
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
