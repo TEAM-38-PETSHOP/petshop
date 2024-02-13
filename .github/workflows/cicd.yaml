@@ -24,6 +24,7 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Build the Docker image
+
         run: |
           mkdir docker-context
           cp target/*.jar docker-context/application.jar
