@@ -87,8 +87,8 @@ jobs:
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          image: sanmartial/team38:petshop
+          container-name: ${{ env.CONTAINER_NAME }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-          image: sanmartial/team38:petshop
           wait-for-service-stability: true
