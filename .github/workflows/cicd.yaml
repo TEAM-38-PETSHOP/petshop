@@ -24,11 +24,12 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Build the Docker image
-
         run: |
           mkdir docker-context
           cp target/*.jar docker-context/application.jar
-          docker build docker-context --file Dockerfile --tag sanmartial/team38:petshop
+          cd docker-context
+          docker build . --file Dockerfile --tag sanmartial/team38:petshop
+      
 
       - name: Log In Docker
         run: docker login -u ${{ secrets.LOGIN_DOCKER }} -p ${{ secrets.PASSWORD_DOCKER }}
