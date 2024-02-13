@@ -1,26 +1,56 @@
-name: Deploy to Amazon ECS
+name: Java CI/CD
 
 on:
   push:
     branches: [ "master" ]
-#  pull_request:
-#    branches: [ "master" ]
-env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: public.ecr.aws/d6h0o9z3/petshop-api
-  ECS_SERVICE: arn:aws:ecs:us-east-1:211125647916:service/PetShopClasterV2/PetShopServiceV1
-  ECS_CLUSTER: arn:aws:ecs:us-east-1:211125647916:cluster/PetShopClasterV2
-  ECS_TASK_DEFINITION: ./petshop_taskV1-revision1.json
-  CONTAINER_NAME: petshopContainer
-
-permissions:
-  contents: read
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag sanmartial/team38:petshop
+
+      - name: Log In Docker
+        run: docker login -u ${{ secrets.LOGIN_DOCKER }} -p ${{ secrets.PASSWORD_DOCKER }}
+
+      - name: Push the Docker image to Docker Hub
+        run: docker push sanmartial/team38:petshop
+
+  deploy:
+    name: Deploy to Amazon ECS
+    on:
+      push:
+        branches: [ "master" ]
     environment: production
+
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-1
+      ECR_REPOSITORY: public.ecr.aws/d6h0o9z3/petshop-api
+      ECS_SERVICE: arn:aws:ecs:us-east-1:211125647916:service/PetShopClasterV2/PetShopServiceV1
+      ECS_CLUSTER: arn:aws:ecs:us-east-1:211125647916:cluster/PetShopClasterV2
+      ECS_TASK_DEFINITION: ./petshop_taskV1-revision1.json
+      CONTAINER_NAME: petshopContainer
+
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
