@@ -8,4 +8,6 @@ public interface AnimalService {
     ResponseAnimalDto create(CreateAnimalRequestDto requestDto);
 
     List<ResponseAnimalDto> getAll();
+
+    ResponseAnimalDto getAnimalById(Long id);
 }
