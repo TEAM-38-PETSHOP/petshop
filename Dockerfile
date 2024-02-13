@@ -29,7 +29,7 @@ COPY . /tmp/
 RUN mvn -B package --file /tmp/pom.xml
 
 # Тепер створюємо новий образ, використовуючи лише JRE
-FROM openjdk:17-jre-slim
+FROM openjdk:17
 
 # Копіюємо скомпільований JAR файл з попереднього етапу в новий образ
 COPY --from=builder /tmp/target/*.jar /app/application.jar
