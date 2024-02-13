@@ -3,8 +3,8 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: public.ecr.aws/d6h0o9z3/petshop-api
@@ -44,7 +44,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
 
         run: |
-          mvn -B package --file pom.xml
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_WORKSPACE/output.txt
