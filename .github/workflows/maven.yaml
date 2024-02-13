@@ -1,0 +1,56 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag sanmartial/team38:petshop
+
+      - name: Log In Docker
+        run: docker login -u ${{ secrets.LOGIN_DOCKER }} -p ${{ secrets.PASSWORD_DOCKER }}
+
+      - name: Push the Docker image to Docker Hub
+        run: docker push sanmartial/team38:petshop
+
+
+
+#      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+#  Це коментар, який пояснює, що ця частина вашого конфігураційного файлу GitLab CI/CD є необов'язковою,
+#  тобто вона не потрібна для виконання основних функцій вашого CI/CD процесу. У цьому випадку ця частина
+#  налаштовує відправку повного графа залежностей Maven до GitHub, щоб поліпшити якість оповіщень Dependabot
+#  для цього репозиторію.
+#
+#  Тобто, якщо ви використовуєте Dependabot для виявлення проблем з безпекою в залежностях вашого проекту
+#  і вам цікаво покращити якість цих оповіщень, то ви можете використати цей крок. Однак, якщо ви не використовуєте
+#  Dependabot або не цікавитеся покращенням якості оповіщень, ви можете проігнорувати цей крок або вилучити його з
+#  вашого конфігураційного файлу.
+#      - name: Update dependency graph
+#        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
