@@ -34,9 +34,6 @@ jobs:
 
   deploy:
     name: Deploy to Amazon ECS
-    on:
-      push:
-        branches: [ "master" ]
     environment: production
 
     runs-on: ubuntu-latest
