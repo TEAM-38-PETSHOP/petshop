@@ -3,7 +3,7 @@ package org.globaroman.petshopba.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
-import org.globaroman.petshopba.dto.category.ResponceCategoryDto;
+import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.CategoryMapper;
 import org.globaroman.petshopba.model.Category;
@@ -19,26 +19,26 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public ResponceCategoryDto create(CreateRequestCategoryDto requestCategory) {
+    public ResponseCategoryDto create(CreateRequestCategoryDto requestCategory) {
         Category category = categoryMapper.toModel(requestCategory);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
-    public List<ResponceCategoryDto> getAll() {
+    public List<ResponseCategoryDto> getAll() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
 
     @Override
-    public ResponceCategoryDto getById(Long id) {
+    public ResponseCategoryDto getById(Long id) {
         Category category = getCategoryFromDb(id);
         return categoryMapper.toDto(category);
     }
 
     @Override
-    public ResponceCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto) {
+    public ResponseCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto) {
         Category category = getCategoryFromDb(id);
         Category updateCategory = categoryMapper.toUpdate(requestCategoryDto, category);
 

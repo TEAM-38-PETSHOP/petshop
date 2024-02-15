@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponceCategoryDto implements Serializable {
+public class ResponseCategoryDto implements Serializable {
     private Long id;
     private String name;
     private String description;
