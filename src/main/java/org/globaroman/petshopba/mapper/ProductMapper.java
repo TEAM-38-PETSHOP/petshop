@@ -9,12 +9,11 @@ import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
 import org.mapstruct.AfterMapping;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@SuppressWarnings("unmappedTargetProperties")
 @Mapper(config = MapperConfig.class)
 public interface ProductMapper {
 
@@ -25,9 +24,10 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     Product toModel(CreateRequestProductDto createRequestProductDto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Product partialUpdate(CreateRequestProductDto createRequestProductDto,
-                          @MappingTarget Product product);
+    @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "animals", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    Product toUpdate(CreateRequestProductDto requestProductDto, @MappingTarget Product product);
 
     @AfterMapping
     default void setCategories(

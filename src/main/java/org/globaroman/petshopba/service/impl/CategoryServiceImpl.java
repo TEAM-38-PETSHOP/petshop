@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
 import org.globaroman.petshopba.dto.category.ResponceCategoryDto;
+import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.CategoryMapper;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.repository.CategoryRepository;
@@ -28,5 +29,30 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public ResponceCategoryDto getById(Long id) {
+        Category category = getCategoryFromDb(id);
+        return categoryMapper.toDto(category);
+    }
+
+    @Override
+    public ResponceCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto) {
+        Category category = getCategoryFromDb(id);
+        Category updateCategory = categoryMapper.toUpdate(requestCategoryDto, category);
+
+        return categoryMapper.toDto(categoryRepository.save(updateCategory));
+    }
+
+    @Override
+    public void delete(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
+    private Category getCategoryFromDb(Long id) {
+        return categoryRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundCustomException("Can not find category with id: " + id)
+        );
     }
 }

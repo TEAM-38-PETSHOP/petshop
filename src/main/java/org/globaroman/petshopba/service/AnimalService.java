@@ -10,4 +10,8 @@ public interface AnimalService {
     List<ResponseAnimalDto> getAll();
 
     ResponseAnimalDto getAnimalById(Long id);
+
+    ResponseAnimalDto update(Long id, CreateAnimalRequestDto requestDto);
+
+    void delete(Long id);
 }

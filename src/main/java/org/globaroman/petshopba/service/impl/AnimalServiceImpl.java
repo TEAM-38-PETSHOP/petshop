@@ -33,10 +33,25 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public ResponseAnimalDto getAnimalById(Long id) {
-        Animal animal = animalRepository.findById(id).orElseThrow(
+        Animal animal = getAnimalFromDb(id);
+        return animalMapper.toDto(animal);
+    }
+
+    @Override
+    public ResponseAnimalDto update(Long id, CreateAnimalRequestDto requestDto) {
+        Animal animal = getAnimalFromDb(id);
+        Animal updateAnimal = animalMapper.toUpdate(requestDto, animal);
+        return animalMapper.toDto(animalRepository.save(updateAnimal));
+    }
+
+    @Override
+    public void delete(Long id) {
+        animalRepository.deleteById(id);
+    }
+
+    private Animal getAnimalFromDb(Long id) {
+        return animalRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException("Can not find animal with id: " + id)
         );
-
-        return animalMapper.toDto(animal);
     }
 }

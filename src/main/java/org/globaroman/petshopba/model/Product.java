@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +37,7 @@ public class Product {
             name = "products_animals",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "animal_id"))
+    @JsonIgnore
     private List<Animal> animals;
 
     @ManyToMany
@@ -43,5 +45,6 @@ public class Product {
             name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JsonIgnore
     private List<Category> categories;
 }

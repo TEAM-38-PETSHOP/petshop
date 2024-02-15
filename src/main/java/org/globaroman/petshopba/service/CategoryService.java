@@ -8,4 +8,10 @@ public interface CategoryService {
     ResponceCategoryDto create(CreateRequestCategoryDto requestCategory);
 
     List<ResponceCategoryDto> getAll();
+
+    ResponceCategoryDto getById(Long id);
+
+    ResponceCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto);
+
+    void delete(Long id);
 }
