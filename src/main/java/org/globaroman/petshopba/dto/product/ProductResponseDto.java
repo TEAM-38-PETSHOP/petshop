@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 import org.globaroman.petshopba.dto.animal.ResponseAnimalDto;
-import org.globaroman.petshopba.dto.category.ResponceCategoryDto;
+import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,5 +18,5 @@ public class ProductResponseDto implements Serializable {
     private BigDecimal price;
     private String image;
     private List<ResponseAnimalDto> animals;
-    private List<ResponceCategoryDto> categories;
+    private List<ResponseCategoryDto> categories;
 }

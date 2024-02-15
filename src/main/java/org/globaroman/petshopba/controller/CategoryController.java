@@ -3,7 +3,7 @@ package org.globaroman.petshopba.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
-import org.globaroman.petshopba.dto.category.ResponceCategoryDto;
+import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,25 +25,25 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponceCategoryDto create(@RequestBody CreateRequestCategoryDto requestCategory) {
+    public ResponseCategoryDto create(@RequestBody CreateRequestCategoryDto requestCategory) {
         return categoryService.create(requestCategory);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponceCategoryDto> getAllCategory() {
+    public List<ResponseCategoryDto> getAllCategory() {
         return categoryService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponceCategoryDto getCategoryById(@PathVariable Long id) {
+    public ResponseCategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
 
     @PatchMapping("/{id}")
 
-    public ResponceCategoryDto updateCategoryById(
+    public ResponseCategoryDto updateCategoryById(
             @PathVariable Long id,
             @RequestBody CreateRequestCategoryDto requestCategoryDto) {
         return categoryService.update(id, requestCategoryDto);

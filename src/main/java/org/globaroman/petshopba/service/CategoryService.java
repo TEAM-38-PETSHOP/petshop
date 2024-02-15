@@ -2,16 +2,16 @@ package org.globaroman.petshopba.service;
 
 import java.util.List;
 import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
-import org.globaroman.petshopba.dto.category.ResponceCategoryDto;
+import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 
 public interface CategoryService {
-    ResponceCategoryDto create(CreateRequestCategoryDto requestCategory);
+    ResponseCategoryDto create(CreateRequestCategoryDto requestCategory);
 
-    List<ResponceCategoryDto> getAll();
+    List<ResponseCategoryDto> getAll();
 
-    ResponceCategoryDto getById(Long id);
+    ResponseCategoryDto getById(Long id);
 
-    ResponceCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto);
+    ResponseCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto);
 
     void delete(Long id);
 }
