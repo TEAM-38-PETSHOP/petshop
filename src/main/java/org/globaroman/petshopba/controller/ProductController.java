@@ -1,5 +1,7 @@
 package org.globaroman.petshopba.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Product management",
+        description = "endpoint for product management")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -25,24 +29,32 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a new product",
+            description = "You can create a new product")
     public ProductResponseDto create(@RequestBody CreateRequestProductDto requestProductDto) {
         return productService.create(requestProductDto);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all products",
+            description = "You can get all products")
     public List<ProductResponseDto> getAllProducts() {
         return productService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get a product by its ID",
+            description = "You can get a product by its ID")
     public ProductResponseDto getProductById(@PathVariable Long id) {
         return productService.getById(id);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update product",
+            description = "You can update a product")
     public ProductResponseDto updateProductById(
             @PathVariable Long id,
             @RequestBody CreateRequestProductDto requestProductDto) {
@@ -51,6 +63,8 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete product",
+            description = "You can delete a product")
     public void deleteProductById(@PathVariable Long id) {
         productService.delete(id);
     }

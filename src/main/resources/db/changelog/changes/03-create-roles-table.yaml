@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_roles_to_user_table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: enum('USER','ADMIN')
+                  constraints:
+                    nullable: false
+                    unique: true
