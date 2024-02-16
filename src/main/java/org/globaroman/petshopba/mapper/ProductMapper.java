@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.mapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.globaroman.petshopba.config.MapperConfig;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
@@ -12,8 +13,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
-@SuppressWarnings("unmappedTargetProperties")
 @Mapper(config = MapperConfig.class)
 public interface ProductMapper {
 
@@ -49,5 +50,17 @@ public interface ProductMapper {
                 .map(Animal::new)
                 .collect(Collectors.toList());
         product.setAnimals(animals);
+    }
+
+    @Named("productFromId")
+    default Long productFromId(Product product) {
+        return Optional.ofNullable(product)
+                .map(Product::getId)
+                .orElse(null);
+    }
+
+    @Named("getNameFromProduct")
+    default String getNameFromProduct(Product product) {
+        return product != null ? product.getName() : null;
     }
 }

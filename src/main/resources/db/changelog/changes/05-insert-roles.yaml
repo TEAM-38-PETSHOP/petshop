@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_roles
+      author: org.globaroman
+
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role
+                  value: 'USER'
+
+  - changeSet:
+      id: insert_admin_role
+      author: org.globaroman
+
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role
+                  value: 'ADMIN'
