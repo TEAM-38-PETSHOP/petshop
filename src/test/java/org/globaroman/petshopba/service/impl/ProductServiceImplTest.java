@@ -13,6 +13,7 @@ import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.ProductRepository;
+import org.globaroman.petshopba.service.S3Uploader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class ProductServiceImplTest {
     @Mock
     private ProductMapper productMapper;
 
+    @Mock
+    private S3Uploader s3Uploader;
+
     @InjectMocks
     private ProductServiceImpl productService;
 
@@ -44,8 +48,9 @@ class ProductServiceImplTest {
         Mockito.when(productRepository.save(product)).thenReturn(product);
 
         ProductResponseDto responseDto = getResponseDto();
-        System.out.println(responseDto);
         Mockito.when(productMapper.toDto(product)).thenReturn(responseDto);
+        Mockito.when(s3Uploader.getPublicUrl(Mockito.anyString(),
+                Mockito.anyString())).thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.create(requestProductDto);
 

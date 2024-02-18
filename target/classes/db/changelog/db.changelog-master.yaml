@@ -17,3 +17,5 @@ databaseChangeLog:
       file: /db/changelog/changes/08-create-cart-items-table.yaml
   - include:
       file: /db/changelog/changes/09-add-foreign-key-to-cart-item-table.yaml
+  - include:
+      file: /db/changelog/changes/10-change-field-image-product-table.yaml

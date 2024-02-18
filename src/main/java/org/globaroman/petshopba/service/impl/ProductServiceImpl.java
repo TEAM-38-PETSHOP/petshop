@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.service.impl;
 
 import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
@@ -9,6 +10,7 @@ import org.globaroman.petshopba.mapper.ProductMapper;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.ProductRepository;
 import org.globaroman.petshopba.service.ProductService;
+import org.globaroman.petshopba.service.S3Uploader;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +19,25 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final S3Uploader s3Uploader;
 
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
         Product product = productMapper.toModel(requestProductDto);
+        String urlImage = s3Uploader.getPublicUrl(
+                requestProductDto.getImage(),
+                getStringObjectKey(requestProductDto));
+        product.setImage(urlImage);
         return productMapper.toDto(productRepository.save(product));
+    }
+
+    private String getStringObjectKey(CreateRequestProductDto requestProductDto) {
+        Random random = new Random();
+        int nameImage = random.nextInt(10000000);
+        String brand = requestProductDto.getBrand();
+        String nameProduct = requestProductDto.getName();
+
+        return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
     }
 
     @Override

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: changeFieldImage
+      author: org.globaroman
+      changes:
+        - modifyDataType:
+            tableName: products
+            columnName: image
+            newDataType: varchar(3000)
+
