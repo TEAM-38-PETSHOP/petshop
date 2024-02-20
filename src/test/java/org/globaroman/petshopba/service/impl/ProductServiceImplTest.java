@@ -93,6 +93,41 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Get all products by category Id -> get List<ResponseDto> like successful result")
+    void getAllProductsByCategoryId_Product_ShouldReturnListWithAllResponseDtoByExistCategory() {
+        Product product = getProduct();
+        List<Product> products = new ArrayList<>();
+        products.add(product);
+
+        Mockito.when(productRepository.findAllByCategories_Id(Mockito.anyLong()))
+                .thenReturn(products);
+        Mockito.when(productMapper.toDto(Mockito.any(Product.class)))
+                .thenReturn(new ProductResponseDto());
+
+        List<ProductResponseDto> result = productService.getAllProductsByCategoryId(1L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+    }
+
+    @Test
+    @DisplayName("Get all products by category Id -> get List<ResponseDto> like successful result")
+    void getAllProductsByCategoryId_Product_ShouldReturnListWithAllResponseDtoByExistAnimal() {
+        Product product = getProduct();
+        List<Product> products = new ArrayList<>();
+        products.add(product);
+
+        Mockito.when(productRepository.findAllByAnimals_Id(Mockito.anyLong())).thenReturn(products);
+        Mockito.when(productMapper.toDto(Mockito.any(Product.class)))
+                .thenReturn(new ProductResponseDto());
+
+        List<ProductResponseDto> result = productService.getAllProductsByAnimalId(1L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+    }
+
+    @Test
     @DisplayName("Update the exist product -> Update and get ResponseDto as successful result")
     void update_Product_ShouldUpdateExistProductAndReturnResponseDto() {
         CreateRequestProductDto requestProductDto = getRequestDto();

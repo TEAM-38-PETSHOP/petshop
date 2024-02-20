@@ -39,13 +39,13 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             PutObjectRequest request = new PutObjectRequest(bucketName, objectKey, new File(path));
             s3Client.putObject(request);
 
-            s3Client.setObjectAcl(bucketName, objectKey, CannedAccessControlList.PublicRead);
+            s3Client.setObjectAcl(bucketName, objectKey, CannedAccessControlList.PublicReadWrite);
 
             GeneratePresignedUrlRequest generatePresignedUrlRequest =
                     new GeneratePresignedUrlRequest(bucketName, objectKey);
             URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
 
-            return url.toString();
+            return "https://" + url.getHost() + url.getPath();
 
         } catch (SdkClientException e) {
             throw new DataProcessingException("Can not load image: " + path + " to S3", e);
@@ -53,8 +53,8 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     public String deleteImage(String url) {
-        String[] splitUrl = url.split("\\?");
-        String[] keyImage = splitUrl[0].split("/");
+
+        String[] keyImage = url.split("/");
         System.out.println(keyImage[3]);
         System.out.println(bucketName);
         try {
@@ -64,7 +64,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             return "Image " + keyImage[3] + "was deleting saccessful";
         } catch (AmazonS3Exception e) {
             throw new DataProcessingException(
-                    "Can not delete image: " + splitUrl[0] + " from S3", e);
+                    "Can not delete image: " + url + " from S3", e);
         }
     }
 
