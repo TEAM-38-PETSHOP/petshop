@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.model;
 
+import java.math.BigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,19 +13,20 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(name = "cart_items")
+@Table(name = "order_items")
 @Data
-@EqualsAndHashCode(exclude = {"product","shoppingCart"})
-public class CartItem {
+@EqualsAndHashCode(exclude = {"order", "product"})
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "shopping_cart_id")
-    private ShoppingCart shoppingCart;
+    @JoinColumn(name = "order_id")
+    private Order order;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
     private int quantity;
+    private BigDecimal price;
 }

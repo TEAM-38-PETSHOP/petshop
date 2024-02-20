@@ -55,7 +55,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: image
-                  type: VARCHAR(255)
+                  type: VARCHAR(3000)
                   constraints:
                     nullable: false
 

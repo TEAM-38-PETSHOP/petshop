@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-key-order-items
+      author: org.globaroman
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: order_items
+            constraintName: fk_order_items_order
+            referencedTableName: orders
+            baseColumnNames:
+              - order_id
+            referencedColumnNames:
+              - id
+            onDelete: CASCADE
+

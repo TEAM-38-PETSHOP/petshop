@@ -13,7 +13,7 @@ import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.ProductRepository;
-import org.globaroman.petshopba.service.S3Uploader;
+import org.globaroman.petshopba.service.AmazonS3Service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class ProductServiceImplTest {
     private ProductMapper productMapper;
 
     @Mock
-    private S3Uploader s3Uploader;
+    private AmazonS3Service s3Uploader;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -49,7 +49,7 @@ class ProductServiceImplTest {
 
         ProductResponseDto responseDto = getResponseDto();
         Mockito.when(productMapper.toDto(product)).thenReturn(responseDto);
-        Mockito.when(s3Uploader.getPublicUrl(Mockito.anyString(),
+        Mockito.when(s3Uploader.uploadImage(Mockito.anyString(),
                 Mockito.anyString())).thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.create(requestProductDto);

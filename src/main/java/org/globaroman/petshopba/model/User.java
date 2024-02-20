@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,9 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +42,9 @@ public class User implements UserDetails {
     private String firstName;
     @Column(name = "last_name",nullable = false)
     private String lastName;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
     @Column(name = "shipping_address")
     private String shippingAddress;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -44,6 +52,9 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Pet> pets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
