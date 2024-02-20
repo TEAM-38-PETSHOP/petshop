@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-order_items-table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: order_items
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_orders_products
+                    references: products(id)
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    nullable: false
+                    checkConstraint: quantity > 0
+              - column:
+                  name: price
+                  type: DECIMAL(10, 2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+
+

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
-      author: org.globaroman
+      id: create-orders-table
+      author: com.globaroman
       changes:
         - createTable:
-            tableName: users
+            tableName: orders
             columns:
               - column:
                   name: id
@@ -12,34 +12,31 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    nullable: false
               - column:
-                  name: phone
-                  type: varchar(255)
-              - column:
-                  name: email
-                  type: varchar(255)
+                  name: user_id
+                  type: bigint
                   constraints:
+                    foreignKeyName: fk_orders_user
+                    references: users(id)
                     nullable: false
-                    unique: true
               - column:
-                  name: password
-                  type: varchar(255)
+                  name: status
+                  type: enum('PROCESSING','PENDING','SHIPPED','DELIVERED','COMPLETED','CANCELLED','REFUNDED')
                   constraints:
                     nullable: false
               - column:
-                  name: first_name
-                  type: varchar(255)
+                  name: total
+                  type: DECIMAL(10, 2)
+                  defaultValueNumeric: 0.00
                   constraints:
                     nullable: false
               - column:
-                  name: last_name
-                  type: varchar(255)
+                  name: order_date
+                  type: TIMESTAMP
                   constraints:
                     nullable: false
-              - column:
-                  name: birth_date
-                  type: DATE
               - column:
                   name: shipping_address
-                  type: varchar(255)
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
