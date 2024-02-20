@@ -33,7 +33,7 @@ class ProductServiceImplTest {
     private ProductMapper productMapper;
 
     @Mock
-    private AmazonS3Service s3Uploader;
+    private AmazonS3Service amazonS3Service;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -49,7 +49,7 @@ class ProductServiceImplTest {
 
         ProductResponseDto responseDto = getResponseDto();
         Mockito.when(productMapper.toDto(product)).thenReturn(responseDto);
-        Mockito.when(s3Uploader.uploadImage(Mockito.anyString(),
+        Mockito.when(amazonS3Service.uploadImage(Mockito.anyString(),
                 Mockito.anyString())).thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.create(requestProductDto);
@@ -119,7 +119,9 @@ class ProductServiceImplTest {
     @DisplayName("Delete the exist product -> get successful result")
     void delete_Product_ShouldDeleteExistProductAsResponseDto() {
         Product product = getProduct();
-
+        Mockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        Mockito.when(amazonS3Service.deleteImage(Mockito.anyString()))
+                .thenReturn(Mockito.anyString());
         productService.delete(product.getId());
 
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(product.getId());
