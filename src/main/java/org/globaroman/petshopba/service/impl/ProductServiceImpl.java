@@ -31,15 +31,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(productRepository.save(product));
     }
 
-    private String getStringObjectKey(CreateRequestProductDto requestProductDto) {
-        Random random = new Random();
-        int nameImage = random.nextInt(10000000);
-        String brand = requestProductDto.getBrand();
-        String nameProduct = requestProductDto.getName();
-
-        return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
-    }
-
     @Override
     public List<ProductResponseDto> getAll() {
 
@@ -52,6 +43,20 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto getById(Long id) {
         Product product = getProductFromDb(id);
         return productMapper.toDto(product);
+    }
+
+    @Override
+    public List<ProductResponseDto> getAllProductsByCategoryId(Long id) {
+        return productRepository.findAllByCategories_Id(id).stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDto> getAllProductsByAnimalId(Long id) {
+        return productRepository.findAllByAnimals_Id(id).stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -73,5 +78,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException("can not find product with id: " + id)
         );
+    }
+
+    private String getStringObjectKey(CreateRequestProductDto requestProductDto) {
+        Random random = new Random();
+        int nameImage = random.nextInt(10000000);
+        String brand = requestProductDto.getBrand();
+        String nameProduct = requestProductDto.getName();
+
+        return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
     }
 }

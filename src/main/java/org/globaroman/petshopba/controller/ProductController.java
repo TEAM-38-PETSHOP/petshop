@@ -51,6 +51,22 @@ public class ProductController {
         return productService.getById(id);
     }
 
+    @GetMapping("/categories/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all products by category ID",
+            description = "You can get all products by category ID")
+    public List<ProductResponseDto> getProductsByCategoryId(@PathVariable Long id) {
+        return productService.getAllProductsByCategoryId(id);
+    }
+
+    @GetMapping("/animals/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all products by animal ID",
+            description = "You can get all products by animal ID")
+    public List<ProductResponseDto> getProductsByAnimalId(@PathVariable Long id) {
+        return productService.getAllProductsByAnimalId(id);
+    }
+
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update product",
