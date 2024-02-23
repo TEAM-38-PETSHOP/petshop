@@ -20,12 +20,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final AmazonS3Service amazonS3Service;
+    private final UploadImageServiceImpl upload;
 
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
         Product product = productMapper.toModel(requestProductDto);
-        String urlImage = amazonS3Service.uploadImage(
-                requestProductDto.getImage(),
+
+        String urlImage = amazonS3Service.uploadImageUrl(
+                upload.downloadImage(requestProductDto.getImage()),
                 getStringObjectKey(requestProductDto));
         product.setImage(urlImage);
         return productMapper.toDto(productRepository.save(product));

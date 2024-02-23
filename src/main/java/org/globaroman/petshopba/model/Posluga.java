@@ -6,33 +6,30 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "animals")
-public class Animal {
+@Table(name = "posluga")
+@Data
+public class Posluga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "number_list", nullable = false)
+    private Long numberList;
     private String name;
     private String description;
-    @ManyToMany(mappedBy = "animals")
-    private List<Product> products;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "animal")
-    private List<Posluga> poslugas;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "posluga")
+    List<TypePosluga> types;
 
-    public Animal(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "animal_id")
+    private Animal animal;
 }

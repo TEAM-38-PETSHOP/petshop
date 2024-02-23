@@ -5,12 +5,15 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.exception.DataProcessingException;
@@ -30,6 +33,34 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Value("${AWS_BUCKET}")
     private String bucketName;
+
+    @Override
+    public String uploadImageUrl(InputStream inputStream, String objectKey) {
+        try {
+            AmazonS3 s3Client = getS3Client();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(Headers.CONTENT_TYPE);
+
+            PutObjectRequest request = new PutObjectRequest(
+                    bucketName,
+                    objectKey,
+                    inputStream,
+                    metadata);
+
+            s3Client.putObject(request);
+
+            s3Client.setObjectAcl(bucketName, objectKey, CannedAccessControlList.PublicReadWrite);
+
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(bucketName, objectKey);
+            URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+
+            return "https://" + url.getHost() + url.getPath();
+
+        } catch (SdkClientException e) {
+            throw new DataProcessingException("Can not load image to S3", e);
+        }
+    }
 
     @Override
     public String uploadImage(String path, String objectKey) {

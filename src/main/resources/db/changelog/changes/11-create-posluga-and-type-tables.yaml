@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_posluga_table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: posluga
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number_list
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(1055)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(4055)
+              - column:
+                  name: animal_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_posluga_animal
+                    references: animals(id)
+
+  - changeSet:
+      id: create_type_posluga_table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: type_posluga
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number_list
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: DECIMAL(10,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: posluga_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_type_posluga_posluga
+                    references: posluga(id)
+
