@@ -1,5 +1,7 @@
 package org.globaroman.petshopba.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ class ProductServiceImplTest {
     @Mock
     private AmazonS3Service amazonS3Service;
 
+    @Mock
+    private UploadImageServiceImpl upload;
+
     @InjectMocks
     private ProductServiceImpl productService;
 
@@ -43,13 +48,16 @@ class ProductServiceImplTest {
     void create_Product_ShouldCreateNewProductAndReturnResponseDto() {
         CreateRequestProductDto requestProductDto = getRequestDto();
         Product product = getProduct();
+        byte[] data = "https://url/image.jpg".getBytes();
+        InputStream inputStream = new ByteArrayInputStream(data);
 
+        Mockito.when(upload.downloadImage(Mockito.anyString())).thenReturn(inputStream);
         Mockito.when(productMapper.toModel(requestProductDto)).thenReturn(product);
         Mockito.when(productRepository.save(product)).thenReturn(product);
 
         ProductResponseDto responseDto = getResponseDto();
         Mockito.when(productMapper.toDto(product)).thenReturn(responseDto);
-        Mockito.when(amazonS3Service.uploadImage(Mockito.anyString(),
+        Mockito.when(amazonS3Service.uploadImageUrl(Mockito.any(InputStream.class),
                 Mockito.anyString())).thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.create(requestProductDto);

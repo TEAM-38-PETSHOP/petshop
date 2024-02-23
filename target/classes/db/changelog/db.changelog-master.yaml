@@ -19,3 +19,5 @@ databaseChangeLog:
       file: /db/changelog/changes/09-add-foreign-key-order-items.yaml
   - include:
       file: /db/changelog/changes/10-create-pets-table.yaml
+  - include:
+      file: /db/changelog/changes/11-create-posluga-and-type-tables.yaml
