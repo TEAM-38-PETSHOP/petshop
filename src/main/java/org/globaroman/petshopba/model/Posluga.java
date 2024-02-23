@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.util.List;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.Data;
 
 @Entity
@@ -27,7 +27,7 @@ public class Posluga {
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "posluga")
-    List<TypePosluga> types;
+    private List<TypePosluga> types;
 
     @ManyToOne
     @JoinColumn(name = "animal_id")
