@@ -8,4 +8,6 @@ public interface AmazonS3Service {
     String uploadImageUrl(InputStream inputStream, String objectKey);
 
     String deleteImage(String image);
+
+    InputStream downloadS3(String path);
 }

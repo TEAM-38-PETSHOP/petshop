@@ -20,5 +20,6 @@ public interface AnimalMapper {
 
     @Mapping(target = "id",ignore = true)
     @Mapping(target = "products",ignore = true)
+    @Mapping(target = "poslugas", ignore = true)
     Animal toUpdate(CreateAnimalRequestDto requestDto, @MappingTarget Animal animal);
 }

@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -33,6 +34,19 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Value("${AWS_BUCKET}")
     private String bucketName;
+
+    @Override
+    public InputStream downloadS3(String path) {
+        AmazonS3 s3Client = getS3Client();
+
+        S3Object s3ClientObject = s3Client.getObject(bucketName, path);
+
+        try {
+            return s3ClientObject.getObjectContent();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can not download file" + path, e);
+        }
+    }
 
     @Override
     public String uploadImageUrl(InputStream inputStream, String objectKey) {

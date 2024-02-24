@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.user;
 
 public enum Status {
     PROCESSING,

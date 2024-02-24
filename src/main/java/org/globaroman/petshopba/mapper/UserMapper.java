@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.globaroman.petshopba.config.MapperConfig;
 import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
-import org.globaroman.petshopba.model.User;
+import org.globaroman.petshopba.model.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 

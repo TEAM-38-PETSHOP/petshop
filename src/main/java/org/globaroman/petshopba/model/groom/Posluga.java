@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.groom;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,9 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Data;
+import org.globaroman.petshopba.model.Animal;
 
 @Entity
 @Table(name = "posluga")
@@ -22,6 +24,7 @@ public class Posluga {
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "number_list", nullable = false)
+    @OrderBy
     private Long numberList;
     private String name;
     private String description;

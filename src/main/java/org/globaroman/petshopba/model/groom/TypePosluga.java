@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.groom;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
