@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

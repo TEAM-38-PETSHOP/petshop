@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.order;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.globaroman.petshopba.model.user.Status;
+import org.globaroman.petshopba.model.user.User;
 
 @Entity
 @Table(name = "orders")
