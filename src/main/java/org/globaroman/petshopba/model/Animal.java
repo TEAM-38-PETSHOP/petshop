@@ -13,7 +13,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.globaroman.petshopba.model.groom.Posluga;
+import org.globaroman.petshopba.model.groom.PetService;
 
 @Data
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public class Animal {
     private List<Product> products;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "animal")
-    private List<Posluga> poslugas;
+    private List<PetService> poslugas;
 
     public Animal(Long id) {
         this.id = id;

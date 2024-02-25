@@ -57,10 +57,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: price
-                  type: DECIMAL(10,2)
-                  defaultValueNumeric: 0.00
-                  constraints:
-                    nullable: false
+                  type: VARCHAR(255)
               - column:
                   name: posluga_id
                   type: BIGINT

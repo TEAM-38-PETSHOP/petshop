@@ -12,13 +12,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.globaroman.petshopba.model.Animal;
 
 @Entity
 @Table(name = "posluga")
 @Data
-public class Posluga {
+@AllArgsConstructor
+@NoArgsConstructor
+public class PetService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,9 +34,13 @@ public class Posluga {
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "posluga")
-    private List<TypePosluga> types;
+    private List<TypePetService> types;
 
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
+
+    public PetService(Long id) {
+        this.id = id;
+    }
 }
