@@ -8,13 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.Data;
 
 @Entity
 @Table(name = "type_posluga")
 @Data
-public class TypePosluga {
+public class TypePetService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,9 +21,9 @@ public class TypePosluga {
     @Column(name = "number_list", nullable = false)
     private Long numberList;
     private String name;
-    private BigDecimal price;
+    private String price;
 
     @ManyToOne
     @JoinColumn(name = "posluga_id")
-    private Posluga posluga;
+    private PetService posluga;
 }

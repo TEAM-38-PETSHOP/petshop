@@ -3,9 +3,9 @@ package org.globaroman.petshopba.dto.grooming;
 import lombok.Data;
 
 @Data
-public class CreatePoslugaRequestDto {
+public class CreateTypeServiceRequestDto {
     private Long numberList;
     private String name;
-    private String description;
-    private Long animalId;
+    private String price;
+    private Long poslugaId;
 }

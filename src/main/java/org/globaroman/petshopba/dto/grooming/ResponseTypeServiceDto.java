@@ -3,10 +3,10 @@ package org.globaroman.petshopba.dto.grooming;
 import lombok.Data;
 
 @Data
-public class ResponsePoslugaDto {
+public class ResponseTypeServiceDto {
     private Long id;
+    private Long poslugaId;
     private Long numberList;
     private String name;
-    private String description;
-    private Long animalId;
+    private String price;
 }
