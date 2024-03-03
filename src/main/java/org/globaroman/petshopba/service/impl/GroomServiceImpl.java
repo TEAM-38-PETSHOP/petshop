@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.dto.grooming.CreatePetServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.CreateTypeServiceRequestDto;
-import org.globaroman.petshopba.dto.grooming.ResponseTy;
 import org.globaroman.petshopba.dto.grooming.ResponseTypeServiceDto;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -35,7 +35,61 @@ public class GroomServiceImpl implements GroomService {
     private final TypeServiceMapper typeServiceMapper;
 
     @Override
-    public List<ResponseTy> getAllSortedNumberList() {
+    public ResponsePetServiceDto createPetService(
+            CreatePetServiceRequestDto requestDto) {
+        PetService petService = petServiceMapper.toModel(requestDto);
+        return petServiceMapper.toDto(petServiceRepository.save(petService));
+    }
+
+    @Override
+    public ResponseTypeServiceDto createTypeService(
+            CreateTypeServiceRequestDto requestDto) {
+        TypePetService typePetService = typeServiceMapper.toModel(requestDto);
+
+        return typeServiceMapper.toDto(typePetServiceRepository.save(typePetService));
+    }
+
+    @Override
+    public ResponsePetServiceDto updatePetService(
+            CreatePetServiceRequestDto requestDto,
+            Long id) {
+        PetService petService = petServiceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundCustomException("Can not find petService with id: " + id)
+        );
+
+        PetService updatePetService = petServiceMapper.toUpdateModel(
+                requestDto,
+                petService);
+        return petServiceMapper.toDto(petServiceRepository.save(updatePetService));
+    }
+
+    @Override
+    public ResponseTypeServiceDto updateTypePetService(
+            CreateTypeServiceRequestDto requestDto,
+            Long id) {
+        TypePetService typePetService = typePetServiceRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundCustomException("Can not find typePetService with id: " + id)
+        );
+
+        TypePetService updateTypeService = typeServiceMapper.toUpdateTypeService(
+                requestDto,
+                typePetService);
+
+        return typeServiceMapper.toDto(typePetServiceRepository.save(updateTypeService));
+    }
+
+    @Override
+    public void deleteServiceById(Long id) {
+        petServiceRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteTypeServiceById(Long id) {
+        typePetServiceRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ResponsePetServiceDto> getAllSortedNumberList() {
         return petServiceRepository.findAllSortedNumberList().stream()
                 .map(petServiceMapper::toDto)
                 .toList();
@@ -84,7 +138,7 @@ public class GroomServiceImpl implements GroomService {
     }
 
     @Override
-    public List<ResponseTy> getAllPetServiceByAnimalId(Long animalId) {
+    public List<ResponsePetServiceDto> getAllPetServiceByAnimalId(Long animalId) {
         return petServiceRepository.findAllByAnimalId(animalId).stream()
                 .map(petServiceMapper::toDto)
                 .toList();
@@ -98,7 +152,7 @@ public class GroomServiceImpl implements GroomService {
     }
 
     @Override
-    public ResponseTy getPetServiceById(Long id) {
+    public ResponsePetServiceDto getPetServiceById(Long id) {
         PetService petService = petServiceRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException("Can not find petService with id:" + id)
         );

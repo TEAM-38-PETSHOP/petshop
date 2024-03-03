@@ -3,7 +3,7 @@ package org.globaroman.petshopba.dto.grooming;
 import lombok.Data;
 
 @Data
-public class ResponseTy {
+public class ResponsePetServiceDto {
     private Long id;
     private Long numberList;
     private String name;

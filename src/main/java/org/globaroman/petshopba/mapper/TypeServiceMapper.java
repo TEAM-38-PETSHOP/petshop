@@ -25,4 +25,7 @@ public interface TypeServiceMapper {
             @MappingTarget TypePetService typePetService) {
         typePetService.setPosluga(new PetService(requestDto.getPoslugaId()));
     }
+
+    @Mapping(target = "id", ignore = true)
+    TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto, @MappingTarget TypePetService typePetService);
 }

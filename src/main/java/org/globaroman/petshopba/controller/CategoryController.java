@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
 import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.service.CategoryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "http://*")
 @Tag(name = "Category management",
         description = "endpoint for category management")
 @RestController
