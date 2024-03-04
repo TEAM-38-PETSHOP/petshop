@@ -32,8 +32,9 @@ public class CartController {
     @Operation(summary = "Add new product - create shopping cart",
             description = "You can create shoppingCart and add new product to your cart")
     public ShoppingCartResponseDto addProductCreateCart(
-            @RequestBody CartItemRequestDto requestDto) {
-        return cartService.addProduct(requestDto);
+            @RequestBody CartItemRequestDto requestDto,
+            Authentication authentication) {
+        return cartService.addProduct(requestDto, authentication);
     }
 
     @PutMapping("cart-items/{cartItemId}")
@@ -42,16 +43,18 @@ public class CartController {
             description = "You can update quantity products into your cart")
     public ShoppingCartResponseDto update(
             @RequestBody CartItemRequestDto requestDto,
-            @PathVariable Long cartItemId) {
-        return cartService.update(cartItemId, requestDto);
+            @PathVariable Long cartItemId,
+            Authentication authentication) {
+        return cartService.update(cartItemId, requestDto, authentication);
     }
 
     @DeleteMapping("cart-items/{cartItemId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete cartItem",
             description = "You can delete your cartItem by its ID from cart")
-    public void delete(@PathVariable Long cartItemId) {
-        cartService.deleteById(cartItemId);
+    public void delete(@PathVariable Long cartItemId,
+                       Authentication authentication) {
+        cartService.deleteById(cartItemId, authentication);
     }
 
     @GetMapping

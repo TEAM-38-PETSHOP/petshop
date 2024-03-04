@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-key-to-cart-items
+      author: org.globaroman
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            constraintName: fk_cart_items_shopping_carts_unique
+            referencedTableName: shopping_carts
+            baseColumnNames:
+              - shopping_cart_id
+            referencedColumnNames:
+              - id
+            onDelete: CASCADE
