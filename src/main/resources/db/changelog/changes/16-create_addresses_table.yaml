@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_addresses_table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: city
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: street
+                  type: VARCHAR(255)
+              - column:
+                  name: building
+                  type: VARCHAR(10)
+              - column:
+                  name: apartment
+                  type: VARCHAR(10)
+              - column:
+                  name: office_post
+                  type: VARCHAR(1055)
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_addresses_orders
+                    references: orders(id)
+  - changeSet:
+      id: add_address_id_to_orders_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: orders
+            columns:
+              - column:
+                  name: address_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_orders_addresses
+                    references: addresses(id)

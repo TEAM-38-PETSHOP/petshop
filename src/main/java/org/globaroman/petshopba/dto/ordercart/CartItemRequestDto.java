@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.dto.cart;
+package org.globaroman.petshopba.dto.ordercart;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

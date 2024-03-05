@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model.order;
+package org.globaroman.petshopba.model.cartorder;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

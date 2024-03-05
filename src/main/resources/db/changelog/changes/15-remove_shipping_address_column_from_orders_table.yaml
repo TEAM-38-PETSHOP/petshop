@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove_shipping_address_column_from_orders_table
+      author: org.globaroman
+      changes:
+        - dropColumn:
+            tableName: orders
+            columnName: shipping_address

@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.cartorder;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.globaroman.petshopba.model.Product;
 
 @Entity
 @Table(name = "cart_items")

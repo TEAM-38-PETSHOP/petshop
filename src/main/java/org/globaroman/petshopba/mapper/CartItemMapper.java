@@ -1,9 +1,9 @@
 package org.globaroman.petshopba.mapper;
 
 import org.globaroman.petshopba.config.MapperConfig;
-import org.globaroman.petshopba.dto.cart.CarItemResponseDto;
-import org.globaroman.petshopba.dto.cart.CartItemRequestDto;
-import org.globaroman.petshopba.model.CartItem;
+import org.globaroman.petshopba.dto.ordercart.CarItemResponseDto;
+import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.model.cartorder.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

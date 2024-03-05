@@ -1,14 +1,14 @@
 package org.globaroman.petshopba.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.globaroman.petshopba.dto.cart.CartItemRequestDto;
-import org.globaroman.petshopba.dto.cart.ShoppingCartResponseDto;
+import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.CartItemMapper;
 import org.globaroman.petshopba.mapper.ShoppingCartMapper;
-import org.globaroman.petshopba.model.CartItem;
 import org.globaroman.petshopba.model.Product;
-import org.globaroman.petshopba.model.ShoppingCart;
+import org.globaroman.petshopba.model.cartorder.CartItem;
+import org.globaroman.petshopba.model.cartorder.ShoppingCart;
 import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.repository.CartItemRepository;
 import org.globaroman.petshopba.repository.ProductRepository;

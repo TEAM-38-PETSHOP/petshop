@@ -27,3 +27,7 @@ databaseChangeLog:
       file: /db/changelog/changes/12-create-cartitem-table.yaml
   - include:
       file: /db/changelog/changes/14-add-foreign-key-to-cart-items.yaml
+  - include:
+      file: /db/changelog/changes/15-remove_shipping_address_column_from_orders_table.yaml
+  - include:
+      file: /db/changelog/changes/16-create_addresses_table.yaml
