@@ -27,5 +27,6 @@ public interface TypeServiceMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto, @MappingTarget TypePetService typePetService);
+    TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto,
+                                       @MappingTarget TypePetService typePetService);
 }

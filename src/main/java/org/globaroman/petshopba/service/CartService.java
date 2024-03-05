@@ -5,9 +5,14 @@ import org.globaroman.petshopba.dto.cart.ShoppingCartResponseDto;
 import org.springframework.security.core.Authentication;
 
 public interface CartService {
-    ShoppingCartResponseDto addProduct(CartItemRequestDto requestDto);
+    ShoppingCartResponseDto addProduct(
+            CartItemRequestDto requestDto,
+            Authentication authentication);
 
-    ShoppingCartResponseDto update(Long cartItemId, CartItemRequestDto requestDto);
+    ShoppingCartResponseDto update(
+            Long cartItemId,
+            CartItemRequestDto requestDto,
+            Authentication authentication);
 
     void deleteById(Long cartItemId);
 

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-shopping-carts-table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: shopping_carts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_shopping_carts_user
+                    references: users(id)
