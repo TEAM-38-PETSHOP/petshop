@@ -11,8 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.awt.print.Book;
-
 @Entity
 @Table(name = "cart_items")
 @Data

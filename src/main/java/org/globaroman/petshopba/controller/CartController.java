@@ -11,9 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,7 +37,7 @@ public class CartController {
         return cartService.addProduct(requestDto, authentication);
     }
 
-    @PutMapping("cart-items/{cartItemId}")
+    @PatchMapping("/cart-items/{cartItemId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update new quantity products",
             description = "You can update quantity products into your cart")
@@ -48,13 +48,12 @@ public class CartController {
         return cartService.update(cartItemId, requestDto, authentication);
     }
 
-    @DeleteMapping("cart-items/{cartItemId}")
+    @DeleteMapping("/cart-items/{cartItemId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete cartItem",
             description = "You can delete your cartItem by its ID from cart")
-    public void delete(@PathVariable Long cartItemId,
-                       Authentication authentication) {
-        cartService.deleteById(cartItemId, authentication);
+    public void delete(@PathVariable Long cartItemId) {
+        cartService.deleteById(cartItemId);
     }
 
     @GetMapping

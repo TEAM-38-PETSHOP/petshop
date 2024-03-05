@@ -1,8 +1,8 @@
 package org.globaroman.petshopba.mapper;
 
 import org.globaroman.petshopba.config.MapperConfig;
-import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.dto.grooming.CreatePetServiceRequestDto;
+import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.model.groom.PetService;
 import org.mapstruct.AfterMapping;
@@ -27,5 +27,6 @@ public interface PetServiceMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    PetService toUpdateModel(CreatePetServiceRequestDto requestDto, @MappingTarget PetService petService);
+    PetService toUpdateModel(CreatePetServiceRequestDto requestDto,
+                             @MappingTarget PetService petService);
 }

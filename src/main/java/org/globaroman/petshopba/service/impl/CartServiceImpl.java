@@ -1,7 +1,6 @@
 package org.globaroman.petshopba.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.globaroman.petshopba.dto.cart.CarItemResponseDto;
 import org.globaroman.petshopba.dto.cart.CartItemRequestDto;
 import org.globaroman.petshopba.dto.cart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -26,9 +25,12 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final CartItemMapper cartItemMapper;
 
     @Override
-    public ShoppingCartResponseDto addProduct(CartItemRequestDto requestDto, Authentication authentication) {
+    public ShoppingCartResponseDto addProduct(
+            CartItemRequestDto requestDto,
+            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         ShoppingCart shoppingCart = getShoppingCartFromDbOrNew(user);
         Product requestProduct = productRepository.findById(requestDto.getProductId())
@@ -48,14 +50,26 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ShoppingCartResponseDto update(Long cartItemId, CartItemRequestDto requestDto, Authentication authentication) {
+    public ShoppingCartResponseDto update(
+            Long cartItemId,
+            CartItemRequestDto requestDto,
+            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return null;
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
+                () -> new EntityNotFoundCustomException(
+                        "Can't find cart with id: "
+                                + cartItemId)
+        );
+        CartItem updateCart = cartItemMapper.toUpdate(requestDto, cartItem);
+        cartItemRepository.save(updateCart);
+        ShoppingCart shoppingCart = getShoppingCartFromDbOrNew(user);
+
+        return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
     @Override
-    public void deleteById(Long cartItemId, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public void deleteById(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
 
     @Override
@@ -65,7 +79,6 @@ public class CartServiceImpl implements CartService {
 
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
-
 
     private ShoppingCart getShoppingCartFromDbOrNew(User user) {
         return shoppingCartRepository.findByUserId(user.getId())

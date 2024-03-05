@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.dto.grooming.CreatePetServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.CreateTypeServiceRequestDto;
+import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.dto.grooming.ResponseTypeServiceDto;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -68,7 +68,8 @@ public class GroomServiceImpl implements GroomService {
             CreateTypeServiceRequestDto requestDto,
             Long id) {
         TypePetService typePetService = typePetServiceRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find typePetService with id: " + id)
+                () -> new EntityNotFoundCustomException("Can not find typePetService with id: "
+                        + id)
         );
 
         TypePetService updateTypeService = typeServiceMapper.toUpdateTypeService(

@@ -1,5 +1,8 @@
 package org.globaroman.petshopba.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.globaroman.petshopba.dto.grooming.CreatePetServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.CreateTypeServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
@@ -20,10 +23,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 class GroomServiceImplTest {
     @Mock
@@ -35,10 +34,9 @@ class GroomServiceImplTest {
     @Mock
     private TypeServiceMapper typeServiceMapper;
     @Mock
-    PetServiceMapper petServiceMapper;
+    private PetServiceMapper petServiceMapper;
     @InjectMocks
     private GroomServiceImpl groomService;
-
 
     @Test
     @DisplayName("Create a new PetService -> return Status Created")
@@ -64,7 +62,8 @@ class GroomServiceImplTest {
 
         Mockito.when(typeServiceMapper.toModel(requestDto)).thenReturn(typePetService);
         Mockito.when(typePetServiceRepository.save(typePetService)).thenReturn(typePetService);
-        Mockito.when(typeServiceMapper.toDto(typePetService)).thenReturn(new ResponseTypeServiceDto());
+        Mockito.when(typeServiceMapper.toDto(typePetService))
+                .thenReturn(new ResponseTypeServiceDto());
 
         ResponseTypeServiceDto result = groomService.createTypeService(requestDto);
 
@@ -78,8 +77,10 @@ class GroomServiceImplTest {
         CreatePetServiceRequestDto requestDto = getRequestPetServiceDto();
         PetService petService = getPetService();
 
-        Mockito.when(petServiceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(petService));
-        Mockito.when(petServiceMapper.toUpdateModel(requestDto, petService)).thenReturn(petService);
+        Mockito.when(petServiceRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(petService));
+        Mockito.when(petServiceMapper.toUpdateModel(requestDto, petService))
+                .thenReturn(petService);
         Mockito.when(petServiceRepository.save(petService)).thenReturn(petService);
         Mockito.when(petServiceMapper.toDto(petService)).thenReturn(new ResponsePetServiceDto());
 
@@ -95,10 +96,13 @@ class GroomServiceImplTest {
         CreateTypeServiceRequestDto requestDto = getRequestTypeServiceDto();
         TypePetService typePetService = getTypePetService();
 
-        Mockito.when(typePetServiceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(typePetService));
-        Mockito.when(typeServiceMapper.toUpdateTypeService(requestDto, typePetService)).thenReturn(typePetService);
+        Mockito.when(typePetServiceRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(typePetService));
+        Mockito.when(typeServiceMapper.toUpdateTypeService(requestDto, typePetService))
+                .thenReturn(typePetService);
         Mockito.when(typePetServiceRepository.save(typePetService)).thenReturn(typePetService);
-        Mockito.when(typeServiceMapper.toDto(typePetService)).thenReturn(new ResponseTypeServiceDto());
+        Mockito.when(typeServiceMapper.toDto(typePetService))
+                .thenReturn(new ResponseTypeServiceDto());
 
         ResponseTypeServiceDto result = groomService.updateTypePetService(requestDto, 1L);
 
@@ -118,7 +122,8 @@ class GroomServiceImplTest {
     void deleteTypeServiceById_ShouldDeleteExistTypePetService_ResultOk() {
         TypePetService typePetService = getTypePetService();
         groomService.deleteTypeServiceById(typePetService.getId());
-        Mockito.verify(typePetServiceRepository, Mockito.times(1)).deleteById(typePetService.getId());
+        Mockito.verify(typePetServiceRepository, Mockito.times(1))
+                .deleteById(typePetService.getId());
     }
 
     @Test
@@ -132,7 +137,8 @@ class GroomServiceImplTest {
         listPets.add(petService1);
 
         Mockito.when(petServiceRepository.findAllSortedNumberList()).thenReturn(listPets);
-        Mockito.when(petServiceMapper.toDto(Mockito.any(PetService.class))).thenReturn(new ResponsePetServiceDto());
+        Mockito.when(petServiceMapper.toDto(Mockito.any(PetService.class)))
+                .thenReturn(new ResponsePetServiceDto());
 
         List<ResponsePetServiceDto> result = groomService.getAllSortedNumberList();
 
@@ -150,7 +156,8 @@ class GroomServiceImplTest {
         typePetServices.add(typePetService);
 
         Mockito.when(typePetServiceRepository.findAll()).thenReturn(typePetServices);
-        Mockito.when(typeServiceMapper.toDto(Mockito.any(TypePetService.class))).thenReturn(new ResponseTypeServiceDto());
+        Mockito.when(typeServiceMapper.toDto(Mockito.any(TypePetService.class)))
+                .thenReturn(new ResponseTypeServiceDto());
 
         List<ResponseTypeServiceDto> result = groomService.getAllTypePetService();
 
@@ -165,8 +172,10 @@ class GroomServiceImplTest {
         PetService petService = getPetService();
         petServices.add(petService);
 
-        Mockito.when(petServiceRepository.findAllByAnimalId(Mockito.anyLong())).thenReturn(petServices);
-        Mockito.when(petServiceMapper.toDto(Mockito.any(PetService.class))).thenReturn(new ResponsePetServiceDto());
+        Mockito.when(petServiceRepository.findAllByAnimalId(Mockito.anyLong()))
+                .thenReturn(petServices);
+        Mockito.when(petServiceMapper.toDto(Mockito.any(PetService.class)))
+                .thenReturn(new ResponsePetServiceDto());
 
         List<ResponsePetServiceDto> result = groomService.getAllPetServiceByAnimalId(1L);
 
@@ -181,8 +190,10 @@ class GroomServiceImplTest {
         TypePetService typePetService = getTypePetService();
         typePetServices.add(typePetService);
 
-        Mockito.when(typePetServiceRepository.findAllByPetServiceId(Mockito.anyLong())).thenReturn(typePetServices);
-        Mockito.when(typeServiceMapper.toDto(Mockito.any(TypePetService.class))).thenReturn(new ResponseTypeServiceDto());
+        Mockito.when(typePetServiceRepository.findAllByPetServiceId(Mockito.anyLong()))
+                .thenReturn(typePetServices);
+        Mockito.when(typeServiceMapper.toDto(Mockito.any(TypePetService.class)))
+                .thenReturn(new ResponseTypeServiceDto());
 
         List<ResponseTypeServiceDto> result = groomService.getAllTypePetServiceByServiceId(1L);
 
@@ -196,7 +207,8 @@ class GroomServiceImplTest {
         PetService petService = getPetService();
         ResponsePetServiceDto responsePetServiceDto = getResponseDto();
 
-        Mockito.when(petServiceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(petService));
+        Mockito.when(petServiceRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(petService));
         Mockito.when(petServiceMapper.toDto(petService)).thenReturn(responsePetServiceDto);
 
         ResponsePetServiceDto result = groomService.getPetServiceById(1L);
@@ -211,8 +223,10 @@ class GroomServiceImplTest {
         TypePetService typePetService = getTypePetService();
         ResponseTypeServiceDto responseTypeServiceDto = getResponseTypeServiceDto();
 
-        Mockito.when(typePetServiceRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(typePetService));
-        Mockito.when(typeServiceMapper.toDto(typePetService)).thenReturn(responseTypeServiceDto);
+        Mockito.when(typePetServiceRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(typePetService));
+        Mockito.when(typeServiceMapper.toDto(typePetService))
+                .thenReturn(responseTypeServiceDto);
 
         ResponseTypeServiceDto result = groomService.getTypePetServiceById(1L);
 
