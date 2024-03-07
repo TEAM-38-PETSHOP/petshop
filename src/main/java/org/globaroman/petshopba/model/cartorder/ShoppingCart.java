@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model;
+package org.globaroman.petshopba.model.cartorder;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

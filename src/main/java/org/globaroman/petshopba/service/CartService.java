@@ -1,7 +1,7 @@
 package org.globaroman.petshopba.service;
 
-import org.globaroman.petshopba.dto.cart.CartItemRequestDto;
-import org.globaroman.petshopba.dto.cart.ShoppingCartResponseDto;
+import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.springframework.security.core.Authentication;
 
 public interface CartService {

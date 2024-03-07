@@ -3,10 +3,10 @@ package org.globaroman.petshopba.mapper;
 import java.util.List;
 import java.util.Set;
 import org.globaroman.petshopba.config.MapperConfig;
-import org.globaroman.petshopba.dto.cart.CarItemResponseDto;
-import org.globaroman.petshopba.dto.cart.ShoppingCartResponseDto;
-import org.globaroman.petshopba.model.CartItem;
-import org.globaroman.petshopba.model.ShoppingCart;
+import org.globaroman.petshopba.dto.ordercart.CarItemResponseDto;
+import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
+import org.globaroman.petshopba.model.cartorder.CartItem;
+import org.globaroman.petshopba.model.cartorder.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.dto.cart;
+package org.globaroman.petshopba.dto.ordercart;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ShoppingCartResponseDto {
     private Long id;
     private Long userId;

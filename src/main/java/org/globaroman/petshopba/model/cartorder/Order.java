@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model.order;
+package org.globaroman.petshopba.model.cartorder;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,8 +38,9 @@ public class Order {
     private BigDecimal total;
     @Column(name = "order_date")
     private LocalDateTime orderDate;
-    @Column(name = "shipping_address")
-    private String shippingAddress;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<OrderItem> orderItems;
 }

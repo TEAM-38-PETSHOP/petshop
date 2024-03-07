@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.dto.cart;
+package org.globaroman.petshopba.dto.ordercart;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
