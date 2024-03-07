@@ -31,3 +31,5 @@ databaseChangeLog:
       file: /db/changelog/changes/15-remove_shipping_address_column_from_orders_table.yaml
   - include:
       file: /db/changelog/changes/16-create_addresses_table.yaml
+  - include:
+      file: /db/changelog/changes/17-remove_shipping_address_column_from_users_table.yaml
