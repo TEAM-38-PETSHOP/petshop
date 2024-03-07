@@ -1,15 +1,17 @@
-package org.globaroman.petshopba.dto.ordercart;
+package org.globaroman.petshopba.mapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponseOrderItemDto implements Serializable {
+public class OrderItemDto implements Serializable {
     private Long id;
     private Long productId;
     private int quantity;
-    private BigDecimal price;
 }

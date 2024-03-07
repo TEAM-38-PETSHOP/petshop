@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,5 +63,10 @@ public interface ProductMapper {
     @Named("getNameFromProduct")
     default String getNameFromProduct(Product product) {
         return product != null ? product.getName() : null;
+    }
+
+    @Named("getPriceFromProduct")
+    default BigDecimal getPriceFromProduct(Product product) {
+        return product != null ? product.getPrice() : null;
     }
 }

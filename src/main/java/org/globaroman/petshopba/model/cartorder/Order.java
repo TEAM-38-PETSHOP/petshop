@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.globaroman.petshopba.model.user.Status;
 import org.globaroman.petshopba.model.user.User;
 
 @Entity

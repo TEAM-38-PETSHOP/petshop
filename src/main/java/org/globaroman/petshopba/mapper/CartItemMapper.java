@@ -14,5 +14,9 @@ public interface CartItemMapper {
     @Mapping(source = "product", target = "productName", qualifiedByName = "getNameFromProduct")
     CarItemResponseDto toCartItemDto(CartItem cartItem);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "shoppingCart", ignore = true)
+    @Mapping(target = "product", ignore = true)
     CartItem toUpdate(CartItemRequestDto requestDto, @MappingTarget CartItem cartItem);
+
 }
