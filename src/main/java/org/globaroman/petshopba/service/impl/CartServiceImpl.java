@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.service.impl;
 
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
@@ -37,13 +38,19 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new EntityNotFoundCustomException(
                         "Can't find product with id: " + requestDto.getProductId()));
         CartItem cartItem = new CartItem();
+
         cartItem.setProduct(requestProduct);
         cartItem.setQuantity(requestDto.getQuantity());
         cartItem.setShoppingCart(shoppingCart);
 
         CartItem savedCartItem = cartItemRepository.save(cartItem);
 
+        if (shoppingCart.getCartItems() == null) {
+            shoppingCart.setCartItems(new HashSet<>());
+        }
+
         shoppingCart.getCartItems().add(savedCartItem);
+
         shoppingCartRepository.save(shoppingCart);
 
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);

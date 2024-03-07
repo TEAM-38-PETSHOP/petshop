@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.model.user;
+package org.globaroman.petshopba.model.cartorder;
 
 public enum Status {
     PROCESSING,

@@ -14,6 +14,8 @@ import org.mapstruct.MappingTarget;
 public interface PetServiceMapper {
 
     @Mapping(target = "animal", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "types", ignore = true)
     PetService toModel(CreatePetServiceRequestDto requestDto);
 
     @Mapping(target = "animalId", source = "animal.id")
@@ -27,6 +29,8 @@ public interface PetServiceMapper {
     }
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "types", ignore = true)
+    @Mapping(target = "animal", ignore = true)
     PetService toUpdateModel(CreatePetServiceRequestDto requestDto,
                              @MappingTarget PetService petService);
 }

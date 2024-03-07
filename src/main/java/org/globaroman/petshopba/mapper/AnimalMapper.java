@@ -16,6 +16,7 @@ public interface AnimalMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "products",ignore = true)
+    @Mapping(target = "poslugas", ignore = true)
     Animal toModel(CreateAnimalRequestDto createAnimalRequestDto);
 
     @Mapping(target = "id",ignore = true)

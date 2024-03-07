@@ -54,19 +54,18 @@ public class OrderController {
         return orderService.updateStatusToOrder(statusDto, id);
     }
 
-    @GetMapping("/{orderId}/items")
+    @GetMapping("/{orderId}")
     @Operation(summary = "Get all item by order",
             description = "You can get all orders from specific order")
     public List<ResponseOrderItemDto> getOrderItemsFromOrder(@PathVariable Long orderId) {
         return orderService.getOrderItensFromOrder(orderId);
     }
 
-    @GetMapping("/{orderId}/items/{itemId}")
+    @GetMapping("/items/{itemId}")
     @Operation(summary = "Get item by order",
             description = "You can get order from specific order")
     public ResponseOrderItemDto getOrderItemById(
-            @PathVariable Long orderId,
             @PathVariable Long itemId) {
-        return orderService.getOrderItemById(orderId, itemId);
+        return orderService.getOrderItemById(itemId);
     }
 }

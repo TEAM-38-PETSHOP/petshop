@@ -16,5 +16,5 @@ public interface OrderService {
 
     List<ResponseOrderItemDto> getOrderItensFromOrder(Long orderId);
 
-    ResponseOrderItemDto getOrderItemById(Long orderId, Long itemId);
+    ResponseOrderItemDto getOrderItemById(Long orderId);
 }

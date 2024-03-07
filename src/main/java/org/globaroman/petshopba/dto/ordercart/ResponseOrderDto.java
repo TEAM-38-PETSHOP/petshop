@@ -7,18 +7,16 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Data;
 import org.globaroman.petshopba.model.cartorder.Address;
-import org.globaroman.petshopba.model.cartorder.OrderItem;
-import org.globaroman.petshopba.model.user.Status;
-import org.globaroman.petshopba.model.user.User;
+import org.globaroman.petshopba.model.cartorder.Status;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseOrderDto implements Serializable {
     private Long id;
-    private User user;
+    private Long userId;
     private Status status;
     private BigDecimal total;
     private LocalDateTime orderDate;
     private Address address;
-    private Set<OrderItem> orderItems;
+    private Set<ResponseOrderItemDto> orderItems;
 }

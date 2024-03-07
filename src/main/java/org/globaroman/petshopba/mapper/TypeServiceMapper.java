@@ -14,6 +14,7 @@ import org.mapstruct.MappingTarget;
 public interface TypeServiceMapper {
 
     @Mapping(target = "posluga", ignore = true)
+    @Mapping(target = "id", ignore = true)
     TypePetService toModel(CreateTypeServiceRequestDto requestDto);
 
     @Mapping(target = "poslugaId", source = "posluga.id")
@@ -27,6 +28,7 @@ public interface TypeServiceMapper {
     }
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "posluga", ignore = true)
     TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto,
                                        @MappingTarget TypePetService typePetService);
 }
