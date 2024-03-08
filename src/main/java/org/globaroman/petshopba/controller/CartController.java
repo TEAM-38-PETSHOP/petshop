@@ -27,6 +27,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new product - create shopping cart",
             description = "You can create shoppingCart and add new product to your cart")
     public ShoppingCartResponseDto addProductCreateCart(
@@ -55,6 +56,7 @@ public class CartController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get shopping cart",
             description = "You can get all selected products from your cart")
     public ShoppingCartResponseDto getShoppingCart(Authentication authentication) {
