@@ -28,6 +28,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new order",
             description = "You can creat a new order")
     public ResponseOrderDto addOrder(
@@ -37,6 +38,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all order",
             description = "You can get all order as history")
     public List<ResponseOrderDto> getAllOrder(Authentication authentication) {
@@ -55,15 +57,17 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all item by order",
-            description = "You can get all orders from specific order")
+            description = "You can get all orderItem from specific order by its ID")
     public List<ResponseOrderItemDto> getOrderItemsFromOrder(@PathVariable Long orderId) {
         return orderService.getOrderItensFromOrder(orderId);
     }
 
     @GetMapping("/items/{itemId}")
-    @Operation(summary = "Get item by order",
-            description = "You can get order from specific order")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get item by ID",
+            description = "You can get orderItem by its ID")
     public ResponseOrderItemDto getOrderItemById(
             @PathVariable Long itemId) {
         return orderService.getOrderItemById(itemId);
