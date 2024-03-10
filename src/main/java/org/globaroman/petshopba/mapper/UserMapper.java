@@ -14,7 +14,6 @@ public interface UserMapper {
     UserResponseDto toDto(User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "phone", ignore = true)
     @Mapping(target = "birthDate", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "pets", ignore = true)

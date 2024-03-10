@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.globaroman.petshopba.validation.FieldMatch;
+import org.globaroman.petshopba.validation.Phone;
 import org.hibernate.validator.constraints.Length;
 
 @Data
@@ -17,13 +18,17 @@ public class UserRegistrationRequestDto {
     @Email
     private String email;
     @NotBlank
+    @Phone
+    @NotBlank
+    private String phone;
+    @NotBlank
     @Length(min = 8, max = 25)
     private String password;
+    @NotBlank
+    @Length(min = 8, max = 25)
     private String repeatPassword;
     @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
-    private String shippingAddress;
 }
