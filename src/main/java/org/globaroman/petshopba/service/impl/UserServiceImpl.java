@@ -41,7 +41,6 @@ public class UserServiceImpl implements UserService {
                             + requestDto.getEmail()
                             + " already exist");
         }
-
         User user = getUserWithRoleAndPasswordEncode(requestDto);
         return userMapper.toDto(userRepository.save(user));
     }
@@ -59,7 +58,6 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(existRole);
         user.setRoles(roles);
-
         return userMapper.toDto(userRepository.save(user));
     }
 
@@ -79,6 +77,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user.setRoles(Set.of(getRoleFromDB(USER_ROLE_ID)));
+
         return user;
     }
 

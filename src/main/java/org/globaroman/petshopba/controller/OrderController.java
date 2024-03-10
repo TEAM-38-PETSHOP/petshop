@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/orders")
+@Tag(name = "Order management",
+        description = "endpoint for order management")
 public class OrderController {
 
     private final OrderService orderService;
@@ -49,7 +52,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update status order",
-            description = "You can update an order")
+            description = "You can update an order. You need Role - ADMIN")
     public ResponseOrderDto updateOrderStatus(
             @RequestBody OrderStatusDto statusDto,
             @PathVariable Long id) {

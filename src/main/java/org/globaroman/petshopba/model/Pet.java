@@ -30,8 +30,6 @@ public class Pet {
     private String petBreed;
     @Column(name = "birth_date")
     private LocalDate birthDate;
-
-    private String image;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
