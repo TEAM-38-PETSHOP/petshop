@@ -1,4 +1,4 @@
-package org.globaroman.petshopba.mapper;
+package org.globaroman.petshopba.dto.ordercart;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
