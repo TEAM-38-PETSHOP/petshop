@@ -121,14 +121,6 @@
             <version>2.1.0</version>
         </dependency>
 
-        <!-- COMPOSE -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -152,6 +144,14 @@
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
+
+        <!-- logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.11</version>
+        </dependency>
+
 
     </dependencies>
     <dependencyManagement>

@@ -6,6 +6,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
+import org.globaroman.petshopba.dto.product.ProductSearchParameters;
+import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,6 +43,27 @@ public class ProductController {
             description = "You can get all products")
     public List<ProductResponseDto> getAllProducts() {
         return productService.getAll();
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Search products by parameters",
+            description = "Search products by brand, name, price")
+    public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters) {
+        return productService.search(productSearchParameters);
+    }
+
+    @GetMapping("/search/name")
+    @Operation(summary = "Search products by name",
+            description = "Search products by name")
+    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter) {
+        return productService.searchByName(productParameter);
+    }
+
+    @GetMapping("/search/brand")
+    @Operation(summary = "Search products by brand",
+            description = "Search products by brand")
+    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter) {
+        return productService.searchByBrand(productParameter);
     }
 
     @GetMapping("/{id}")

@@ -13,22 +13,22 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface TypeServiceMapper {
 
-    @Mapping(target = "posluga", ignore = true)
+    @Mapping(target = "petService", ignore = true)
     @Mapping(target = "id", ignore = true)
     TypePetService toModel(CreateTypeServiceRequestDto requestDto);
 
-    @Mapping(target = "poslugaId", source = "posluga.id")
+    @Mapping(target = "petServiceId", source = "petService.id")
     ResponseTypeServiceDto toDto(TypePetService typePetService);
 
     @AfterMapping
     default void setPerService(
             CreateTypeServiceRequestDto requestDto,
             @MappingTarget TypePetService typePetService) {
-        typePetService.setPosluga(new PetService(requestDto.getPoslugaId()));
+        typePetService.setPetService(new PetService(requestDto.getPetServiceId()));
     }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "posluga", ignore = true)
+    @Mapping(target = "petService", ignore = true)
     TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto,
                                        @MappingTarget TypePetService typePetService);
 }

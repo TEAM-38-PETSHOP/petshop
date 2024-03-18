@@ -33,7 +33,7 @@ public class PetService {
     private String name;
     private String description;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "posluga")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petService")
     private List<TypePetService> types;
 
     @ManyToOne

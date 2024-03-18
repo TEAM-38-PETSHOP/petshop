@@ -32,6 +32,14 @@ public class Product {
     private BigDecimal price;
     private String image;
 
+    @Column(name = "country_product")
+    private String countryProduct;
+    private String group;
+    @Column(name = "breed_size")
+    private String breedSize;
+    private String type;
+    private String packaging;
+
     @ManyToMany
     @JoinTable(
             name = "products_animals",

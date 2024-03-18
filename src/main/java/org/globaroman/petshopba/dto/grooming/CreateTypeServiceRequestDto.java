@@ -7,5 +7,5 @@ public class CreateTypeServiceRequestDto {
     private Long numberList;
     private String name;
     private String price;
-    private Long poslugaId;
+    private Long petServiceId;
 }

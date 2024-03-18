@@ -5,12 +5,16 @@ import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
+import org.globaroman.petshopba.dto.product.ProductSearchParameters;
+import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.ProductMapper;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.ProductRepository;
+import org.globaroman.petshopba.repository.specification.product.ProductSpecificationBuilder;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.ProductService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final AmazonS3Service amazonS3Service;
     private final UploadImageServiceImpl upload;
+    private final ProductSpecificationBuilder productSpecificationBuilder;
 
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
@@ -56,6 +61,33 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponseDto> getAllProductsByAnimalId(Long id) {
         return productRepository.findAllByAnimals_Id(id).stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDto> search(ProductSearchParameters params) {
+        Specification<Product> productSpecification = productSpecificationBuilder.build(params);
+
+        return productRepository.findAll(productSpecification)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter) {
+
+        return productRepository.findByName(productParameter.parameter())
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter) {
+        return productRepository.findByBrand(productParameter.parameter())
+                .stream()
                 .map(productMapper::toDto)
                 .toList();
     }

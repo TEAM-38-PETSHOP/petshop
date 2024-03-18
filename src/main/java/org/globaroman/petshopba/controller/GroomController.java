@@ -10,6 +10,7 @@ import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
 import org.globaroman.petshopba.dto.grooming.ResponseTypeServiceDto;
 import org.globaroman.petshopba.service.GroomService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroomController {
     private final GroomService groomService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/services")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create pet services",
@@ -37,6 +39,7 @@ public class GroomController {
         return groomService.createPetService(requestDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/typeOfServices")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new type pet services",
@@ -46,6 +49,7 @@ public class GroomController {
         return groomService.createTypeService(requestDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/services/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update the pet services",
@@ -56,6 +60,7 @@ public class GroomController {
         return groomService.updatePetService(requestDto, id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/typeOfServices/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update the type pet services",
@@ -66,6 +71,7 @@ public class GroomController {
         return groomService.updateTypePetService(requestDto, id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/services/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete the pet services by id",
@@ -74,6 +80,7 @@ public class GroomController {
         groomService.deleteServiceById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/typeOfServices/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete the type pet services by id",
@@ -82,6 +89,7 @@ public class GroomController {
         groomService.deleteTypeServiceById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/downloadService")
     @ResponseStatus(HttpStatus.OK)
     @Operation(hidden = true)

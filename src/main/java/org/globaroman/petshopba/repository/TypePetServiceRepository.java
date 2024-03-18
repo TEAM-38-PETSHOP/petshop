@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface TypePetServiceRepository extends JpaRepository<TypePetService, Long> {
 
-    @Query("SELECT p FROM TypePetService p where p.posluga.id = :serviceId "
+    @Query("SELECT p FROM TypePetService p where p.petService.id = :serviceId "
             + "ORDER By p.numberList ASC")
     List<TypePetService> findAllByPetServiceId(@Param("serviceId") Long serviceId);
 }
