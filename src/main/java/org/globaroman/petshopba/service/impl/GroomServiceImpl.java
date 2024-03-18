@@ -174,7 +174,7 @@ public class GroomServiceImpl implements GroomService {
         CreateTypeServiceRequestDto requestDto = new CreateTypeServiceRequestDto();
         requestDto.setName(splitLine[2]);
         requestDto.setPrice(splitLine[3]);
-        requestDto.setPoslugaId(getPetServiceId(splitLine[0]));
+        requestDto.setPetServiceId(getPetServiceId(splitLine[0]));
         requestDto.setNumberList(Long.parseLong(splitLine[1]));
         return requestDto;
     }

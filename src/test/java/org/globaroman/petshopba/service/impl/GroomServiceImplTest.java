@@ -142,8 +142,6 @@ class GroomServiceImplTest {
 
         List<ResponsePetServiceDto> result = groomService.getAllSortedNumberList();
 
-        System.out.println(result);
-
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
     }
@@ -267,7 +265,7 @@ class GroomServiceImplTest {
     private TypePetService getTypePetService() {
         TypePetService typePetService = new TypePetService();
         typePetService.setId(1L);
-        typePetService.setPosluga(getPetService());
+        typePetService.setPetService(getPetService());
         typePetService.setPrice("100");
         typePetService.setName("NAME TS");
         typePetService.setNumberList(100101L);
@@ -279,7 +277,7 @@ class GroomServiceImplTest {
         requestDto.setNumberList(100101L);
         requestDto.setName("NAME TS");
         requestDto.setPrice("100");
-        requestDto.setPoslugaId(1L);
+        requestDto.setPetServiceId(1L);
         return requestDto;
     }
 
@@ -288,7 +286,7 @@ class GroomServiceImplTest {
         responseDto.setId(1L);
         responseDto.setPrice("100");
         responseDto.setName("NAME TS");
-        responseDto.setPoslugaId(1L);
+        responseDto.setPetServiceId(1L);
         responseDto.setNumberList(100101L);
         return responseDto;
     }

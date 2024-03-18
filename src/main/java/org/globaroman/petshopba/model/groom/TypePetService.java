@@ -25,5 +25,5 @@ public class TypePetService {
 
     @ManyToOne
     @JoinColumn(name = "posluga_id")
-    private PetService posluga;
+    private PetService petService;
 }
