@@ -34,7 +34,8 @@ public class Product {
 
     @Column(name = "country_product")
     private String countryProduct;
-    private String group;
+    @Column(name = "group_product")
+    private String groupProduct;
     @Column(name = "breed_size")
     private String breedSize;
     private String type;

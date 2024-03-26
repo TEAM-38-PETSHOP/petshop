@@ -9,6 +9,7 @@ import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.service.ProductService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,29 +43,32 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all products",
             description = "You can get all products")
-    public List<ProductResponseDto> getAllProducts() {
-        return productService.getAll();
+    public List<ProductResponseDto> getAllProducts(Pageable pageable) {
+        return productService.getAll(pageable);
     }
 
     @GetMapping("/search")
     @Operation(summary = "Search products by parameters",
             description = "Search products by brand, name, price")
-    public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters) {
-        return productService.search(productSearchParameters);
+    public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
+                                           Pageable pageable) {
+        return productService.search(productSearchParameters, pageable);
     }
 
     @GetMapping("/search/name")
     @Operation(summary = "Search products by name",
             description = "Search products by name")
-    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter) {
-        return productService.searchByName(productParameter);
+    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
+                                                 Pageable pageable) {
+        return productService.searchByName(productParameter, pageable);
     }
 
     @GetMapping("/search/brand")
     @Operation(summary = "Search products by brand",
             description = "Search products by brand")
-    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter) {
-        return productService.searchByBrand(productParameter);
+    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
+                                                  Pageable pageable) {
+        return productService.searchByBrand(productParameter, pageable);
     }
 
     @GetMapping("/{id}")
@@ -78,16 +83,28 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all products by category ID",
             description = "You can get all products by category ID")
-    public List<ProductResponseDto> getProductsByCategoryId(@PathVariable Long id) {
-        return productService.getAllProductsByCategoryId(id);
+    public List<ProductResponseDto> getProductsByCategoryId(@PathVariable Long id,
+                                                            Pageable pageable) {
+        return productService.getAllProductsByCategoryId(id, pageable);
     }
 
     @GetMapping("/animals/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all products by animal ID",
             description = "You can get all products by animal ID")
-    public List<ProductResponseDto> getProductsByAnimalId(@PathVariable Long id) {
-        return productService.getAllProductsByAnimalId(id);
+    public List<ProductResponseDto> getProductsByAnimalId(@PathVariable Long id,
+                                                          Pageable pageable) {
+        return productService.getAllProductsByAnimalId(id, pageable);
+    }
+
+    @GetMapping("/random")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get random amount of product",
+            description = "You can get random amount of product. Default quantity - 15, "
+                    + "You can indicate your quantity items")
+    public List<ProductResponseDto> getRandomProducts(@RequestParam(defaultValue = "15")
+                                                          int count) {
+        return productService.getRandomProducts(count);
     }
 
     @PatchMapping("/{id}")
@@ -97,6 +114,7 @@ public class ProductController {
     public ProductResponseDto updateProductById(
             @PathVariable Long id,
             @RequestBody CreateRequestProductDto requestProductDto) {
+
         return productService.update(id, requestProductDto);
     }
 

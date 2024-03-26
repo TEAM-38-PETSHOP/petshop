@@ -5,11 +5,12 @@ import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
     ProductResponseDto create(CreateRequestProductDto requestProductDto);
 
-    List<ProductResponseDto> getAll();
+    List<ProductResponseDto> getAll(Pageable pageable);
 
     ProductResponseDto getById(Long id);
 
@@ -17,13 +18,20 @@ public interface ProductService {
 
     void delete(Long id);
 
-    List<ProductResponseDto> getAllProductsByCategoryId(Long id);
+    List<ProductResponseDto> getAllProductsByCategoryId(Long id,
+                                                        Pageable pageable);
 
-    List<ProductResponseDto> getAllProductsByAnimalId(Long id);
+    List<ProductResponseDto> getAllProductsByAnimalId(Long id,
+                                                      Pageable pageable);
 
-    List<ProductResponseDto> search(ProductSearchParameters productSearchParameters);
+    List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
+                                    Pageable pageable);
 
-    List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter);
+    List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
+                                          Pageable pageable);
 
-    List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter);
+    List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
+                                           Pageable pageable);
+
+    List<ProductResponseDto> getRandomProducts(int count);
 }

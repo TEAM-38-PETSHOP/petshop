@@ -17,6 +17,7 @@ public interface UserMapper {
     @Mapping(target = "birthDate", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "pets", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     User toModel(UserRegistrationRequestDto requestDto);
 
     @Named("idFromUser")
