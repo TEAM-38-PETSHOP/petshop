@@ -132,6 +132,10 @@ public class ProductServiceImpl implements ProductService {
 
     private String getNameProductShort(String name) {
         String[] splStr = name.split(" ");
-        return splStr[0] + " " + splStr[1] + " " + splStr[2];
+        if (splStr.length > 3) {
+            return splStr[0] + " " + splStr[1] + " " + splStr[2];
+        } else {
+            return name;
+        }
     }
 }

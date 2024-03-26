@@ -100,8 +100,10 @@ public class ProductController {
     @GetMapping("/random")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get random amount of product",
-            description = "You can get random amount of product. Default quantity - 15, You can indicate your quantity items")
-    public List<ProductResponseDto> getRandomProducts(@RequestParam(defaultValue = "15") int count) {
+            description = "You can get random amount of product. Default quantity - 15, "
+                    + "You can indicate your quantity items")
+    public List<ProductResponseDto> getRandomProducts(@RequestParam(defaultValue = "15")
+                                                          int count) {
         return productService.getRandomProducts(count);
     }
 

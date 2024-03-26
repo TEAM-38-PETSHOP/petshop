@@ -1,6 +1,5 @@
 package org.globaroman.petshopba.repository;
 
-import java.util.Collection;
 import java.util.List;
 import org.globaroman.petshopba.model.Product;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
     @Query("select p from Product p where lower(p.brand) like lower(concat('%', :brand, '%') )")
     List<Product> findByBrand(@Param("brand")String parameter, Pageable pageable);
 
-    @Query(value = "SELECT * FROM `petshop-db`.products ORDER BY RAND() LIMIT :countProduct", nativeQuery = true)
+    @Query(value = "SELECT * FROM `petshop-db`.products ORDER BY RAND() LIMIT :countProduct",
+            nativeQuery = true)
     List<Product> findRandomProducts(@Param("countProduct") int countProduct);
 }
