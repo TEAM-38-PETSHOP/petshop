@@ -35,3 +35,5 @@ databaseChangeLog:
       file: /db/changelog/changes/17-remove_shipping_address_column_from_users_table.yaml
   - include:
       file: /db/changelog/changes/18-add_fields_to_product_table.yaml
+  - include:
+      file: /db/changelog/changes/19-change_field_group_product_table.yaml

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename_group_column
+      author: org.globaroman
+      changes:
+        - renameColumn:
+            tableName: products
+            oldColumnName: group
+            newColumnName: group_product
+            columnDataType: varchar(255)
+
+

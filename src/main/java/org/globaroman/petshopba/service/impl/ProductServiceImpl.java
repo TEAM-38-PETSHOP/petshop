@@ -14,6 +14,7 @@ import org.globaroman.petshopba.repository.ProductRepository;
 import org.globaroman.petshopba.repository.specification.product.ProductSpecificationBuilder;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.ProductService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +40,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getAll() {
-        return productRepository.findAll().stream()
+    public List<ProductResponseDto> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable).stream()
                 .map(productMapper::toDto)
                 .toList();
     }
@@ -52,42 +53,49 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getAllProductsByCategoryId(Long id) {
-        return productRepository.findAllByCategories_Id(id).stream()
+    public List<ProductResponseDto> getAllProductsByCategoryId(Long id, Pageable pageable) {
+        return productRepository.findAllByCategories_Id(id, pageable).stream()
                 .map(productMapper::toDto)
                 .toList();
     }
 
     @Override
-    public List<ProductResponseDto> getAllProductsByAnimalId(Long id) {
-        return productRepository.findAllByAnimals_Id(id).stream()
+    public List<ProductResponseDto> getAllProductsByAnimalId(Long id, Pageable pageable) {
+        return productRepository.findAllByAnimals_Id(id, pageable).stream()
                 .map(productMapper::toDto)
                 .toList();
     }
 
     @Override
-    public List<ProductResponseDto> search(ProductSearchParameters params) {
+    public List<ProductResponseDto> search(ProductSearchParameters params, Pageable pageable) {
         Specification<Product> productSpecification = productSpecificationBuilder.build(params);
-
-        return productRepository.findAll(productSpecification)
+        return productRepository.findAll(productSpecification, pageable)
                 .stream()
                 .map(productMapper::toDto)
                 .toList();
     }
 
     @Override
-    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter) {
-
-        return productRepository.findByName(productParameter.parameter())
+    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
+                                                 Pageable pageable) {
+        return productRepository.findByName(productParameter.parameter(), pageable)
                 .stream()
                 .map(productMapper::toDto)
                 .toList();
     }
 
     @Override
-    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter) {
-        return productRepository.findByBrand(productParameter.parameter())
+    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
+                                                  Pageable pageable) {
+        return productRepository.findByBrand(productParameter.parameter(), pageable)
                 .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponseDto> getRandomProducts(int count) {
+        return productRepository.findRandomProducts(count).stream()
                 .map(productMapper::toDto)
                 .toList();
     }
@@ -117,8 +125,13 @@ public class ProductServiceImpl implements ProductService {
         Random random = new Random();
         int nameImage = random.nextInt(10000000);
         String brand = requestProductDto.getBrand();
-        String nameProduct = requestProductDto.getName();
+        String nameProduct = getNameProductShort(requestProductDto.getName());
 
         return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
+    }
+
+    private String getNameProductShort(String name) {
+        String[] splStr = name.split(" ");
+        return splStr[0] + " " + splStr[1] + " " + splStr[2];
     }
 }

@@ -152,7 +152,8 @@ class OrderServiceImplTest {
         responseOrderDto.setStatus(Status.COMPLETED);
 
         Mockito.when(orderRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(order));
-        Mockito.when(orderRepository.save(updateOrder)).thenReturn(updateOrder);
+        Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(updateOrder);
+
         Mockito.when(orderMapper.toDto(updateOrder)).thenReturn(responseOrderDto);
 
         ResponseOrderDto result = orderService.updateStatusToOrder(orderStatusDto, 1L);

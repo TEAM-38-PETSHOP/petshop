@@ -100,13 +100,12 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     public String deleteImage(String url) {
 
         String[] keyImage = url.split("/");
-        System.out.println(keyImage[3]);
-        System.out.println(bucketName);
+
         try {
             AmazonS3 s3Client = getS3Client();
             DeleteObjectRequest request = new DeleteObjectRequest(bucketName, keyImage[3]);
             s3Client.deleteObject(request);
-            return "Image " + keyImage[3] + "was deleting saccessful";
+            return "Image " + keyImage[3] + "was deleting successful";
         } catch (AmazonS3Exception e) {
             throw new DataProcessingException(
                     "Can not delete image: " + url + " from S3", e);

@@ -24,6 +24,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -71,15 +75,17 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("Get all products -> get List<ResponseDto> like successful result")
     void getAll_Product_ShouldReturnListWithAllResponseDto() {
-        Product product = getProduct();
+        Pageable pageable = PageRequest.of(0, 5);
         List<Product> products = new ArrayList<>();
+        Product product = getProduct();
         products.add(product);
+        Page<Product> mockPage = new PageImpl<>(products);
 
-        Mockito.when(productRepository.findAll()).thenReturn(products);
+        Mockito.when(productRepository.findAll(pageable)).thenReturn(mockPage);
         Mockito.when(productMapper.toDto(Mockito.any(Product.class)))
                 .thenReturn(new ProductResponseDto());
 
-        List<ProductResponseDto> result = productService.getAll();
+        List<ProductResponseDto> result = productService.getAll(pageable);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
@@ -103,16 +109,17 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("Get all products by category Id -> get List<ResponseDto> like successful result")
     void getAllProductsByCategoryId_Product_ShouldReturnListWithAllResponseDtoByExistCategory() {
+        Pageable pageable = Pageable.unpaged();
         Product product = getProduct();
         List<Product> products = new ArrayList<>();
         products.add(product);
 
-        Mockito.when(productRepository.findAllByCategories_Id(Mockito.anyLong()))
-                .thenReturn(products);
+        Mockito.when(productRepository.findAllByCategories_Id(Mockito.anyLong(),
+                        Mockito.eq(pageable))).thenReturn(products);
         Mockito.when(productMapper.toDto(Mockito.any(Product.class)))
                 .thenReturn(new ProductResponseDto());
 
-        List<ProductResponseDto> result = productService.getAllProductsByCategoryId(1L);
+        List<ProductResponseDto> result = productService.getAllProductsByCategoryId(1L, pageable);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
@@ -121,15 +128,17 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("Get all products by category Id -> get List<ResponseDto> like successful result")
     void getAllProductsByCategoryId_Product_ShouldReturnListWithAllResponseDtoByExistAnimal() {
+        Pageable pageable = Pageable.unpaged();
         Product product = getProduct();
         List<Product> products = new ArrayList<>();
         products.add(product);
 
-        Mockito.when(productRepository.findAllByAnimals_Id(Mockito.anyLong())).thenReturn(products);
+        Mockito.when(productRepository.findAllByAnimals_Id(Mockito.anyLong(), Mockito.eq(pageable)))
+                .thenReturn(products);
         Mockito.when(productMapper.toDto(Mockito.any(Product.class)))
                 .thenReturn(new ProductResponseDto());
 
-        List<ProductResponseDto> result = productService.getAllProductsByAnimalId(1L);
+        List<ProductResponseDto> result = productService.getAllProductsByAnimalId(1L, pageable);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
