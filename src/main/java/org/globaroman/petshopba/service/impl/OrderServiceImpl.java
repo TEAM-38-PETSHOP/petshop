@@ -1,6 +1,8 @@
 package org.globaroman.petshopba.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,6 +24,7 @@ import org.globaroman.petshopba.repository.AddressRepository;
 import org.globaroman.petshopba.repository.OrderItemRepository;
 import org.globaroman.petshopba.repository.OrderRepository;
 import org.globaroman.petshopba.repository.ShoppingCartRepository;
+import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.OrderService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final EmailSenderService emailSenderService;
 
     @Override
     public ResponseOrderDto addOrder(
@@ -47,6 +51,17 @@ public class OrderServiceImpl implements OrderService {
         Address savedAddress = addressRepository.save(address);
         Order order = getOrderFromShoppingCart(user, savedAddress);
 
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+        emailSenderService.sendEmail(
+                "OneGroom.com.ua",
+                user.getEmail(),
+                "Замовлення № " + order.getId(),
+                "Ваше замовлення №" + user.getId() + " прийняте.\n"
+                        + "Ви можете відстежити статус свого замовлення в особистому кабінеті.\n"
+                        + "Замовлення від " + order.getOrderDate().format(formatDate) + "\n"
+                        + getOrderItemTextingName(order.getOrderItems()) + "\n"
+                        + "Загальна сума замовлення: " + order.getTotal() + " грн."
+        );
         return orderMapper.toDto(orderRepository.save(order));
     }
 
@@ -63,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException("Can't find order with id: " + id));
         order.setStatus(statusDto.getStatus());
+
         return orderMapper.toDto(orderRepository.save(order));
     }
 
@@ -85,6 +101,9 @@ public class OrderServiceImpl implements OrderService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new EntityNotFoundCustomException(
                         "Can't find shopping cart for user with id: " + user.getId()));
+        if (shoppingCart.getCartItems().isEmpty()) {
+            throw new RuntimeException("Can not create order because of cartItem is empty");
+        }
         Order order = getOrderWithFields(shoppingCart, address);
 
         shoppingCartRepository.delete(shoppingCart);
@@ -119,6 +138,19 @@ public class OrderServiceImpl implements OrderService {
                 .mapToDouble(o ->
                         o.getPrice().doubleValue() * o.getQuantity())
                 .sum();
-        return new BigDecimal(sum);
+        return new BigDecimal(sum).setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    private String getOrderItemTextingName(Set<OrderItem> orderItems) {
+        StringBuilder sb = new StringBuilder();
+        for (OrderItem orderItem : orderItems) {
+            sb.append("№").append(orderItem.getId()).append("\n")
+                    .append(orderItem.getProduct().getName()).append("\n")
+                    .append("Кількість: ").append(orderItem.getQuantity()).append(" шт.\n")
+                    .append("Ціна: ").append(orderItem.getPrice()
+                            .setScale(2, RoundingMode.HALF_EVEN))
+                    .append("\n");
+        }
+        return sb.toString();
     }
 }
