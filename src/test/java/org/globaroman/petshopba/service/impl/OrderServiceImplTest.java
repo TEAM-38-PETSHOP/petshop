@@ -65,6 +65,9 @@ class OrderServiceImplTest {
     @Mock
     private OrderItemRepository orderItemRepository;
 
+    @Mock
+    private EmailSenderServiceImpl emailSenderService;
+
     private User user;
     private ShoppingCart shoppingCart;
 
@@ -111,6 +114,20 @@ class OrderServiceImplTest {
                 .thenReturn(getOrderItem());
         Mockito.doNothing().when(shoppingCartRepository)
                 .delete(Mockito.any(ShoppingCart.class));
+        Mockito.when(emailSenderService.sendEmail(
+                "OneGroom.com.ua",
+                "roman@gmail.com",
+                "Замовлення № 1",
+                "Ваше замовлення №1 прийняте.\n"
+                        + "Ви можете відстежити статус свого замовлення в особистому кабінеті.\n"
+                        + "Замовлення від 31.03.2024\n"
+                        + "№1\n"
+                        + "Product\n"
+                        + "Кількість: 1 шт.\n"
+                        + "Ціна: 100.00\n"
+                        + "\n"
+                        + "Загальна сума замовлення: 100.00 грн."))
+                .thenReturn("Email sent successfully!");
         Mockito.when(orderRepository.save(order))
                 .thenReturn(order);
         Mockito.when(orderMapper.toDto(order))
