@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
                 "OneGroom.com.ua",
                 user.getEmail(),
                 "Замовлення № " + order.getId(),
-                "Ваше замовлення №" + user.getId() + " прийняте.\n"
+                "Ваше замовлення №" + order.getId() + " прийняте.\n"
                         + "Ви можете відстежити статус свого замовлення в особистому кабінеті.\n"
                         + "Замовлення від " + order.getOrderDate().format(formatDate) + "\n"
                         + getOrderItemTextingName(order.getOrderItems()) + "\n"
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     private String getOrderItemTextingName(Set<OrderItem> orderItems) {
         StringBuilder sb = new StringBuilder();
         for (OrderItem orderItem : orderItems) {
-            sb.append("№").append(orderItem.getId()).append("\n")
+            sb.append("№").append(orderItem.getProduct().getId()).append("\n")
                     .append(orderItem.getProduct().getName()).append("\n")
                     .append("Кількість: ").append(orderItem.getQuantity()).append(" шт.\n")
                     .append("Ціна: ").append(orderItem.getPrice()

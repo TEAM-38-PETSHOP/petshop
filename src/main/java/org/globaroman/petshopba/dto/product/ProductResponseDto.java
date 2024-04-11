@@ -11,7 +11,7 @@ import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductResponseDto implements Serializable {
-    private Long id;
+    private Long productId;
     private String name;
     private String brand;
     private String description;

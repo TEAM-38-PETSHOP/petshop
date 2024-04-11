@@ -49,7 +49,8 @@ public class ProductController {
 
     @GetMapping("/search")
     @Operation(summary = "Search products by parameters",
-            description = "Search products by brand, name, price")
+            description = "Search for products by brand, name, price, breedSize, countryProduct, "
+                    + "packaging, type, group as parameter in different combinations")
     public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
                                            Pageable pageable) {
         return productService.search(productSearchParameters, pageable);
@@ -95,6 +96,18 @@ public class ProductController {
     public List<ProductResponseDto> getProductsByAnimalId(@PathVariable Long id,
                                                           Pageable pageable) {
         return productService.getAllProductsByAnimalId(id, pageable);
+    }
+
+    @GetMapping("/animal/{animalId}/category/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all products by animal ID and category ID",
+            description = "You can get all products by animal ID and category ID")
+    public List<ProductResponseDto> getAllProductsAnimalAndCategory(
+            @PathVariable Long animalId,
+            @PathVariable Long categoryId,
+            Pageable pageable) {
+        return productService.getAllProductsByAnimalAndCategory(animalId, categoryId, pageable);
+
     }
 
     @GetMapping("/random")

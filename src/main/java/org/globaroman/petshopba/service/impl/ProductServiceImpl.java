@@ -101,6 +101,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDto> getAllProductsByAnimalAndCategory(
+            Long animalId,
+            Long categoryId,
+            Pageable pageable) {
+        return productRepository.findAllByAnimalsAndCategories(animalId, categoryId, pageable)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
     public ProductResponseDto update(Long id,
                                      CreateRequestProductDto requestProductDto) {
         Product product = getProductFromDb(id);

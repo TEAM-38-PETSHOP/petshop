@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-wish_items-table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: wish_items
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: wish_list_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_wish_items_wish_lists
+                    references: wish_lists(id)
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_wish_items_products
+                    references: products(id)

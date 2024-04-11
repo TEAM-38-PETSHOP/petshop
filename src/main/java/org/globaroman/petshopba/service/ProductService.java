@@ -34,4 +34,9 @@ public interface ProductService {
                                            Pageable pageable);
 
     List<ProductResponseDto> getRandomProducts(int count);
+
+    List<ProductResponseDto> getAllProductsByAnimalAndCategory(
+            Long animalId,
+            Long categoryId,
+            Pageable pageable);
 }

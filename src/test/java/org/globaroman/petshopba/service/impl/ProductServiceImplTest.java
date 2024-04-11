@@ -67,7 +67,7 @@ class ProductServiceImplTest {
         ProductResponseDto result = productService.create(requestProductDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getProductId());
         Assertions.assertEquals(result.getAnimals().size(),
                 requestProductDto.getAnimalsId().size());
     }
@@ -103,7 +103,7 @@ class ProductServiceImplTest {
         ProductResponseDto result = productService.getById(1L);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getProductId());
     }
 
     @Test
@@ -163,7 +163,7 @@ class ProductServiceImplTest {
         ProductResponseDto result = productService.update(1L, requestProductDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getProductId());
         Assertions.assertEquals(requestProductDto.getBrand(), result.getBrand());
     }
 
@@ -206,14 +206,14 @@ class ProductServiceImplTest {
         responseDto.setImage("image.jpeg");
         responseDto.setName("Product");
         responseDto.setDescription("This is description of product");
-        responseDto.setId(1L);
+        responseDto.setProductId(1L);
         ResponseCategoryDto responseCategoryDto = new ResponseCategoryDto();
         responseCategoryDto.setId(1L);
         ResponseCategoryDto responseCategoryDto2 = new ResponseCategoryDto();
         responseCategoryDto2.setId(2L);
         responseDto.setCategories(List.of(responseCategoryDto, responseCategoryDto2));
         responseDto.setPrice(BigDecimal.valueOf(15.99));
-        responseDto.setId(1L);
+        responseDto.setProductId(1L);
 
         return responseDto;
     }
