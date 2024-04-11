@@ -23,4 +23,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
     @Query(value = "SELECT * FROM products ORDER BY RAND() LIMIT :countProduct",
             nativeQuery = true)
     List<Product> findRandomProducts(@Param("countProduct") int countProduct);
+
+    @Query("SELECT p FROM Product p JOIN p.animals a JOIN  p.categories c WHERE a.id = :animalId "
+            + "AND c.id = :categoryId")
+    List<Product> findAllByAnimalsAndCategories(
+            @Param("animalId") Long animalId,
+            @Param("categoryId") Long categoryId,
+            Pageable pageable);
 }

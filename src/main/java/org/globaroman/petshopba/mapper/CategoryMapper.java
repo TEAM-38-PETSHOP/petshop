@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@SuppressWarnings("unmappedTargetProperties")
 @Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
 

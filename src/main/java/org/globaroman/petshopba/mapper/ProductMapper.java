@@ -19,6 +19,7 @@ import org.mapstruct.Named;
 @Mapper(config = MapperConfig.class)
 public interface ProductMapper {
 
+    @Mapping(target = "productId", source = "id")
     ProductResponseDto toDto(Product product);
 
     @Mapping(target = "categories", ignore = true)
@@ -69,4 +70,5 @@ public interface ProductMapper {
     default BigDecimal getPriceFromProduct(Product product) {
         return product != null ? product.getPrice() : null;
     }
+
 }

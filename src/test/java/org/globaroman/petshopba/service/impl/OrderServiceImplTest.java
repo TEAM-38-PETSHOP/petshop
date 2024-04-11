@@ -2,6 +2,7 @@ package org.globaroman.petshopba.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -114,13 +115,17 @@ class OrderServiceImplTest {
                 .thenReturn(getOrderItem());
         Mockito.doNothing().when(shoppingCartRepository)
                 .delete(Mockito.any(ShoppingCart.class));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+        String dayToday = order.getOrderDate().format(formatter);
+
         Mockito.when(emailSenderService.sendEmail(
                 "OneGroom.com.ua",
                 "roman@gmail.com",
                 "Замовлення № 1",
                 "Ваше замовлення №1 прийняте.\n"
                         + "Ви можете відстежити статус свого замовлення в особистому кабінеті.\n"
-                        + "Замовлення від 31.03.2024\n"
+                        + "Замовлення від " + dayToday + "\n"
                         + "№1\n"
                         + "Product\n"
                         + "Кількість: 1 шт.\n"
