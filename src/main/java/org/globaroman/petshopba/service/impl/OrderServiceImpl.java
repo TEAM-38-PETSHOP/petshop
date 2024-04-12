@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     private String getOrderItemTextingName(Set<OrderItem> orderItems) {
         StringBuilder sb = new StringBuilder();
         for (OrderItem orderItem : orderItems) {
-            sb.append("№").append(orderItem.getProduct().getId()).append("\n")
+            sb.append("Артикль №").append(orderItem.getProduct().getId()).append("\n")
                     .append(orderItem.getProduct().getName()).append("\n")
                     .append("Кількість: ").append(orderItem.getQuantity()).append(" шт.\n")
                     .append("Ціна: ").append(orderItem.getPrice()
