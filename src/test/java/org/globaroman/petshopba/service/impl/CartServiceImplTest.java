@@ -87,10 +87,10 @@ class CartServiceImplTest {
                 .thenReturn(Optional.of(shoppingCart));
         Mockito.when(productRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(product));
+
         Mockito.when(cartItemRepository.save(Mockito.any(CartItem.class)))
                 .thenReturn(cartItem);
-        Mockito.when(shoppingCartRepository.save(Mockito.any(ShoppingCart.class)))
-                .thenReturn(shoppingCart);
+
         Mockito.when(shoppingCartMapper.toShoppingCartDto(shoppingCart))
                 .thenReturn(new ShoppingCartResponseDto());
 

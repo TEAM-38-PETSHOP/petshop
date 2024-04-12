@@ -1,6 +1,8 @@
 package org.globaroman.petshopba.service.impl;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
@@ -37,6 +39,11 @@ public class CartServiceImpl implements CartService {
         Product requestProduct = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new EntityNotFoundCustomException(
                         "Can't find product with id: " + requestDto.getProductId()));
+
+        if (isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
+            return shoppingCartMapper.toShoppingCartDto(shoppingCart);
+        }
+
         CartItem cartItem = new CartItem();
 
         cartItem.setProduct(requestProduct);
@@ -44,10 +51,6 @@ public class CartServiceImpl implements CartService {
         cartItem.setShoppingCart(shoppingCart);
 
         CartItem savedCartItem = cartItemRepository.save(cartItem);
-
-        if (shoppingCart.getCartItems() == null) {
-            shoppingCart.setCartItems(new HashSet<>());
-        }
 
         shoppingCart.getCartItems().add(savedCartItem);
 
@@ -91,8 +94,27 @@ public class CartServiceImpl implements CartService {
         return shoppingCartRepository.findByUserId(user.getId())
                 .orElseGet(() -> {
                     ShoppingCart newShoppingCart = new ShoppingCart();
+                    newShoppingCart.setCartItems(new HashSet<>());
                     newShoppingCart.setUser(user);
                     return shoppingCartRepository.save(newShoppingCart);
                 });
+    }
+
+    private boolean isProductIntoCart(ShoppingCart shoppingCart,
+                                      Product requestProduct,
+                                      CartItemRequestDto requestDto) {
+        Map<Long, CartItem> cartItemsMap = new HashMap<>();
+
+        for (CartItem item : shoppingCart.getCartItems()) {
+            cartItemsMap.put(item.getProduct().getId(), item);
+        }
+
+        if (cartItemsMap.containsKey(requestProduct.getId())) {
+            CartItem item = cartItemsMap.get(requestProduct.getId());
+            item.setQuantity(item.getQuantity() + requestDto.getQuantity());
+            cartItemRepository.save(item);
+            return true;
+        }
+        return false;
     }
 }
