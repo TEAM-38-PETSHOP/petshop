@@ -1,4 +1,4 @@
-# Використовуємо базовий образ з JDK та Maven
+
 FROM maven:3.8.4-openjdk-17 AS builder
 
 # Копіюємо pom.xml окремо, щоб спростити кешування
@@ -15,7 +15,7 @@ FROM openjdk:17
 # Копіюємо скомпільований JAR файл з попереднього етапу в новий образ
 COPY --from=builder /tmp/target/*.jar /app/application.jar
 
-# Виконуємо ваше Java-додаток
+# Виконуємо ваш Java-додаток
 CMD ["java", "-jar", "/app/application.jar"]
 
 

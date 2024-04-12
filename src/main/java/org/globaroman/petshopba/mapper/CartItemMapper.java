@@ -12,11 +12,11 @@ import org.mapstruct.MappingTarget;
 public interface CartItemMapper {
     @Mapping(source = "product", target = "productId", qualifiedByName = "productFromId")
     @Mapping(source = "product", target = "productName", qualifiedByName = "getNameFromProduct")
+    @Mapping(target = "cartItemId", source = "id")
     CarItemResponseDto toCartItemDto(CartItem cartItem);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "shoppingCart", ignore = true)
     @Mapping(target = "product", ignore = true)
     CartItem toUpdate(CartItemRequestDto requestDto, @MappingTarget CartItem cartItem);
-
 }

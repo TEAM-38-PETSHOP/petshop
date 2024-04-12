@@ -31,7 +31,7 @@ public class WishListServiceImpl implements WishListService {
     @Override
     public WishListResponseDto addProduct(WishItemRequestDto requestDto,
                                           Authentication authentication) {
-        System.out.println(requestDto);
+
         User user = (User) authentication.getPrincipal();
 
         WishList wishList = getWishLIstFromDbOrNew(user);

@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.wishlist.WishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishListResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Wish list management",
+        description = "endpoint for wish list (favorite products) management")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/profile/wishlists")
@@ -30,7 +33,6 @@ public class WishListController {
     public WishListResponseDto addProductCreateCart(
             @RequestBody WishItemRequestDto requestDto,
             Authentication authentication) {
-        System.out.println(requestDto);
         return wishListService.addProduct(requestDto, authentication);
     }
 
