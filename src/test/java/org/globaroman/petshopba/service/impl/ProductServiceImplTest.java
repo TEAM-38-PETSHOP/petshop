@@ -198,9 +198,9 @@ class ProductServiceImplTest {
     private ProductResponseDto getResponseDto() {
         ProductResponseDto responseDto = new ProductResponseDto();
         ResponseAnimalDto responseAnimalDto = new ResponseAnimalDto();
-        responseAnimalDto.setId(1L);
+        responseAnimalDto.setAnimalId(1L);
         ResponseAnimalDto responseAnimalDto2 = new ResponseAnimalDto();
-        responseAnimalDto2.setId(2L);
+        responseAnimalDto2.setAnimalId(2L);
         responseDto.setAnimals(List.of(responseAnimalDto, responseAnimalDto2));
         responseDto.setBrand("Brand");
         responseDto.setImage("image.jpeg");
@@ -208,9 +208,9 @@ class ProductServiceImplTest {
         responseDto.setDescription("This is description of product");
         responseDto.setProductId(1L);
         ResponseCategoryDto responseCategoryDto = new ResponseCategoryDto();
-        responseCategoryDto.setId(1L);
+        responseCategoryDto.setCategoryId(1L);
         ResponseCategoryDto responseCategoryDto2 = new ResponseCategoryDto();
-        responseCategoryDto2.setId(2L);
+        responseCategoryDto2.setCategoryId(2L);
         responseDto.setCategories(List.of(responseCategoryDto, responseCategoryDto2));
         responseDto.setPrice(BigDecimal.valueOf(15.99));
         responseDto.setProductId(1L);

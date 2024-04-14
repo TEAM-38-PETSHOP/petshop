@@ -43,7 +43,7 @@ class AnimalServiceImplTest {
         ResponseAnimalDto result = animalService.create(requestDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getAnimalId());
     }
 
     @Test
@@ -75,7 +75,7 @@ class AnimalServiceImplTest {
         ResponseAnimalDto result = animalService.getAnimalById(1L);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getId());
+        Assertions.assertEquals(1, result.getAnimalId());
     }
 
     @Test
@@ -98,7 +98,7 @@ class AnimalServiceImplTest {
         ResponseAnimalDto result = animalService.update(1L, requestDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getId());
+        Assertions.assertEquals(1, result.getAnimalId());
         Assertions.assertEquals(requestDto.getName(), result.getName());
 
     }
@@ -124,7 +124,7 @@ class AnimalServiceImplTest {
 
     private ResponseAnimalDto getResponseDto() {
         ResponseAnimalDto responseAnimalDto = new ResponseAnimalDto();
-        responseAnimalDto.setId(1L);
+        responseAnimalDto.setAnimalId(1L);
         responseAnimalDto.setName("Animal");
         return responseAnimalDto;
     }

@@ -11,6 +11,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
 
+    @Mapping(target = "categoryId", source = "id")
     ResponseCategoryDto toDto(Category category);
 
     @Mapping(target = "id", ignore = true)

@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseAnimalDto implements Serializable {
-    private Long id;
+    private Long animalId;
     private String name;
 }

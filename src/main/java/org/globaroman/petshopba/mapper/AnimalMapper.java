@@ -12,6 +12,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface AnimalMapper {
 
+    @Mapping(target = "animalId", source = "id")
     ResponseAnimalDto toDto(Animal animal);
 
     @Mapping(target = "id", ignore = true)
