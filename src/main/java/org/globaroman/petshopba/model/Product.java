@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,8 @@ public class Product {
     private String breedSize;
     private String type;
     private String packaging;
+    @Column(name = "entry_date")
+    private LocalDateTime entryDate;
 
     @ManyToMany
     @JoinTable(

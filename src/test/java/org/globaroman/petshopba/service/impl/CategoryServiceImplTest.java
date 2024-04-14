@@ -43,7 +43,7 @@ class CategoryServiceImplTest {
         ResponseCategoryDto result = categoryService.create(requestCategoryDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getCategoryId());
     }
 
     @Test
@@ -75,7 +75,7 @@ class CategoryServiceImplTest {
         ResponseCategoryDto result = categoryService.getById(1L);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getCategoryId());
     }
 
     @Test
@@ -98,7 +98,7 @@ class CategoryServiceImplTest {
         ResponseCategoryDto result = categoryService.update(1L, requestCategoryDto);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(1L, result.getCategoryId());
         Assertions.assertEquals(requestCategoryDto.getName(), result.getName());
     }
 
@@ -121,7 +121,7 @@ class CategoryServiceImplTest {
 
     private ResponseCategoryDto getResponseDto() {
         ResponseCategoryDto responseCategoryDto = new ResponseCategoryDto();
-        responseCategoryDto.setId(1L);
+        responseCategoryDto.setCategoryId(1L);
         responseCategoryDto.setName("Category");
         responseCategoryDto.setDescription("This is a description a category of product");
         return responseCategoryDto;

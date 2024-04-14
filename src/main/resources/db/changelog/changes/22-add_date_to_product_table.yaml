@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_fields_to_products_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: entry_date
+                  type: TIMESTAMP
+
+
