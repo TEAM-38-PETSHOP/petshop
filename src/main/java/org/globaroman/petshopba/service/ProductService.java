@@ -4,6 +4,7 @@ import java.util.List;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
+import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.springframework.data.domain.Pageable;
 
@@ -39,4 +40,9 @@ public interface ProductService {
             Long animalId,
             Long categoryId,
             Pageable pageable);
+
+    List<ProductResponseDto> changeImages();
+
+    ProductResponseDto updateImageToProduct(Long id,
+                                            RequestUpdateImageToProductDto requestImageDto);
 }

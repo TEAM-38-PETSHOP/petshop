@@ -187,7 +187,7 @@ class ProductServiceImplTest {
         requestProductDto.setAnimalsId(animalIds);
         requestProductDto.setName("Product");
         requestProductDto.setBrand("Brand");
-        requestProductDto.setImage("image.jpeg");
+        requestProductDto.setImageUrls(List.of("image.jpeg"));
         requestProductDto.setPrice(BigDecimal.valueOf(15.99));
         requestProductDto.setCategoriesId(animalIds);
         requestProductDto.setDescription("This is description of product");
@@ -203,7 +203,7 @@ class ProductServiceImplTest {
         responseAnimalDto2.setAnimalId(2L);
         responseDto.setAnimals(List.of(responseAnimalDto, responseAnimalDto2));
         responseDto.setBrand("Brand");
-        responseDto.setImage("image.jpeg");
+        responseDto.setImageUrls(List.of("image.jpeg"));
         responseDto.setName("Product");
         responseDto.setDescription("This is description of product");
         responseDto.setProductId(1L);

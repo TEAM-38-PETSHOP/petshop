@@ -35,6 +35,8 @@ public interface ProductMapper {
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "animals", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "entryDate", ignore = true)
     Product toUpdate(CreateRequestProductDto requestProductDto, @MappingTarget Product product);
 
     @AfterMapping

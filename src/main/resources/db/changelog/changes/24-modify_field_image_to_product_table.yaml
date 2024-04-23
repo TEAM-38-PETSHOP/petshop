@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: modify_field_image_column_to_products
+      author: org.globaroman
+      changes:
+        - dropNotNullConstraint:
+            tableName: products
+            columnName: image
+            columnDataType: VARCHAR(3005)
+
+
+
