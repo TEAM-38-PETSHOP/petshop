@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_list_urls_image_to_products_table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: product_image_urls
+            columns:
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: varchar(3000)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: product_image_urls
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_product_image_urls_products
+
