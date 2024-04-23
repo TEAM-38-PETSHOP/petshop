@@ -1,11 +1,13 @@
 package org.globaroman.petshopba.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
+import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.ProductMapper;
@@ -31,11 +33,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
         Product product = productMapper.toModel(requestProductDto);
+        List<String> urlsImageForModel = new ArrayList<>();
 
-        String urlImage = amazonS3Service.uploadImageUrl(
-                upload.downloadImage(requestProductDto.getImage()),
-                getStringObjectKey(requestProductDto));
-        product.setImage(urlImage);
+        List<String> imageUrls = requestProductDto.getImageUrls();
+
+        for (String url : imageUrls) {
+
+            urlsImageForModel.add(amazonS3Service.uploadImageUrl(
+                    upload.downloadImage(url),
+                    getStringObjectKey(
+                            requestProductDto.getBrand(),
+                            requestProductDto.getName())));
+        }
+        product.setImageUrls(urlsImageForModel);
+        product.setImage("ImageSoonDelete");
+
         return productMapper.toDto(productRepository.save(product));
     }
 
@@ -112,6 +124,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDto> changeImages() {
+        List<Product> products = productRepository.findAll();
+
+        for (Product product : products) {
+            if (product.getImage() != null && !product.getImage().equals("ImageSoonDelete")) {
+                List<String> lists = new ArrayList<>();
+                lists.add(product.getImage());
+                product.setImageUrls(lists);
+                productRepository.save(product);
+            }
+        }
+
+        return productRepository.findAll().stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public ProductResponseDto updateImageToProduct(Long id,
+                                                   RequestUpdateImageToProductDto requestImageDto) {
+        Product productFromDb = getProductFromDb(id);
+
+        List<String> urlsImageForModel = productFromDb.getImageUrls();
+
+        List<String> imageUrls = requestImageDto.getImageUrls();
+
+        for (String url : imageUrls) {
+            urlsImageForModel.add(amazonS3Service.uploadImageUrl(
+                    upload.downloadImage(url),
+                    getStringObjectKey(productFromDb.getBrand(), productFromDb.getName())));
+        }
+        productFromDb.setImageUrls(urlsImageForModel);
+
+        return productMapper.toDto(productRepository.save(productFromDb));
+
+    }
+
+    @Override
     public ProductResponseDto update(Long id,
                                      CreateRequestProductDto requestProductDto) {
         Product product = getProductFromDb(id);
@@ -132,11 +182,9 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    private String getStringObjectKey(CreateRequestProductDto requestProductDto) {
+    private String getStringObjectKey(String brand, String nameProduct) {
         Random random = new Random();
         int nameImage = random.nextInt(10000000);
-        String brand = requestProductDto.getBrand();
-        String nameProduct = getNameProductShort(requestProductDto.getName());
 
         return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
     }

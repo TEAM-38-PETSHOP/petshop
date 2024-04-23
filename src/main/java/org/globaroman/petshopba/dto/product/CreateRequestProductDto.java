@@ -13,7 +13,7 @@ public class CreateRequestProductDto implements Serializable {
     private String brand;
     private String description;
     private BigDecimal price;
-    private String image;
+    private List<String> imageUrls;
     private String countryProduct;
     private String groupProduct;
     private String breedSize;

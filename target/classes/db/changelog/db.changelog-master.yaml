@@ -45,3 +45,5 @@ databaseChangeLog:
       file: /db/changelog/changes/22-add_date_to_product_table.yaml
   - include:
       file: /db/changelog/changes/23-add_list_urls_image_to_product_table.yaml
+  - include:
+      file: /db/changelog/changes/24-modify_field_image_to_product_table.yaml

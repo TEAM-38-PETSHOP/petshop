@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
+import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.service.ProductService;
 import org.springframework.data.domain.Pageable;
@@ -131,11 +132,27 @@ public class ProductController {
         return productService.update(id, requestProductDto);
     }
 
+    @PatchMapping("/updateImage/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update images",
+            description = "You can add images to products")
+    public ProductResponseDto updateImageOfProductById(
+            @PathVariable Long id,
+            @RequestBody RequestUpdateImageToProductDto requestImageDto) {
+
+        return productService.updateImageToProduct(id, requestImageDto);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete product",
             description = "You can delete a product")
     public void deleteProductById(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @GetMapping("/admin/transimages")
+    public List<ProductResponseDto> changeImages() {
+        return productService.changeImages();
     }
 }

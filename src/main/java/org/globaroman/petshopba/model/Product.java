@@ -66,11 +66,11 @@ public class Product {
     @JsonIgnore
     private List<Category> categories;
 
-
     @ElementCollection
     @CollectionTable(name = "product_image_urls", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url")
     private List<String> imageUrls = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
