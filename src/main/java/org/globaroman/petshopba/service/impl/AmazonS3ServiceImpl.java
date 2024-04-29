@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Value("${AWS_ACCESS_KEY}")
@@ -44,6 +46,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
         try {
             return s3ClientObject.getObjectContent();
         } catch (Exception e) {
+            log.error("Can not download file" + path, e);
             throw new DataProcessingException("Can not download file" + path, e);
         }
     }
@@ -72,6 +75,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             return "https://" + url.getHost() + url.getPath();
 
         } catch (SdkClientException e) {
+            log.error("Can not load image to S3", e);
             throw new DataProcessingException("Can not load image to S3", e);
         }
     }
@@ -93,7 +97,25 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             return "https://" + url.getHost() + url.getPath();
 
         } catch (SdkClientException e) {
+            log.error("Can not load image: " + path + " to S3", e);
             throw new DataProcessingException("Can not load image: " + path + " to S3", e);
+        }
+    }
+
+    @Override
+    public void uploadDoc(String path, String objectKey) {
+        try {
+            AmazonS3 s3Client = getS3Client();
+
+            PutObjectRequest request = new PutObjectRequest(bucketName, objectKey, new File(path));
+            s3Client.putObject(request);
+
+            s3Client.setObjectAcl(bucketName, objectKey,
+                    CannedAccessControlList.PublicReadWrite);
+
+        } catch (SdkClientException e) {
+            log.error("Can not load doc: " + path + " to S3", e);
+            throw new DataProcessingException("Can not load doc: " + path + " to S3", e);
         }
     }
 
@@ -107,6 +129,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             s3Client.deleteObject(request);
             return "Image " + keyImage[3] + "was deleting successful";
         } catch (AmazonS3Exception e) {
+            log.error("Can not delete image: " + url + " from S3", e);
             throw new DataProcessingException(
                     "Can not delete image: " + url + " from S3", e);
         }

@@ -40,6 +40,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             Method method = value.getClass().getMethod(methodName);
             return method.invoke(value);
         } catch (Exception e) {
+            log.error("Can't get access to field" + name, e);
             throw new RuntimeException("Can't get access to field" + name, e);
 
         }

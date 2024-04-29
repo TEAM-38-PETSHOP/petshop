@@ -151,8 +151,4 @@ public class ProductController {
         productService.delete(id);
     }
 
-    @GetMapping("/admin/transimages")
-    public List<ProductResponseDto> changeImages() {
-        return productService.changeImages();
-    }
 }

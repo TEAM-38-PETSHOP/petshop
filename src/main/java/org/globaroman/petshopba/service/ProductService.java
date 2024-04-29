@@ -41,8 +41,6 @@ public interface ProductService {
             Long categoryId,
             Pageable pageable);
 
-    List<ProductResponseDto> changeImages();
-
     ProductResponseDto updateImageToProduct(Long id,
                                             RequestUpdateImageToProductDto requestImageDto);
 }

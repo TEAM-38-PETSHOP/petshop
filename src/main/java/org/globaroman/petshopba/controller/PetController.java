@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.pet.CreatePetAnimalRequestDto;
 import org.globaroman.petshopba.dto.pet.ResponsePetAnimalDto;
-import org.globaroman.petshopba.security.PetAnimalService;
+import org.globaroman.petshopba.service.PetAnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

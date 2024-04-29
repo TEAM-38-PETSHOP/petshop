@@ -10,4 +10,6 @@ public interface AmazonS3Service {
     String deleteImage(String image);
 
     InputStream downloadS3(String path);
+
+    void uploadDoc(String path, String objectKey);
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class CartServiceImpl implements CartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
@@ -37,8 +39,11 @@ public class CartServiceImpl implements CartService {
         User user = (User) authentication.getPrincipal();
         ShoppingCart shoppingCart = getShoppingCartFromDbOrNew(user);
         Product requestProduct = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundCustomException(
-                        "Can't find product with id: " + requestDto.getProductId()));
+                .orElseThrow(() -> {
+                    log.error("Can't find product with id: " + requestDto.getProductId());
+                    return new EntityNotFoundCustomException("Can't find product with id: "
+                    + requestDto.getProductId());
+                });
 
         if (isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
             return shoppingCartMapper.toShoppingCartDto(shoppingCart);
@@ -65,10 +70,12 @@ public class CartServiceImpl implements CartService {
             CartItemRequestDto requestDto,
             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
-                () -> new EntityNotFoundCustomException(
-                        "Can't find cart with id: "
-                                + cartItemId)
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> {
+                    log.error("Can't find cart with id: "
+                            + cartItemId);
+                    return new EntityNotFoundCustomException(
+                            "Can't find cart with id: " + cartItemId);
+                }
         );
         CartItem updateCart = cartItemMapper.toUpdate(requestDto, cartItem);
         cartItemRepository.save(updateCart);

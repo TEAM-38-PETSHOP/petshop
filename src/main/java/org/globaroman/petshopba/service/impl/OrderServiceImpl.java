@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class OrderServiceImpl implements OrderService {
 
     private final AddressMapper addressMapper;
@@ -76,7 +78,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResponseOrderDto updateStatusToOrder(OrderStatusDto statusDto, Long id) {
         Order order = orderRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can't find order with id: " + id));
+                () -> {
+                    log.error("Can't find order with id: " + id);
+                    return new EntityNotFoundCustomException("Can't find order with id: " + id);
+                });
         order.setStatus(statusDto.getStatus());
 
         return orderMapper.toDto(orderRepository.save(order));
@@ -85,23 +90,36 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ResponseOrderItemDto> getOrderItensFromOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can't find order with id: " + orderId));
+                () -> {
+                    log.error("Can't find order with id: " + orderId);
+                    return new EntityNotFoundCustomException(
+                            "Can't find order with id: " + orderId);
+                });
         return orderMapper.orderItemsToDtos(order.getOrderItems());
     }
 
     @Override
     public ResponseOrderItemDto getOrderItemById(Long itemId) {
         OrderItem orderItem = orderItemRepository.findById(itemId).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find orderItem with id: " + itemId)
+                () -> {
+                    log.error("Can not find orderItem with id: " + itemId);
+                    return new EntityNotFoundCustomException(
+                            "Can not find orderItem with id: " + itemId);
+                }
         );
         return itemMapper.toDto(orderItem);
     }
 
     private Order getOrderFromShoppingCart(User user, Address address) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundCustomException(
-                        "Can't find shopping cart for user with id: " + user.getId()));
+                .orElseThrow(
+                        () -> {
+                            log.error("Can't find shopping cart for user with id: " + user.getId());
+                            return new EntityNotFoundCustomException(
+                                    "Can't find shopping cart for user with id: " + user.getId());
+                        });
         if (shoppingCart.getCartItems().isEmpty()) {
+            log.error("Can not create order because of cartItem is empty");
             throw new RuntimeException("Can not create order because of cartItem is empty");
         }
         Order order = getOrderWithFields(shoppingCart, address);

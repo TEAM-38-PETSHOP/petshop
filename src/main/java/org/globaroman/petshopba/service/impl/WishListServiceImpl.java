@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.wishlist.WishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishListResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class WishListServiceImpl implements WishListService {
 
     private final WishListRepository wishListRepository;
@@ -37,8 +39,11 @@ public class WishListServiceImpl implements WishListService {
         WishList wishList = getWishLIstFromDbOrNew(user);
 
         Product requestProduct = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundCustomException(
-                        "Can't find product with id: " + requestDto.getProductId()));
+                .orElseThrow(() -> {
+                    log.error("Can't find product with id: " + requestDto.getProductId());
+                    return new EntityNotFoundCustomException(
+                            "Can't find product with id: " + requestDto.getProductId());
+                });
 
         if (isProduct(wishList, requestProduct)) {
             return wishListMapper.toDto(wishList);

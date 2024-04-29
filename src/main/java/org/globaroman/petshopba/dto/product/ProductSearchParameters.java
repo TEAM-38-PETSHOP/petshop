@@ -7,6 +7,8 @@ public record ProductSearchParameters(String[] name,
                                       String[] type,
                                       String[] breedSize,
                                       String[] packaging,
-                                      String[] countryProduct) {
+                                      String[] countryProduct,
+                                      String [] animals,
+                                      String [] categories) {
 
 }

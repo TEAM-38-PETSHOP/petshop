@@ -42,12 +42,12 @@ class PetAnimalServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        user = new User()
-                .setId(1L)
-                .setEmail("roman@gmail.com")
-                .setPassword("$2a$10$2P9C9iZmpeNBNt2qrNKHcO7mxE/DcDV62TVvHa1OZpa1Ha3Hzi1Va")
-                .setFirstName("John")
-                .setLastName("Duo");
+        user = new User();
+        user.setId(1L);
+        user.setEmail("roman@gmail.com");
+        user.setPassword("$2a$10$2P9C9iZmpeNBNt2qrNKHcO7mxE/DcDV62TVvHa1OZpa1Ha3Hzi1Va");
+        user.setFirstName("John");
+        user.setLastName("Duo");
 
         authentication = new org.springframework.security
                 .authentication.UsernamePasswordAuthenticationToken(user, null);

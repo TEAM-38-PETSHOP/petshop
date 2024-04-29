@@ -26,5 +26,4 @@ public class UploadImageServiceImpl implements UploadImageService {
             throw new RuntimeException(e);
         }
     }
-
 }
