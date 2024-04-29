@@ -1,12 +1,11 @@
 package org.globaroman.petshopba.repository.specification.product;
 
-import jakarta.persistence.criteria.*;
-import org.globaroman.petshopba.model.*;
-import org.globaroman.petshopba.repository.specification.*;
-import org.springframework.data.jpa.domain.*;
-import org.springframework.stereotype.*;
-
-import java.util.*;
+import jakarta.persistence.criteria.Join;
+import org.globaroman.petshopba.model.Category;
+import org.globaroman.petshopba.model.Product;
+import org.globaroman.petshopba.repository.specification.SpecificationProvider;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CategorySpecificationProvider implements SpecificationProvider<Product> {

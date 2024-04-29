@@ -1,12 +1,12 @@
 package org.globaroman.petshopba.service.impl;
 
-import lombok.*;
-import lombok.extern.log4j.*;
-import org.globaroman.petshopba.service.*;
-import org.springframework.scheduling.annotation.*;
-import org.springframework.stereotype.*;
-
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.globaroman.petshopba.service.AmazonS3Service;
+import org.globaroman.petshopba.service.LogService;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +18,5 @@ public class LogServiceImpl implements LogService {
     @Scheduled(fixedRate = 60, timeUnit = TimeUnit.MINUTES)
     public void downloadLogToS3() {
         amazonS3Service.uploadDoc("application.log", "logs/app.log");
-
     }
-
 }

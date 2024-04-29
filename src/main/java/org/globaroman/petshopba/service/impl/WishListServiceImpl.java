@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.wishlist.WishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishListResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;

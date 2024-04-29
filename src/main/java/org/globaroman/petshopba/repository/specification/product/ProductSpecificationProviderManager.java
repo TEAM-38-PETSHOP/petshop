@@ -2,7 +2,7 @@ package org.globaroman.petshopba.repository.specification.product;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.specification.SpecificationProvider;
 import org.globaroman.petshopba.repository.specification.SpecificationProviderManager;

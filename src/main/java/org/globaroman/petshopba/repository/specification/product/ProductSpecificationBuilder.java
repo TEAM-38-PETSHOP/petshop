@@ -36,7 +36,8 @@ public class ProductSpecificationBuilder implements SpecificationBuilder<Product
                     .getSpecification(searchParameters.price()));
         }
 
-        if (searchParameters.countryProduct() != null && searchParameters.countryProduct().length > 0) {
+        if (searchParameters.countryProduct() != null
+                && searchParameters.countryProduct().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("countryProduct")
                     .getSpecification(searchParameters.countryProduct()));

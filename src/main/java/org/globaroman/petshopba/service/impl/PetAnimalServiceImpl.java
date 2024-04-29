@@ -2,7 +2,7 @@ package org.globaroman.petshopba.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.pet.CreatePetAnimalRequestDto;
 import org.globaroman.petshopba.dto.pet.ResponsePetAnimalDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;

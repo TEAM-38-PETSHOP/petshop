@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UploadImageServiceImpl implements UploadImageService {
 
     @Override
-    public InputStream  downloadImage(String imageUrl) {
+    public InputStream downloadImage(String imageUrl) {
         URL url = null;
         try {
             url = new URL(imageUrl);
@@ -26,5 +26,4 @@ public class UploadImageServiceImpl implements UploadImageService {
             throw new RuntimeException(e);
         }
     }
-
 }

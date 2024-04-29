@@ -9,8 +9,7 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
-
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Value;

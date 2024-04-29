@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
@@ -92,7 +92,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> {
                     log.error("Can't find order with id: " + orderId);
-                    return new EntityNotFoundCustomException("Can't find order with id: " + orderId);
+                    return new EntityNotFoundCustomException(
+                            "Can't find order with id: " + orderId);
                 });
         return orderMapper.orderItemsToDtos(order.getOrderItems());
     }
@@ -102,7 +103,8 @@ public class OrderServiceImpl implements OrderService {
         OrderItem orderItem = orderItemRepository.findById(itemId).orElseThrow(
                 () -> {
                     log.error("Can not find orderItem with id: " + itemId);
-                    return new EntityNotFoundCustomException("Can not find orderItem with id: " + itemId);
+                    return new EntityNotFoundCustomException(
+                            "Can not find orderItem with id: " + itemId);
                 }
         );
         return itemMapper.toDto(orderItem);

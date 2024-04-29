@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -110,15 +110,15 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             PutObjectRequest request = new PutObjectRequest(bucketName, objectKey, new File(path));
             s3Client.putObject(request);
 
-            s3Client.setObjectAcl(bucketName, objectKey, CannedAccessControlList.PublicReadWrite);
-
-
+            s3Client.setObjectAcl(bucketName, objectKey,
+                    CannedAccessControlList.PublicReadWrite);
 
         } catch (SdkClientException e) {
             log.error("Can not load doc: " + path + " to S3", e);
             throw new DataProcessingException("Can not load doc: " + path + " to S3", e);
         }
     }
+
     public String deleteImage(String url) {
 
         String[] keyImage = url.split("/");

@@ -1,7 +1,7 @@
 package org.globaroman.petshopba.security;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
