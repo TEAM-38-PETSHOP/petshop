@@ -2,6 +2,7 @@ package org.globaroman.petshopba.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.*;
 import org.globaroman.petshopba.dto.pet.CreatePetAnimalRequestDto;
 import org.globaroman.petshopba.dto.pet.ResponsePetAnimalDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -10,12 +11,13 @@ import org.globaroman.petshopba.model.Pet;
 import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.repository.PetRepository;
 import org.globaroman.petshopba.repository.UserRepository;
-import org.globaroman.petshopba.security.PetAnimalService;
+import org.globaroman.petshopba.service.PetAnimalService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class PetAnimalServiceImpl implements PetAnimalService {
     private final PetRepository petRepository;
     private final PetMapper petMapper;
@@ -55,6 +57,7 @@ public class PetAnimalServiceImpl implements PetAnimalService {
             Pet pet = getPetFromDataBase(petId);
             return petMapper.toDto(pet);
         } else {
+            log.error("You do not need permission for this operation");
             throw new RuntimeException("You do not need permission for this operation");
         }
     }
@@ -73,6 +76,7 @@ public class PetAnimalServiceImpl implements PetAnimalService {
             Pet pet = getPetFromDataBase(petId);
             petRepository.deleteById(petId);
         } else {
+            log.error("You do not need permission for this operation");
             throw new RuntimeException("You do not need permission for this operation");
         }
 
@@ -80,7 +84,10 @@ public class PetAnimalServiceImpl implements PetAnimalService {
 
     private Pet getPetFromDataBase(Long petId) {
         return petRepository.findById(petId).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not pet with ID: " + petId)
+                () -> {
+                    log.error("Can not pet with ID: " + petId);
+                    return new EntityNotFoundCustomException("Can not pet with ID: " + petId);
+                }
         );
     }
 

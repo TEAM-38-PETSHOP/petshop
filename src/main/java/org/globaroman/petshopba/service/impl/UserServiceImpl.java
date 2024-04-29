@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.*;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class UserServiceImpl implements UserService {
     private static final Long USER_ROLE_ID =
             (long) Role.RoleName.USER.ordinal() + 1;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            log.error("Can't register user. The same user with email "
+                    + requestDto.getEmail()
+                    + " already exist");
             throw new RegistrationException(
                     "Can't register user. The same user with email "
                             + requestDto.getEmail()
@@ -50,7 +55,10 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto update(Long id, UpdateRoleDto updateRoleDto) {
         Role.RoleName roleName = Role.RoleName.valueOf(updateRoleDto.getRole().name());
         User user = userRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("No found user by id: " + id)
+                () -> {
+                    log.error("No found user by id: " + id);
+                    return new EntityNotFoundCustomException("No found user by id: " + id);
+                }
         );
 
         Role existRole = getRoleFromDB((long)roleName.ordinal() + 1);
@@ -83,6 +91,9 @@ public class UserServiceImpl implements UserService {
 
     private Role getRoleFromDB(Long id) {
         return roleRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("Can't find role with id: " + id));
+                () -> {
+                    log.error("Can't find role with id: " + id);
+                    return new UsernameNotFoundException("Can't find role with id: " + id);
+                });
     }
 }

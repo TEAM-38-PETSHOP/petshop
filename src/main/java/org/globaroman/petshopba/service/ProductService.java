@@ -25,14 +25,11 @@ public interface ProductService {
     List<ProductResponseDto> getAllProductsByAnimalId(Long id,
                                                       Pageable pageable);
 
-    List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
-                                    Pageable pageable);
+    List<ProductResponseDto> search(ProductSearchParameters productSearchParameters, Pageable pageable);
 
-    List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
-                                          Pageable pageable);
+    List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter, Pageable pageable);
 
-    List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
-                                           Pageable pageable);
+    List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter, Pageable pageable);
 
     List<ProductResponseDto> getRandomProducts(int count);
 
@@ -40,8 +37,6 @@ public interface ProductService {
             Long animalId,
             Long categoryId,
             Pageable pageable);
-
-    List<ProductResponseDto> changeImages();
 
     ProductResponseDto updateImageToProduct(Long id,
                                             RequestUpdateImageToProductDto requestImageDto);

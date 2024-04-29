@@ -2,6 +2,7 @@ package org.globaroman.petshopba.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.*;
 import org.globaroman.petshopba.dto.animal.CreateAnimalRequestDto;
 import org.globaroman.petshopba.dto.animal.ResponseAnimalDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
@@ -51,7 +53,10 @@ public class AnimalServiceImpl implements AnimalService {
 
     private Animal getAnimalFromDb(Long id) {
         return animalRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find animal with id: " + id)
+                () -> {
+                    log.error("Can not find animal with id: " + id);
+                    return new EntityNotFoundCustomException("Can not find animal with id: " + id);
+                }
         );
     }
 }

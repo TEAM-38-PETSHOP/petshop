@@ -124,24 +124,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> changeImages() {
-        List<Product> products = productRepository.findAll();
-
-        for (Product product : products) {
-            if (product.getImage() != null && !product.getImage().equals("ImageSoonDelete")) {
-                List<String> lists = new ArrayList<>();
-                lists.add(product.getImage());
-                product.setImageUrls(lists);
-                productRepository.save(product);
-            }
-        }
-
-        return productRepository.findAll().stream()
-                .map(productMapper::toDto)
-                .toList();
-    }
-
-    @Override
     public ProductResponseDto updateImageToProduct(Long id,
                                                    RequestUpdateImageToProductDto requestImageDto) {
         Product productFromDb = getProductFromDb(id);

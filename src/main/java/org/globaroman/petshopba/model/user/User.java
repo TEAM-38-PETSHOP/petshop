@@ -28,7 +28,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 @Data
 @EqualsAndHashCode(exclude = {"roles", "pets"})
-@Accessors(chain = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

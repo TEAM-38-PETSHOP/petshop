@@ -9,12 +9,15 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
+
+import lombok.extern.log4j.*;
 import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class EmailSenderServiceImpl implements EmailSenderService {
     @Value("${mail.smtp.host}")
     private String smptHost;
@@ -54,6 +57,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             Transport.send(message);
             return "Email sent successfully!";
         } catch (MessagingException e) {
+            log.error("Email didn't send", e);
             throw new DataProcessingException("Email didn't send", e);
         }
     }

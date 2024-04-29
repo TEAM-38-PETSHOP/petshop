@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.*;
 import org.globaroman.petshopba.dto.grooming.CreatePetServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.CreateTypeServiceRequestDto;
 import org.globaroman.petshopba.dto.grooming.ResponsePetServiceDto;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class GroomServiceImpl implements GroomService {
     public static final String PATH_KEY_SERVICE = "services/listBasicService.txt";
     public static final String PATH_KEY_TYPE_SERVICE = "services/listPoslug.txt";
@@ -54,7 +56,10 @@ public class GroomServiceImpl implements GroomService {
             CreatePetServiceRequestDto requestDto,
             Long id) {
         PetService petService = petServiceRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find petService with id: " + id)
+                () -> {
+                    log.error("Can not find petService with id: " + id);
+                    return new EntityNotFoundCustomException("Can not find petService with id: " + id);
+                }
         );
 
         PetService updatePetService = petServiceMapper.toUpdateModel(
@@ -68,8 +73,12 @@ public class GroomServiceImpl implements GroomService {
             CreateTypeServiceRequestDto requestDto,
             Long id) {
         TypePetService typePetService = typePetServiceRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find typePetService with id: "
-                        + id)
+                () -> {
+                    log.error("Can not find typePetService with id: "
+                            + id);
+                    return new EntityNotFoundCustomException("Can not find typePetService with id: "
+                            + id);
+                }
         );
 
         TypePetService updateTypeService = typeServiceMapper.toUpdateTypeService(
@@ -110,6 +119,7 @@ public class GroomServiceImpl implements GroomService {
             }
 
         } catch (IOException e) {
+            log.error("Can not download file: " + PATH_KEY_SERVICE, e);
             throw new DataProcessingException("Can not download file: " + PATH_KEY_SERVICE, e);
         }
     }
@@ -125,8 +135,8 @@ public class GroomServiceImpl implements GroomService {
                 TypePetService typePetService = typeServiceMapper.toModel(requestDto);
                 typePetServiceRepository.save(typePetService);
             }
-
         } catch (IOException e) {
+            log.error("Can not download file: " + PATH_KEY_SERVICE, e);
             throw new DataProcessingException("Can not download file: " + PATH_KEY_SERVICE, e);
         }
     }
@@ -155,7 +165,10 @@ public class GroomServiceImpl implements GroomService {
     @Override
     public ResponsePetServiceDto getPetServiceById(Long id) {
         PetService petService = petServiceRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find petService with id:" + id)
+                () -> {
+                    log.error("Can not find petService with id:" + id);
+                    return new EntityNotFoundCustomException("Can not find petService with id:" + id);
+                }
         );
 
         return petServiceMapper.toDto(petService);
@@ -164,7 +177,10 @@ public class GroomServiceImpl implements GroomService {
     @Override
     public ResponseTypeServiceDto getTypePetServiceById(Long id) {
         TypePetService typePetService = typePetServiceRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find typePetService with id:" + id)
+                () -> {
+                    log.error("Can not find typePetService with id:" + id);
+                    return new EntityNotFoundCustomException("Can not find typePetService with id:" + id);
+                }
         );
         return typeServiceMapper.toDto(typePetService);
     }
@@ -182,8 +198,12 @@ public class GroomServiceImpl implements GroomService {
     private Long getPetServiceId(String s) {
         Long petServiceId = Long.parseLong(s);
         PetService petService = petServiceRepository.findByNumberId(petServiceId).orElseThrow(
-                () -> new EntityNotFoundCustomException("Can not find PetService with numberId: "
-                        + petServiceId)
+                () -> {
+                    log.error("Can not find PetService with numberId: "
+                            + petServiceId);
+                    return new EntityNotFoundCustomException("Can not find PetService with numberId: "
+                            + petServiceId);
+                }
         );
 
         return petService.getId();

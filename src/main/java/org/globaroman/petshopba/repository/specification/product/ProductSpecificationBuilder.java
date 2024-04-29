@@ -36,34 +36,46 @@ public class ProductSpecificationBuilder implements SpecificationBuilder<Product
                     .getSpecification(searchParameters.price()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
+        if (searchParameters.countryProduct() != null && searchParameters.countryProduct().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("countryProduct")
                     .getSpecification(searchParameters.countryProduct()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
+        if (searchParameters.group() != null && searchParameters.group().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("group")
                     .getSpecification(searchParameters.group()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
+        if (searchParameters.breedSize() != null && searchParameters.breedSize().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("breedSize")
                     .getSpecification(searchParameters.breedSize()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
+        if (searchParameters.type() != null && searchParameters.type().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("type")
                     .getSpecification(searchParameters.type()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
+        if (searchParameters.packaging() != null && searchParameters.packaging().length > 0) {
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("packaging")
                     .getSpecification(searchParameters.packaging()));
+        }
+
+        if (searchParameters.animals() != null && searchParameters.animals().length > 0) {
+            spec = spec.and(productSpecificationProviderManager
+                    .getSpecificationProvider("animals")
+                    .getSpecification(searchParameters.animals()));
+        }
+
+        if (searchParameters.categories() != null && searchParameters.categories().length > 0) {
+            spec = spec.and(productSpecificationProviderManager
+                    .getSpecificationProvider("categories")
+                    .getSpecification(searchParameters.categories()));
         }
 
         return spec;
