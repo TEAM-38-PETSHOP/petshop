@@ -15,6 +15,7 @@ public interface TypeServiceMapper {
 
     @Mapping(target = "petService", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "typePetServiceNameId", ignore = true)
     TypePetService toModel(CreateTypeServiceRequestDto requestDto);
 
     @Mapping(target = "petServiceId", source = "petService.id")
@@ -29,6 +30,7 @@ public interface TypeServiceMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "petService", ignore = true)
+    @Mapping(target = "typePetServiceNameId", ignore = true)
     TypePetService toUpdateTypeService(CreateTypeServiceRequestDto requestDto,
                                        @MappingTarget TypePetService typePetService);
 }

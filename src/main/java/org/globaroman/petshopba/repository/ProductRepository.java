@@ -30,4 +30,18 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
             @Param("animalId") Long animalId,
             @Param("categoryId") Long categoryId,
             Pageable pageable);
+
+    @Query("SELECT count(p) FROM Product p")
+    Long countAllProducts();
+
+    Long countProductsByCategoriesId(@Param("id") Long id);
+
+    Long countProductsByAnimalsId(@Param("id") Long id);
+
+    @Query("SELECT count(p) FROM Product p JOIN p.animals a JOIN  p.categories c "
+            + "WHERE a.id = :animalId "
+            + "AND c.id = :categoryId")
+    Long countProductsByAnimalsIdAndCategoriesId(
+            @Param("animalId") Long animalId,
+            @Param("categoryId") Long categoryId);
 }

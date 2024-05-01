@@ -26,6 +26,8 @@ public class Animal {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
+    @Column(name = "animal_name_id")
+    private String animalNameId;
     private String description;
     @ManyToMany(mappedBy = "animals")
     private List<Product> products;

@@ -23,9 +23,11 @@ public interface PetMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "petNameId", ignore = true)
     Pet toEntity(CreatePetAnimalRequestDto createPetAnimalRequestDto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "petNameId", ignore = true)
     Pet updatePet(CreatePetAnimalRequestDto requestDto, @MappingTarget Pet pet);
 }

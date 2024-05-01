@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.mapper.CategoryMapper;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.repository.CategoryRepository;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class CategoryServiceImplTest {
     @Mock
     private CategoryMapper categoryMapper;
 
+    @Mock
+    private TransliterationService transliterationService;
+
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
@@ -39,6 +43,8 @@ class CategoryServiceImplTest {
         Mockito.when(categoryMapper.toModel(requestCategoryDto)).thenReturn(category);
         Mockito.when(categoryRepository.save(category)).thenReturn(category);
         Mockito.when(categoryMapper.toDto(category)).thenReturn(responseCategoryDto);
+        Mockito.when(transliterationService.getLatinStringLine("Category"))
+                .thenReturn(Mockito.anyString());
 
         ResponseCategoryDto result = categoryService.create(requestCategoryDto);
 
@@ -94,6 +100,8 @@ class CategoryServiceImplTest {
                 .thenReturn(updateCategory);
         Mockito.when(categoryRepository.save(updateCategory)).thenReturn(updateCategory);
         Mockito.when(categoryMapper.toDto(updateCategory)).thenReturn(responseCategoryDto);
+        Mockito.when(transliterationService.getLatinStringLine("New name"))
+                .thenReturn(Mockito.anyString());
 
         ResponseCategoryDto result = categoryService.update(1L, requestCategoryDto);
 

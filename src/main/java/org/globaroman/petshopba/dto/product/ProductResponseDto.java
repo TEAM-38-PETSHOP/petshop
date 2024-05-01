@@ -14,6 +14,7 @@ import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 public class ProductResponseDto implements Serializable {
     private Long productId;
     private String name;
+    private String productNameId;
     private String brand;
     private String description;
     private BigDecimal price;
@@ -24,7 +25,12 @@ public class ProductResponseDto implements Serializable {
     private String type;
     private String packaging;
     private LocalDateTime entryDate;
-
+    private String composition;
+    private String compositionAnalysis;
+    private String compositionEnergyValue;
+    private String compositionExpiration;
+    private String instruction;
+    private String instructionWhyBuy;
     private List<ResponseAnimalDto> animals;
     private List<ResponseCategoryDto> categories;
 }

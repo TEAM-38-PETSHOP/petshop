@@ -12,6 +12,7 @@ import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.repository.PetRepository;
 import org.globaroman.petshopba.repository.UserRepository;
 import org.globaroman.petshopba.service.PetAnimalService;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class PetAnimalServiceImpl implements PetAnimalService {
     private final PetRepository petRepository;
     private final PetMapper petMapper;
     private final UserRepository userRepository;
+    private final TransliterationService transliterationService;
 
     @Override
     public ResponsePetAnimalDto create(CreatePetAnimalRequestDto requestDto,
@@ -30,8 +32,11 @@ public class PetAnimalServiceImpl implements PetAnimalService {
 
         Pet pet = petMapper.toEntity(requestDto);
         pet.setUser(user);
+        pet.setPetNameId(transliterationService.getLatinStringLine(pet.getName()));
         Pet savedPet = petRepository.save(pet);
+
         userRepository.save(user);
+
         return petMapper.toDto(savedPet);
     }
 
@@ -39,6 +44,7 @@ public class PetAnimalServiceImpl implements PetAnimalService {
     public ResponsePetAnimalDto update(CreatePetAnimalRequestDto requestDto, Long petId) {
         Pet pet = getPetFromDataBase(petId);
         Pet updatePet = petMapper.updatePet(requestDto, pet);
+        updatePet.setPetNameId(transliterationService.getLatinStringLine(pet.getName()));
         return petMapper.toDto(petRepository.save(updatePet));
     }
 

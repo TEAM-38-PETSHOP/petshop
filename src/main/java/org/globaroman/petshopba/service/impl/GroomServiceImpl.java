@@ -21,6 +21,7 @@ import org.globaroman.petshopba.repository.PetServiceRepository;
 import org.globaroman.petshopba.repository.TypePetServiceRepository;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.GroomService;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,11 +36,14 @@ public class GroomServiceImpl implements GroomService {
     private final AmazonS3Service amazonS3Service;
     private final PetServiceMapper petServiceMapper;
     private final TypeServiceMapper typeServiceMapper;
+    private final TransliterationService transliterationService;
 
     @Override
     public ResponsePetServiceDto createPetService(
             CreatePetServiceRequestDto requestDto) {
         PetService petService = petServiceMapper.toModel(requestDto);
+        petService.setPetServiceNameId(
+                transliterationService.getLatinStringLine(petService.getName()));
         return petServiceMapper.toDto(petServiceRepository.save(petService));
     }
 
@@ -47,6 +51,9 @@ public class GroomServiceImpl implements GroomService {
     public ResponseTypeServiceDto createTypeService(
             CreateTypeServiceRequestDto requestDto) {
         TypePetService typePetService = typeServiceMapper.toModel(requestDto);
+        typePetService.setTypePetServiceNameId(
+                transliterationService.getLatinStringLine(typePetService.getName())
+        );
 
         return typeServiceMapper.toDto(typePetServiceRepository.save(typePetService));
     }
@@ -66,6 +73,8 @@ public class GroomServiceImpl implements GroomService {
         PetService updatePetService = petServiceMapper.toUpdateModel(
                 requestDto,
                 petService);
+        updatePetService.setPetServiceNameId(
+                transliterationService.getLatinStringLine(updatePetService.getName()));
         return petServiceMapper.toDto(petServiceRepository.save(updatePetService));
     }
 
@@ -85,6 +94,10 @@ public class GroomServiceImpl implements GroomService {
         TypePetService updateTypeService = typeServiceMapper.toUpdateTypeService(
                 requestDto,
                 typePetService);
+
+        updateTypeService.setTypePetServiceNameId(
+                transliterationService.getLatinStringLine(updateTypeService.getName())
+        );
 
         return typeServiceMapper.toDto(typePetServiceRepository.save(updateTypeService));
     }

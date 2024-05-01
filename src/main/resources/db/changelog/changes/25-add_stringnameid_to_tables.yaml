@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_fields_to_products_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: product_name_id
+                  type: varchar(500)
+              - column:
+                  name: composition
+                  type: varchar(2000)
+              - column:
+                  name: composition_analysis
+                  type: varchar(500)
+              - column:
+                  name: composition_energy_value
+                  type: varchar(255)
+              - column:
+                  name: composition_expiration
+                  type: varchar(500)
+              - column:
+                  name: instruction
+                  type: varchar(2000)
+              - column:
+                  name: instruction_why_buy
+                  type: varchar(2000)
+  - changeSet:
+      id: add_fields_to_categories_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: categories
+            columns:
+              - column:
+                  name: category_name_id
+                  type: varchar(500)
+
+  - changeSet:
+      id: add_fields_to_animals_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: animals
+            columns:
+              - column:
+                  name: animal_name_id
+                  type: varchar(500)
+
+  - changeSet:
+      id: add_fields_to_pets_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: pets
+            columns:
+              - column:
+                  name: pet_name_id
+                  type: varchar(500)
+
+  - changeSet:
+      id: add_fields_to_posluga_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: posluga
+            columns:
+              - column:
+                  name: posluga_name_id
+                  type: varchar(500)
+
+  - changeSet:
+      id: add_fields_to_type_posluga_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: type_posluga
+            columns:
+              - column:
+                  name: t_posluga_name_id
+                  type: varchar(500)

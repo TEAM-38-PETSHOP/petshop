@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
@@ -11,11 +12,20 @@ import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.ProductMapper;
+import org.globaroman.petshopba.model.Animal;
+import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
+import org.globaroman.petshopba.model.groom.PetService;
+import org.globaroman.petshopba.model.groom.TypePetService;
+import org.globaroman.petshopba.repository.AnimalRepository;
+import org.globaroman.petshopba.repository.CategoryRepository;
+import org.globaroman.petshopba.repository.PetServiceRepository;
 import org.globaroman.petshopba.repository.ProductRepository;
+import org.globaroman.petshopba.repository.TypePetServiceRepository;
 import org.globaroman.petshopba.repository.specification.product.ProductSpecificationBuilder;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.ProductService;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -29,6 +39,13 @@ public class ProductServiceImpl implements ProductService {
     private final AmazonS3Service amazonS3Service;
     private final UploadImageServiceImpl upload;
     private final ProductSpecificationBuilder productSpecificationBuilder;
+    private final TransliterationService transliterationService;
+
+    //TODO delete method updateNAmeId
+    private final AnimalRepository animalRepository;
+    private final CategoryRepository categoryRepository;
+    private final TypePetServiceRepository typePetServiceRepository;
+    private final PetServiceRepository petServiceRepository;
 
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
@@ -46,7 +63,8 @@ public class ProductServiceImpl implements ProductService {
                             requestProductDto.getName())));
         }
         product.setImageUrls(urlsImageForModel);
-        product.setImage("ImageSoonDelete");
+        product.setProductNameId(
+                transliterationService.getLatinStringLine(product.getName()));
 
         return productMapper.toDto(productRepository.save(product));
     }
@@ -144,17 +162,91 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void updateNameId() {
+
+        List<Product> products = productRepository.findAll();
+        for (Product product : products) {
+            product.setProductNameId(
+                    transliterationService.getLatinStringLine(product.getName()));
+        }
+        productRepository.saveAll(products);
+
+        List<Animal> animals = animalRepository.findAll();
+        for (Animal animal : animals) {
+            animal.setAnimalNameId(
+                    transliterationService.getLatinStringLine(animal.getName()));
+        }
+
+        animalRepository.saveAll(animals);
+
+        List<Category> categories = categoryRepository.findAll();
+        for (Category category : categories) {
+            category.setCategoryNameId(
+                    transliterationService.getLatinStringLine(category.getName()));
+        }
+        categoryRepository.saveAll(categories);
+
+        List<PetService> petServices = petServiceRepository.findAll();
+
+        for (PetService petService : petServices) {
+            petService.setPetServiceNameId(
+                    transliterationService.getLatinStringLine(petService.getName()));
+        }
+
+        petServiceRepository.saveAll(petServices);
+
+        List<TypePetService> typePetServices = typePetServiceRepository.findAll();
+
+        for (TypePetService petService : typePetServices) {
+            petService.setTypePetServiceNameId(
+                    transliterationService.getLatinStringLine(petService.getName()));
+        }
+
+        typePetServiceRepository.saveAll(typePetServices);
+    }
+
+    @Override
+    public CountParameterDto countAllProducts() {
+        CountParameterDto countParameterDto =
+                new CountParameterDto(productRepository.countAllProducts());
+        return countParameterDto;
+    }
+
+    @Override
+    public CountParameterDto countProductsByCategoryId(Long id) {
+
+        return new CountParameterDto(productRepository.countProductsByCategoriesId(id));
+    }
+
+    @Override
+    public CountParameterDto countProductsByAnimalId(Long id) {
+        return new CountParameterDto(productRepository.countProductsByAnimalsId(id));
+    }
+
+    @Override
+    public CountParameterDto countProductsByAnimalAndCategory(Long animalId, Long categoryId) {
+        return new CountParameterDto(productRepository
+                .countProductsByAnimalsIdAndCategoriesId(animalId, categoryId));
+    }
+
+    @Override
     public ProductResponseDto update(Long id,
                                      CreateRequestProductDto requestProductDto) {
         Product product = getProductFromDb(id);
         Product updateProduct = productMapper.toUpdate(requestProductDto, product);
+        updateProduct.setProductNameId(
+                transliterationService.getLatinStringLine(updateProduct.getName()));
         return productMapper.toDto(productRepository.save(updateProduct));
     }
 
     @Override
     public void delete(Long id) {
         Product product = getProductFromDb(id);
-        amazonS3Service.deleteImage(product.getImage());
+        List<String> urls = product.getImageUrls();
+        for (String url : urls) {
+            amazonS3Service.deleteImage(url);
+        }
+
         productRepository.deleteById(id);
     }
 
@@ -168,7 +260,10 @@ public class ProductServiceImpl implements ProductService {
         Random random = new Random();
         int nameImage = random.nextInt(10000000);
 
-        return brand + "_" + nameProduct + "_" + nameImage + ".jpg";
+        String latinLine = transliterationService.getLatinStringLine(nameProduct);
+
+        return brand + "_" + getNameProductShort(latinLine) + "_" + nameImage + ".jpg";
+
     }
 
     private String getNameProductShort(String name) {

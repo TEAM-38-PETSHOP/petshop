@@ -20,6 +20,8 @@ public class TypePetService {
     private Long id;
     @Column(name = "number_list", nullable = false)
     private Long numberList;
+    @Column(name = "t_posluga_name_id")
+    private String typePetServiceNameId;
     private String name;
     private String price;
 

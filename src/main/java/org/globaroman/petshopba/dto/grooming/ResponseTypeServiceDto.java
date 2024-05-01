@@ -8,5 +8,6 @@ public class ResponseTypeServiceDto {
     private Long petServiceId;
     private Long numberList;
     private String name;
+    private String typePetServiceNameId;
     private String price;
 }

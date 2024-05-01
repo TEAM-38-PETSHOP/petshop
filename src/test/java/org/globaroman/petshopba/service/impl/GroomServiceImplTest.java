@@ -14,6 +14,7 @@ import org.globaroman.petshopba.model.groom.PetService;
 import org.globaroman.petshopba.model.groom.TypePetService;
 import org.globaroman.petshopba.repository.PetServiceRepository;
 import org.globaroman.petshopba.repository.TypePetServiceRepository;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,10 @@ class GroomServiceImplTest {
     private TypeServiceMapper typeServiceMapper;
     @Mock
     private PetServiceMapper petServiceMapper;
+
+    @Mock
+    private TransliterationService transliterationService;
+
     @InjectMocks
     private GroomServiceImpl groomService;
 
@@ -47,6 +52,8 @@ class GroomServiceImplTest {
         Mockito.when(petServiceMapper.toModel(requestDto)).thenReturn(petService);
         Mockito.when(petServiceRepository.save(petService)).thenReturn(petService);
         Mockito.when(petServiceMapper.toDto(petService)).thenReturn(new ResponsePetServiceDto());
+        Mockito.when(transliterationService.getLatinStringLine("NAME"))
+                .thenReturn(Mockito.anyString());
 
         ResponsePetServiceDto result = groomService.createPetService(requestDto);
 
@@ -64,6 +71,8 @@ class GroomServiceImplTest {
         Mockito.when(typePetServiceRepository.save(typePetService)).thenReturn(typePetService);
         Mockito.when(typeServiceMapper.toDto(typePetService))
                 .thenReturn(new ResponseTypeServiceDto());
+        Mockito.when(transliterationService.getLatinStringLine("NAME TS"))
+                .thenReturn(Mockito.anyString());
 
         ResponseTypeServiceDto result = groomService.createTypeService(requestDto);
 
@@ -82,7 +91,9 @@ class GroomServiceImplTest {
         Mockito.when(petServiceMapper.toUpdateModel(requestDto, petService))
                 .thenReturn(petService);
         Mockito.when(petServiceRepository.save(petService)).thenReturn(petService);
-        Mockito.when(petServiceMapper.toDto(petService)).thenReturn(new ResponsePetServiceDto());
+
+        Mockito.when(petServiceMapper.toDto(petService))
+                .thenReturn(new ResponsePetServiceDto());
 
         ResponsePetServiceDto result = groomService.updatePetService(requestDto, 1L);
 

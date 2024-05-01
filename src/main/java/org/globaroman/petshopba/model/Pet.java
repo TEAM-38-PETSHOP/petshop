@@ -25,6 +25,8 @@ public class Pet {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
+    @Column(name = "pet_name_id")
+    private String petNameId;
     private String sex;
     @Column(name = "pet_breed")
     private String petBreed;

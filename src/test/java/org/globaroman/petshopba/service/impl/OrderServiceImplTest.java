@@ -297,7 +297,7 @@ class OrderServiceImplTest {
         product.setId(2L);
         product.setAnimals(List.of(responseAnimalDto, responseAnimalDto2));
         product.setBrand("Brand");
-        product.setImage("image.jpeg");
+        product.setImageUrls(List.of("image.jpeg"));
         product.setName("Product");
         product.setDescription("This is description of product");
         product.setId(1L);

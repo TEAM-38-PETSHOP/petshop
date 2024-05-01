@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.animal.ResponseAnimalDto;
 import org.globaroman.petshopba.mapper.AnimalMapper;
 import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.repository.AnimalRepository;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class AnimalServiceImplTest {
     @Mock
     private AnimalMapper animalMapper;
 
+    @Mock
+    private TransliterationService transliterationService;
+
     @InjectMocks
     private AnimalServiceImpl animalService;
 
@@ -39,6 +43,8 @@ class AnimalServiceImplTest {
         Mockito.when(animalMapper.toModel(requestDto)).thenReturn(animal);
         Mockito.when(animalRepository.save(animal)).thenReturn(animal);
         Mockito.when(animalMapper.toDto(animal)).thenReturn(responseAnimalDto);
+        Mockito.when(transliterationService.getLatinStringLine("Animal"))
+                .thenReturn(Mockito.anyString());
 
         ResponseAnimalDto result = animalService.create(requestDto);
 
@@ -94,6 +100,8 @@ class AnimalServiceImplTest {
         Mockito.when(animalMapper.toUpdate(requestDto, animal)).thenReturn(updateAnimal);
         Mockito.when(animalRepository.save(updateAnimal)).thenReturn(updateAnimal);
         Mockito.when(animalMapper.toDto(updateAnimal)).thenReturn(responseAnimalDto);
+        Mockito.when(transliterationService.getLatinStringLine("New name"))
+                .thenReturn(Mockito.anyString());
 
         ResponseAnimalDto result = animalService.update(1L, requestDto);
 

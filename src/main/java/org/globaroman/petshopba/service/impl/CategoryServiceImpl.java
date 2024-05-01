@@ -10,6 +10,7 @@ import org.globaroman.petshopba.mapper.CategoryMapper;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.repository.CategoryRepository;
 import org.globaroman.petshopba.service.CategoryService;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,10 +20,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final TransliterationService transliterationService;
 
     @Override
     public ResponseCategoryDto create(CreateRequestCategoryDto requestCategory) {
         Category category = categoryMapper.toModel(requestCategory);
+        category.setCategoryNameId(
+                transliterationService.getLatinStringLine(category.getName()));
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
@@ -43,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
     public ResponseCategoryDto update(Long id, CreateRequestCategoryDto requestCategoryDto) {
         Category category = getCategoryFromDb(id);
         Category updateCategory = categoryMapper.toUpdate(requestCategoryDto, category);
-
+        updateCategory.setCategoryNameId(
+                transliterationService.getLatinStringLine(updateCategory.getName()));
         return categoryMapper.toDto(categoryRepository.save(updateCategory));
     }
 

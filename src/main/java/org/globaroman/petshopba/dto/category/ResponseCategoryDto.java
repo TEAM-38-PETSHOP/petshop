@@ -9,5 +9,6 @@ import lombok.Data;
 public class ResponseCategoryDto implements Serializable {
     private Long categoryId;
     private String name;
+    private String categoryNameId;
     private String description;
 }

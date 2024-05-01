@@ -16,6 +16,7 @@ import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
 import org.globaroman.petshopba.repository.ProductRepository;
 import org.globaroman.petshopba.service.AmazonS3Service;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ class ProductServiceImplTest {
     @Mock
     private UploadImageServiceImpl upload;
 
+    @Mock
+    private TransliterationService transliterationService;
+
     @InjectMocks
     private ProductServiceImpl productService;
 
@@ -63,6 +67,8 @@ class ProductServiceImplTest {
         Mockito.when(productMapper.toDto(product)).thenReturn(responseDto);
         Mockito.when(amazonS3Service.uploadImageUrl(Mockito.any(InputStream.class),
                 Mockito.anyString())).thenReturn(Mockito.anyString());
+        Mockito.when(transliterationService.getLatinStringLine("Name"))
+                .thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.create(requestProductDto);
 
@@ -159,6 +165,8 @@ class ProductServiceImplTest {
         Mockito.when(productMapper.toUpdate(requestProductDto, product)).thenReturn(updateProduct);
         Mockito.when(productRepository.save(updateProduct)).thenReturn(updateProduct);
         Mockito.when(productMapper.toDto(updateProduct)).thenReturn(responseDto);
+        Mockito.when(transliterationService.getLatinStringLine("Product"))
+                .thenReturn(Mockito.anyString());
 
         ProductResponseDto result = productService.update(1L, requestProductDto);
 
@@ -227,7 +235,7 @@ class ProductServiceImplTest {
         product.setId(2L);
         product.setAnimals(List.of(responseAnimalDto, responseAnimalDto2));
         product.setBrand("Brand");
-        product.setImage("image.jpeg");
+        product.setImageUrls(List.of("image.jpeg"));
         product.setName("Product");
         product.setDescription("This is description of product");
         product.setId(1L);
