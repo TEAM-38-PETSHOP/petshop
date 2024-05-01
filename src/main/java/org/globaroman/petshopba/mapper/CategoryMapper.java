@@ -16,10 +16,12 @@ public interface CategoryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "products", ignore = true)
+    @Mapping(target = "categoryNameId", ignore = true)
     Category toModel(CreateRequestCategoryDto createRequestCategory);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "products", ignore = true)
+    @Mapping(target = "categoryNameId", ignore = true)
     Category toUpdate(CreateRequestCategoryDto requestCategoryDto,
                       @MappingTarget Category category);
 }

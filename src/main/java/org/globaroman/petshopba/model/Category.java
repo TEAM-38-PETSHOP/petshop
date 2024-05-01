@@ -23,6 +23,8 @@ public class Category {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
+    @Column(name = "category_name_id")
+    private String categoryNameId;
     private String description;
     @ManyToMany(mappedBy = "categories")
     private List<Product> products;

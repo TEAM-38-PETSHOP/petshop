@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove_image_from_products_table
+      author: org.globaroman
+      changes:
+        - dropColumn:
+            tableName: products
+            columnName: image

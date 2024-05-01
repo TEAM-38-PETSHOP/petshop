@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.service;
 
 import java.util.List;
+import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
@@ -43,4 +44,14 @@ public interface ProductService {
 
     ProductResponseDto updateImageToProduct(Long id,
                                             RequestUpdateImageToProductDto requestImageDto);
+
+    void updateNameId();
+
+    CountParameterDto countAllProducts();
+
+    CountParameterDto countProductsByCategoryId(Long id);
+
+    CountParameterDto countProductsByAnimalId(Long id);
+
+    CountParameterDto countProductsByAnimalAndCategory(Long animalId, Long categoryId);
 }

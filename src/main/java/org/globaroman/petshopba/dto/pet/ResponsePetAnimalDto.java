@@ -15,6 +15,7 @@ public class ResponsePetAnimalDto implements Serializable {
     private Long id;
     private Long userId;
     private String name;
+    private String petNameId;
     private String sex;
     private String petBreed;
     private LocalDate birthDate;

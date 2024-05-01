@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
@@ -48,6 +49,11 @@ public class ProductController {
         return productService.getAll(pageable);
     }
 
+    @GetMapping("/count")
+    public CountParameterDto countGetAllProducts() {
+        return productService.countAllProducts();
+    }
+
     @GetMapping("/search")
     @Operation(summary = "Search products by parameters",
             description = "Search for products by brand, name, price, breedSize, countryProduct, "
@@ -90,6 +96,11 @@ public class ProductController {
         return productService.getAllProductsByCategoryId(id, pageable);
     }
 
+    @GetMapping("/categories/{id}/count")
+    public CountParameterDto getCountProductsByCategoryId(@PathVariable Long id) {
+        return productService.countProductsByCategoryId(id);
+    }
+
     @GetMapping("/animals/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all products by animal ID",
@@ -97,6 +108,11 @@ public class ProductController {
     public List<ProductResponseDto> getProductsByAnimalId(@PathVariable Long id,
                                                           Pageable pageable) {
         return productService.getAllProductsByAnimalId(id, pageable);
+    }
+
+    @GetMapping("/animals/{id}/count")
+    public CountParameterDto getCountProductsByAnimalId(@PathVariable Long id) {
+        return productService.countProductsByAnimalId(id);
     }
 
     @GetMapping("/animal/{animalId}/category/{categoryId}")
@@ -109,6 +125,12 @@ public class ProductController {
             Pageable pageable) {
         return productService.getAllProductsByAnimalAndCategory(animalId, categoryId, pageable);
 
+    }
+
+    @GetMapping("/animal/{animalId}/category/{categoryId}/count")
+    public CountParameterDto getCountAllProductsAnimalAndCategory(@PathVariable Long animalId,
+                                                                  @PathVariable Long categoryId) {
+        return productService.countProductsByAnimalAndCategory(animalId, categoryId);
     }
 
     @GetMapping("/random")
@@ -149,6 +171,11 @@ public class ProductController {
             description = "You can delete a product")
     public void deleteProductById(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @GetMapping("/admin/updateNameId")
+    public void updateNameId() {
+        productService.updateNameId();
     }
 
 }

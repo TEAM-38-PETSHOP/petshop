@@ -9,4 +9,5 @@ import lombok.Data;
 public class ResponseAnimalDto implements Serializable {
     private Long animalId;
     private String name;
+    private String animalNameId;
 }

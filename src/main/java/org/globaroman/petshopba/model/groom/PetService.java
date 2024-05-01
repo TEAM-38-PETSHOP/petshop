@@ -32,7 +32,8 @@ public class PetService {
     private Long numberList;
     private String name;
     private String description;
-
+    @Column(name = "posluga_name_id")
+    private String petServiceNameId;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "petService")
     private List<TypePetService> types;
 

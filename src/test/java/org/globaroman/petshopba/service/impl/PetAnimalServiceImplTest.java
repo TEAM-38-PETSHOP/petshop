@@ -11,6 +11,7 @@ import org.globaroman.petshopba.model.Pet;
 import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.repository.PetRepository;
 import org.globaroman.petshopba.repository.UserRepository;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,9 @@ class PetAnimalServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private TransliterationService transliterationService;
 
     @InjectMocks
     private PetAnimalServiceImpl petAnimalService;
@@ -61,6 +65,7 @@ class PetAnimalServiceImplTest {
 
         Mockito.when(petMapper.toEntity(requestDto)).thenReturn(pet);
         Mockito.when(petRepository.save(pet)).thenReturn(pet);
+
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
         ResponsePetAnimalDto response = getResponsePetDto();
@@ -163,6 +168,7 @@ class PetAnimalServiceImplTest {
 
     private ResponsePetAnimalDto getResponsePetDto() {
         ResponsePetAnimalDto response = new ResponsePetAnimalDto();
+        response.setPetNameId("Name");
         response.setPetBreed("Breed");
         response.setId(1L);
         response.setName("Name");

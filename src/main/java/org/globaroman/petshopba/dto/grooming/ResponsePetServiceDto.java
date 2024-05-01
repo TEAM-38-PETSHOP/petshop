@@ -7,6 +7,7 @@ public class ResponsePetServiceDto {
     private Long id;
     private Long numberList;
     private String name;
+    private String petServiceNameId;
     private String description;
     private Long animalId;
 }

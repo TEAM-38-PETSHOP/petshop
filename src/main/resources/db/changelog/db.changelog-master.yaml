@@ -47,3 +47,7 @@ databaseChangeLog:
       file: /db/changelog/changes/23-add_list_urls_image_to_product_table.yaml
   - include:
       file: /db/changelog/changes/24-modify_field_image_to_product_table.yaml
+  - include:
+      file: /db/changelog/changes/25-add_stringnameid_to_tables.yaml
+  - include:
+      file: /db/changelog/changes/26-remove_image_from_products_table.yaml

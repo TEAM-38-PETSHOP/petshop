@@ -1,6 +1,8 @@
 package org.globaroman.petshopba.dto.product;
 
 public record ProductSearchParameters(String[] name,
+
+                                      String[] productNameId,
                                       String[] brand,
                                       String[] price,
                                       String[] group,

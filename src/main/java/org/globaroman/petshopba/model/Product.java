@@ -34,10 +34,11 @@ public class Product {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
+    @Column(name = "product_name_id")
+    private String productNameId;
     private String brand;
     private String description;
     private BigDecimal price;
-    private String image;
 
     @Column(name = "country_product")
     private String countryProduct;
@@ -49,6 +50,18 @@ public class Product {
     private String packaging;
     @Column(name = "entry_date")
     private LocalDateTime entryDate;
+    private String composition;
+
+    @Column(name = "composition_analysis")
+    private String compositionAnalysis;
+    @Column(name = "composition_energy_value")
+    private String compositionEnergyValue;
+    @Column(name = "composition_expiration")
+    private String compositionExpiration;
+    private String instruction;
+
+    @Column(name = "instruction_why_buy")
+    private String instructionWhyBuy;
 
     @ManyToMany
     @JoinTable(

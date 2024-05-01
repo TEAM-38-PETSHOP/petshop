@@ -30,13 +30,14 @@ public interface ProductMapper {
     @Mapping(target = "animals", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "entryDate", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "productNameId", ignore = true)
     Product toModel(CreateRequestProductDto createRequestProductDto);
 
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "animals", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "image", ignore = true)
     @Mapping(target = "entryDate", ignore = true)
+    @Mapping(target = "productNameId", ignore = true)
     Product toUpdate(CreateRequestProductDto requestProductDto, @MappingTarget Product product);
 
     @AfterMapping
@@ -96,6 +97,7 @@ public interface ProductMapper {
         ResponseAnimalDto responseAnimalDto = new ResponseAnimalDto();
         responseAnimalDto.setAnimalId(animal.getId());
         responseAnimalDto.setName(animal.getName());
+        responseAnimalDto.setAnimalNameId(animal.getAnimalNameId());
 
         return responseAnimalDto;
     }
@@ -105,6 +107,7 @@ public interface ProductMapper {
         responseCategoryDto.setCategoryId(category.getId());
         responseCategoryDto.setName(category.getName());
         responseCategoryDto.setDescription(category.getDescription());
+        responseCategoryDto.setCategoryNameId(category.getCategoryNameId());
         return responseCategoryDto;
     }
 }

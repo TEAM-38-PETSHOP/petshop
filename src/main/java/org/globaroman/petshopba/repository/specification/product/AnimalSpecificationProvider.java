@@ -18,7 +18,7 @@ public class AnimalSpecificationProvider implements SpecificationProvider<Produc
     public Specification<Product> getSpecification(String[] params) {
         return (root, query, criteriaBuilder) -> {
             Join<Product, Animal> animalJoin = root.join("animals");
-            return animalJoin.get("name").in((Object[]) params);
+            return animalJoin.get("animalNameId").in((Object[]) params);
         };
     }
 }

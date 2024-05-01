@@ -10,6 +10,7 @@ import org.globaroman.petshopba.mapper.AnimalMapper;
 import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.repository.AnimalRepository;
 import org.globaroman.petshopba.service.AnimalService;
+import org.globaroman.petshopba.service.TransliterationService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,10 +20,14 @@ public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final AnimalMapper animalMapper;
+    private final TransliterationService transliterationService;
 
     @Override
     public ResponseAnimalDto create(CreateAnimalRequestDto requestDto) {
         Animal animal = animalMapper.toModel(requestDto);
+        animal.setAnimalNameId(
+                transliterationService.getLatinStringLine(animal.getName()));
+
         return animalMapper.toDto(animalRepository.save(animal));
     }
 
@@ -43,6 +48,8 @@ public class AnimalServiceImpl implements AnimalService {
     public ResponseAnimalDto update(Long id, CreateAnimalRequestDto requestDto) {
         Animal animal = getAnimalFromDb(id);
         Animal updateAnimal = animalMapper.toUpdate(requestDto, animal);
+        updateAnimal.setAnimalNameId(
+                transliterationService.getLatinStringLine(updateAnimal.getName()));
         return animalMapper.toDto(animalRepository.save(updateAnimal));
     }
 
