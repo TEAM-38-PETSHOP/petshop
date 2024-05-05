@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
-import org.globaroman.petshopba.dto.product.ProductSearchParameters;
 import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
-import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.service.ProductService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -54,36 +52,12 @@ public class ProductController {
         return productService.countAllProducts();
     }
 
-    @GetMapping("/search")
-    @Operation(summary = "Search products by parameters",
-            description = "Search for products by brand, name, price, breedSize, countryProduct, "
-                    + "packaging, type, group as parameter in different combinations")
-    public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
-                                           Pageable pageable) {
-        return productService.search(productSearchParameters, pageable);
-    }
-
-    @GetMapping("/search/name")
-    @Operation(summary = "Search products by name",
-            description = "Search products by name")
-    public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
-                                                 Pageable pageable) {
-        return productService.searchByName(productParameter, pageable);
-    }
-
-    @GetMapping("/search/brand")
-    @Operation(summary = "Search products by brand",
-            description = "Search products by brand")
-    public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
-                                                  Pageable pageable) {
-        return productService.searchByBrand(productParameter, pageable);
-    }
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get a product by its ID",
             description = "You can get a product by its ID")
     public ProductResponseDto getProductById(@PathVariable Long id) {
+
         return productService.getById(id);
     }
 
@@ -177,5 +151,4 @@ public class ProductController {
     public void updateNameId() {
         productService.updateNameId();
     }
-
 }
