@@ -3,6 +3,7 @@ package org.globaroman.petshopba.service;
 import java.util.List;
 import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
+import org.globaroman.petshopba.dto.product.PriceSearchParameter;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
 import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
@@ -45,8 +46,6 @@ public interface ProductService {
     ProductResponseDto updateImageToProduct(Long id,
                                             RequestUpdateImageToProductDto requestImageDto);
 
-    void updateNameId();
-
     CountParameterDto countAllProducts();
 
     CountParameterDto countProductsByCategoryId(Long id);
@@ -54,4 +53,24 @@ public interface ProductService {
     CountParameterDto countProductsByAnimalId(Long id);
 
     CountParameterDto countProductsByAnimalAndCategory(Long animalId, Long categoryId);
+
+    void updateNameId();
+
+    List<ProductResponseDto> searchByPrice(PriceSearchParameter priceSearchParameter, Pageable pageable);
+
+    List<ProductResponseDto> searchByAnimalAndPrice(Long animalId, PriceSearchParameter priceSearchParameter, Pageable pageable);
+
+    List<ProductResponseDto> searchByCategoryAndPrice(Long categoryId, PriceSearchParameter priceSearchParameter, Pageable pageable);
+
+    CountParameterDto searchAllCount(ProductSearchParameters productSearchParameters);
+
+    CountParameterDto searchByNameCount(SimpleSearchProductParameter productParameter);
+
+    CountParameterDto searchByBrandCount(SimpleSearchProductParameter productParameter);
+
+    CountParameterDto searchByPriceCount(PriceSearchParameter priceSearchParameter);
+
+    CountParameterDto searchByAnimalAndPriceCount(Long animalId, PriceSearchParameter priceSearchParameter);
+
+    CountParameterDto searchByCategoryAndPriceCount(Long categoryId, PriceSearchParameter priceSearchParameter);
 }

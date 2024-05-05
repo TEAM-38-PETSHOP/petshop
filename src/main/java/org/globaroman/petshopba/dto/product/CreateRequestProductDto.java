@@ -19,6 +19,7 @@ public class CreateRequestProductDto implements Serializable {
     private String breedSize;
     private String type;
     private String packaging;
+    private String productSize;
     private String composition;
     private String compositionAnalysis;
     private String compositionEnergyValue;

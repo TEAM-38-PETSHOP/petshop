@@ -16,7 +16,6 @@ public class ProductResponseDto implements Serializable {
     private String name;
     private String productNameId;
     private String brand;
-    private String description;
     private BigDecimal price;
     private List<String> imageUrls;
     private String countryProduct;
@@ -24,13 +23,15 @@ public class ProductResponseDto implements Serializable {
     private String breedSize;
     private String type;
     private String packaging;
-    private LocalDateTime entryDate;
+    private String productSize;
+    private String description;
     private String composition;
     private String compositionAnalysis;
     private String compositionEnergyValue;
     private String compositionExpiration;
     private String instruction;
     private String instructionWhyBuy;
+    private LocalDateTime entryDate;
     private List<ResponseAnimalDto> animals;
     private List<ResponseCategoryDto> categories;
 }

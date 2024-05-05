@@ -30,11 +30,6 @@ public class ProductSpecificationBuilder implements SpecificationBuilder<Product
                     .getSpecification(searchParameters.brand()));
         }
 
-        if (searchParameters.price() != null && searchParameters.price().length > 0) {
-            spec = spec.and(productSpecificationProviderManager
-                    .getSpecificationProvider("price")
-                    .getSpecification(searchParameters.price()));
-        }
 
         if (searchParameters.countryProduct() != null
                 && searchParameters.countryProduct().length > 0) {
@@ -59,12 +54,6 @@ public class ProductSpecificationBuilder implements SpecificationBuilder<Product
             spec = spec.and(productSpecificationProviderManager
                     .getSpecificationProvider("type")
                     .getSpecification(searchParameters.type()));
-        }
-
-        if (searchParameters.packaging() != null && searchParameters.packaging().length > 0) {
-            spec = spec.and(productSpecificationProviderManager
-                    .getSpecificationProvider("packaging")
-                    .getSpecification(searchParameters.packaging()));
         }
 
         if (searchParameters.animals() != null && searchParameters.animals().length > 0) {

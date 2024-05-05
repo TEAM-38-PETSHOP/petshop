@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TransliterationServiceImpl implements TransliterationService {
 
-    public static final String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
+    public static final String CYRILLIC_TO_LATIN = "Ukrainian-Latin/BGN";
 
     @Override
     public String toLatin(String line) {

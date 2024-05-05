@@ -1,27 +1,23 @@
 package org.globaroman.petshopba.service.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
+import org.globaroman.petshopba.dto.product.PriceSearchParameter;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.dto.product.ProductSearchParameters;
 import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.dto.product.SimpleSearchProductParameter;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.ProductMapper;
-import org.globaroman.petshopba.model.Animal;
 import org.globaroman.petshopba.model.Category;
 import org.globaroman.petshopba.model.Product;
-import org.globaroman.petshopba.model.groom.PetService;
-import org.globaroman.petshopba.model.groom.TypePetService;
-import org.globaroman.petshopba.repository.AnimalRepository;
 import org.globaroman.petshopba.repository.CategoryRepository;
-import org.globaroman.petshopba.repository.PetServiceRepository;
 import org.globaroman.petshopba.repository.ProductRepository;
-import org.globaroman.petshopba.repository.TypePetServiceRepository;
 import org.globaroman.petshopba.repository.specification.product.ProductSpecificationBuilder;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.ProductService;
@@ -41,11 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductSpecificationBuilder productSpecificationBuilder;
     private final TransliterationService transliterationService;
 
-    //TODO delete method updateNAmeId
-    private final AnimalRepository animalRepository;
     private final CategoryRepository categoryRepository;
-    private final TypePetServiceRepository typePetServiceRepository;
-    private final PetServiceRepository petServiceRepository;
 
     @Override
     public ProductResponseDto create(CreateRequestProductDto requestProductDto) {
@@ -106,6 +98,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public CountParameterDto searchAllCount(ProductSearchParameters params) {
+        Specification<Product> productSpecification = productSpecificationBuilder.build(params);
+        CountParameterDto countParameterDto = new CountParameterDto(productRepository.findAll(productSpecification)
+                .stream()
+                .count());
+
+        return countParameterDto;
+    }
+
+    @Override
     public List<ProductResponseDto> searchByName(SimpleSearchProductParameter productParameter,
                                                  Pageable pageable) {
         return productRepository.findByName(productParameter.parameter(), pageable)
@@ -115,12 +117,95 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public CountParameterDto searchByNameCount(SimpleSearchProductParameter productParameter) {
+
+        return new CountParameterDto(productRepository.countByName(productParameter.parameter()));
+    }
+
+    @Override
     public List<ProductResponseDto> searchByBrand(SimpleSearchProductParameter productParameter,
                                                   Pageable pageable) {
         return productRepository.findByBrand(productParameter.parameter(), pageable)
                 .stream()
                 .map(productMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public CountParameterDto searchByBrandCount(SimpleSearchProductParameter productParameter) {
+        return new CountParameterDto(productRepository.countByBrand(productParameter.parameter()));
+    }
+
+    @Override
+    public List<ProductResponseDto> searchByPrice(PriceSearchParameter priceSearchParameter,
+                                                  Pageable pageable) {
+        String fromPrice = "0";
+        String toPrice = "10000";
+        if (!priceSearchParameter.from().isBlank() && !priceSearchParameter.to().isBlank()) {
+            fromPrice = priceSearchParameter.from();
+            toPrice = priceSearchParameter.to();
+        }
+
+        return productRepository.findByPriceFromTo(fromPrice, toPrice, pageable).stream()
+                .sorted(getComparatorForPrice())
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+
+    @Override
+    public CountParameterDto searchByPriceCount(PriceSearchParameter priceSearchParameter) {
+        return new CountParameterDto(productRepository.countPriceAllProducts(priceSearchParameter.from(),
+                priceSearchParameter.to()));
+    }
+
+    @Override
+    public List<ProductResponseDto> searchByAnimalAndPrice(Long animalId,
+                                                           PriceSearchParameter priceSearchParameter,
+                                                           Pageable pageable) {
+        String fromPrice = "0";
+        String toPrice = "10000";
+        if (!priceSearchParameter.from().isBlank() && !priceSearchParameter.to().isBlank()) {
+            fromPrice = priceSearchParameter.from();
+            toPrice = priceSearchParameter.to();
+        }
+
+        return productRepository.findByPriceByAnimalFromTo(animalId, fromPrice, toPrice).stream()
+                .sorted(getComparatorForPrice())
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+
+    @Override
+    public CountParameterDto searchByAnimalAndPriceCount(Long animalId, PriceSearchParameter priceSearchParameter) {
+        return new CountParameterDto(productRepository.countByAnimalAndPrice(animalId,
+                priceSearchParameter.from(),
+                priceSearchParameter.to()));
+    }
+
+    @Override
+    public List<ProductResponseDto> searchByCategoryAndPrice(Long categoryId,
+                                                             PriceSearchParameter priceSearchParameter,
+                                                             Pageable pageable) {
+        String fromPrice = "0";
+        String toPrice = "10000";
+        if (!priceSearchParameter.from().isBlank() && !priceSearchParameter.to().isBlank()) {
+            fromPrice = priceSearchParameter.from();
+            toPrice = priceSearchParameter.to();
+        }
+
+        return productRepository.findByPriceByCategoryFromTo(categoryId, fromPrice, toPrice).stream()
+                .sorted(getComparatorForPrice())
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public CountParameterDto searchByCategoryAndPriceCount(Long categoryId, PriceSearchParameter priceSearchParameter) {
+        return new CountParameterDto(productRepository.countCategoryAndPrice(categoryId,
+                priceSearchParameter.from(),
+                priceSearchParameter.to()));
     }
 
     @Override
@@ -162,50 +247,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateNameId() {
-
-        List<Product> products = productRepository.findAll();
-        for (Product product : products) {
-            product.setProductNameId(
-                    transliterationService.getLatinStringLine(product.getName()));
-        }
-        productRepository.saveAll(products);
-
-        List<Animal> animals = animalRepository.findAll();
-        for (Animal animal : animals) {
-            animal.setAnimalNameId(
-                    transliterationService.getLatinStringLine(animal.getName()));
-        }
-
-        animalRepository.saveAll(animals);
-
-        List<Category> categories = categoryRepository.findAll();
-        for (Category category : categories) {
-            category.setCategoryNameId(
-                    transliterationService.getLatinStringLine(category.getName()));
-        }
-        categoryRepository.saveAll(categories);
-
-        List<PetService> petServices = petServiceRepository.findAll();
-
-        for (PetService petService : petServices) {
-            petService.setPetServiceNameId(
-                    transliterationService.getLatinStringLine(petService.getName()));
-        }
-
-        petServiceRepository.saveAll(petServices);
-
-        List<TypePetService> typePetServices = typePetServiceRepository.findAll();
-
-        for (TypePetService petService : typePetServices) {
-            petService.setTypePetServiceNameId(
-                    transliterationService.getLatinStringLine(petService.getName()));
-        }
-
-        typePetServiceRepository.saveAll(typePetServices);
-    }
-
-    @Override
     public CountParameterDto countAllProducts() {
         CountParameterDto countParameterDto =
                 new CountParameterDto(productRepository.countAllProducts());
@@ -227,6 +268,25 @@ public class ProductServiceImpl implements ProductService {
     public CountParameterDto countProductsByAnimalAndCategory(Long animalId, Long categoryId) {
         return new CountParameterDto(productRepository
                 .countProductsByAnimalsIdAndCategoriesId(animalId, categoryId));
+    }
+
+    @Override
+    public void updateNameId() {
+        List<Product> products = productRepository.findAll();
+
+        for (Product product : products) {
+            product.setProductNameId(product.getName());
+        }
+
+        productRepository.saveAll(products);
+
+        List<Category> categories = categoryRepository.findAll();
+
+        for (Category category : categories) {
+            category.setCategoryNameId(category.getName());
+        }
+
+        categoryRepository.saveAll(categories);
     }
 
     @Override
@@ -273,5 +333,10 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return name;
         }
+    }
+
+
+    private Comparator<Product> getComparatorForPrice() {
+        return (o1, o2) -> o1.getPrice().compareTo(o2.getPrice());
     }
 }

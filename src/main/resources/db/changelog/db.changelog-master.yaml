@@ -51,3 +51,5 @@ databaseChangeLog:
       file: /db/changelog/changes/25-add_stringnameid_to_tables.yaml
   - include:
       file: /db/changelog/changes/26-remove_image_from_products_table.yaml
+  - include:
+      file: /db/changelog/changes/27-add_field_size_to_products_tables.yaml
