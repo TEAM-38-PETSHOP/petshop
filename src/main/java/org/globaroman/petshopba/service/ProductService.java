@@ -56,11 +56,16 @@ public interface ProductService {
 
     void updateNameId();
 
-    List<ProductResponseDto> searchByPrice(PriceSearchParameter priceSearchParameter, Pageable pageable);
+    List<ProductResponseDto> searchByPrice(PriceSearchParameter priceSearchParameter,
+                                           Pageable pageable);
 
-    List<ProductResponseDto> searchByAnimalAndPrice(Long animalId, PriceSearchParameter priceSearchParameter, Pageable pageable);
+    List<ProductResponseDto> searchByAnimalAndPrice(Long animalId,
+                                                    PriceSearchParameter priceSearchParameter,
+                                                    Pageable pageable);
 
-    List<ProductResponseDto> searchByCategoryAndPrice(Long categoryId, PriceSearchParameter priceSearchParameter, Pageable pageable);
+    List<ProductResponseDto> searchByCategoryAndPrice(Long categoryId,
+                                                      PriceSearchParameter priceSearchParameter,
+                                                      Pageable pageable);
 
     CountParameterDto searchAllCount(ProductSearchParameters productSearchParameters);
 
@@ -70,7 +75,9 @@ public interface ProductService {
 
     CountParameterDto searchByPriceCount(PriceSearchParameter priceSearchParameter);
 
-    CountParameterDto searchByAnimalAndPriceCount(Long animalId, PriceSearchParameter priceSearchParameter);
+    CountParameterDto searchByAnimalAndPriceCount(Long animalId,
+                                                  PriceSearchParameter priceSearchParameter);
 
-    CountParameterDto searchByCategoryAndPriceCount(Long categoryId, PriceSearchParameter priceSearchParameter);
+    CountParameterDto searchByCategoryAndPriceCount(Long categoryId,
+                                                    PriceSearchParameter priceSearchParameter);
 }

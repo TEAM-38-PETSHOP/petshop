@@ -1,8 +1,8 @@
 package org.globaroman.petshopba.controller;
 
-import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.CountParameterDto;
 import org.globaroman.petshopba.dto.product.PriceSearchParameter;
@@ -28,7 +28,8 @@ public class ProductSearchController {
     @GetMapping()
     @Operation(summary = "Search products by parameters",
             description = "Search for products by brand, name, breedSize, countryProduct, "
-                    + "type, group and animals(nameID), categories(nameId) as parameter in different combinations")
+                    + "type, group and animals(nameID), categories(nameId) "
+                    + "as parameter in different combinations")
     public List<ProductResponseDto> search(ProductSearchParameters productSearchParameters,
                                            Pageable pageable) {
         return productService.search(productSearchParameters, pageable);
@@ -70,7 +71,8 @@ public class ProductSearchController {
 
     @GetMapping("/price")
     @Operation(summary = "Search products by price ",
-            description = "Search products by price as from price to price /api/products/search/price?from=10&to=100")
+            description = "Search products by price as from price to price /api/products"
+                    + "/search/price?from=10&to=100")
     public List<ProductResponseDto> searchByPrice(PriceSearchParameter priceSearchParameter,
                                                   Pageable pageable) {
         return productService.searchByPrice(priceSearchParameter, pageable);
@@ -86,31 +88,33 @@ public class ProductSearchController {
     @Operation(summary = "Search products by animal and price ",
             description = "Search products by animal and price as from price to price")
     public List<ProductResponseDto> searchByAnimalAndPrice(@PathVariable Long animalId,
-                                                           PriceSearchParameter priceSearchParameter,
+                                                           PriceSearchParameter parameter,
                                                            Pageable pageable) {
-        return productService.searchByAnimalAndPrice(animalId, priceSearchParameter, pageable);
+        return productService.searchByAnimalAndPrice(animalId, parameter, pageable);
     }
 
     @GetMapping("/price/animal/{animalId}/count")
-    @Operation(summary = "Count products by animal and price /api/products/search/price/animal/1/count?from=10&to=100")
+    @Operation(summary = "Count products by animal and price /api/products/search/price"
+            + "/animal/1/count?from=10&to=100")
     public CountParameterDto searchByAnimalAndPriceCount(@PathVariable Long animalId,
-                                                         PriceSearchParameter priceSearchParameter) {
-        return productService.searchByAnimalAndPriceCount(animalId, priceSearchParameter);
+                                                         PriceSearchParameter parameter) {
+        return productService.searchByAnimalAndPriceCount(animalId, parameter);
     }
 
     @GetMapping("/price/category/{categoryId}")
     @Operation(summary = "Search products by category and price ",
             description = "Search products by category and price as from price to price")
     public List<ProductResponseDto> searchByCategoryAndPrice(@PathVariable Long categoryId,
-                                                             PriceSearchParameter priceSearchParameter,
+                                                             PriceSearchParameter parameter,
                                                              Pageable pageable) {
-        return productService.searchByCategoryAndPrice(categoryId, priceSearchParameter, pageable);
+        return productService.searchByCategoryAndPrice(categoryId, parameter, pageable);
     }
 
     @GetMapping("/price/category/{categoryId}/count")
-    @Operation(summary = "Count products by category and price /api/products/search/price/category/1/count?from=10&to=100")
+    @Operation(summary = "Count products by category and price"
+            + "/api/products/search/price/category/1/count?from=10&to=100")
     public CountParameterDto searchByCategoryAndPriceCount(@PathVariable Long categoryId,
-                                                           PriceSearchParameter priceSearchParameter) {
-        return productService.searchByCategoryAndPriceCount(categoryId, priceSearchParameter);
+                                                           PriceSearchParameter parameter) {
+        return productService.searchByCategoryAndPriceCount(categoryId, parameter);
     }
 }

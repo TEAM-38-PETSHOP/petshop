@@ -100,7 +100,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CountParameterDto searchAllCount(ProductSearchParameters params) {
         Specification<Product> productSpecification = productSpecificationBuilder.build(params);
-        CountParameterDto countParameterDto = new CountParameterDto(productRepository.findAll(productSpecification)
+        CountParameterDto countParameterDto = new CountParameterDto(productRepository
+                .findAll(productSpecification)
                 .stream()
                 .count());
 
@@ -152,22 +153,22 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
-
     @Override
     public CountParameterDto searchByPriceCount(PriceSearchParameter priceSearchParameter) {
-        return new CountParameterDto(productRepository.countPriceAllProducts(priceSearchParameter.from(),
+        return new CountParameterDto(productRepository
+                .countPriceAllProducts(priceSearchParameter.from(),
                 priceSearchParameter.to()));
     }
 
     @Override
     public List<ProductResponseDto> searchByAnimalAndPrice(Long animalId,
-                                                           PriceSearchParameter priceSearchParameter,
+                                                           PriceSearchParameter parameter,
                                                            Pageable pageable) {
         String fromPrice = "0";
         String toPrice = "10000";
-        if (!priceSearchParameter.from().isBlank() && !priceSearchParameter.to().isBlank()) {
-            fromPrice = priceSearchParameter.from();
-            toPrice = priceSearchParameter.to();
+        if (!parameter.from().isBlank() && !parameter.to().isBlank()) {
+            fromPrice = parameter.from();
+            toPrice = parameter.to();
         }
 
         return productRepository.findByPriceByAnimalFromTo(animalId, fromPrice, toPrice).stream()
@@ -176,36 +177,38 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
-
     @Override
-    public CountParameterDto searchByAnimalAndPriceCount(Long animalId, PriceSearchParameter priceSearchParameter) {
+    public CountParameterDto searchByAnimalAndPriceCount(Long animalId,
+                                                         PriceSearchParameter parameter) {
         return new CountParameterDto(productRepository.countByAnimalAndPrice(animalId,
-                priceSearchParameter.from(),
-                priceSearchParameter.to()));
+                parameter.from(),
+                parameter.to()));
     }
 
     @Override
     public List<ProductResponseDto> searchByCategoryAndPrice(Long categoryId,
-                                                             PriceSearchParameter priceSearchParameter,
+                                                             PriceSearchParameter parameter,
                                                              Pageable pageable) {
         String fromPrice = "0";
         String toPrice = "10000";
-        if (!priceSearchParameter.from().isBlank() && !priceSearchParameter.to().isBlank()) {
-            fromPrice = priceSearchParameter.from();
-            toPrice = priceSearchParameter.to();
+        if (!parameter.from().isBlank() && !parameter.to().isBlank()) {
+            fromPrice = parameter.from();
+            toPrice = parameter.to();
         }
 
-        return productRepository.findByPriceByCategoryFromTo(categoryId, fromPrice, toPrice).stream()
+        return productRepository.findByPriceByCategoryFromTo(categoryId, fromPrice, toPrice)
+                .stream()
                 .sorted(getComparatorForPrice())
                 .map(productMapper::toDto)
                 .toList();
     }
 
     @Override
-    public CountParameterDto searchByCategoryAndPriceCount(Long categoryId, PriceSearchParameter priceSearchParameter) {
+    public CountParameterDto searchByCategoryAndPriceCount(Long categoryId,
+                                                           PriceSearchParameter parameter) {
         return new CountParameterDto(productRepository.countCategoryAndPrice(categoryId,
-                priceSearchParameter.from(),
-                priceSearchParameter.to()));
+                parameter.from(),
+                parameter.to()));
     }
 
     @Override
@@ -334,7 +337,6 @@ public class ProductServiceImpl implements ProductService {
             return name;
         }
     }
-
 
     private Comparator<Product> getComparatorForPrice() {
         return (o1, o2) -> o1.getPrice().compareTo(o2.getPrice());
