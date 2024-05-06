@@ -278,7 +278,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
 
         for (Product product : products) {
-            product.setProductNameId(product.getName());
+            product.setProductNameId(transliterationService.getLatinStringLine(product.getName()));
         }
 
         productRepository.saveAll(products);
@@ -286,7 +286,8 @@ public class ProductServiceImpl implements ProductService {
         List<Category> categories = categoryRepository.findAll();
 
         for (Category category : categories) {
-            category.setCategoryNameId(category.getName());
+            category.setCategoryNameId(transliterationService
+                    .getLatinStringLine(category.getName()));
         }
 
         categoryRepository.saveAll(categories);

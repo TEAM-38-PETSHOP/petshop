@@ -74,6 +74,13 @@ public class ProductSpecificationBuilder implements SpecificationBuilder<Product
                     .getSpecification(searchParameters.productNameId()));
         }
 
+        if (searchParameters.price() != null) {
+            String[] param = {searchParameters.price().from(), searchParameters.price().to()};
+            spec = spec.and(productSpecificationProviderManager
+                    .getSpecificationProvider("price")
+                    .getSpecification(param));
+        }
+
         return spec;
     }
 }
