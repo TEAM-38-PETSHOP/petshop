@@ -5,6 +5,7 @@ import org.globaroman.petshopba.config.MapperConfig;
 import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
 import org.globaroman.petshopba.model.user.User;
+import org.globaroman.petshopba.model.user.UserTemp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -24,6 +25,13 @@ public interface UserMapper {
     default Long idFromUser(User user) {
         return Optional.ofNullable(user)
                 .map(User::getId)
+                .orElse(null);
+    }
+
+    @Named("idFromUserTemp")
+    default Long idFromUserTemp(UserTemp userTemp) {
+        return Optional.ofNullable(userTemp)
+                .map(UserTemp::getId)
                 .orElse(null);
     }
 }

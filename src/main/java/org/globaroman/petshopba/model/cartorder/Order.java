@@ -20,6 +20,7 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.globaroman.petshopba.model.user.User;
+import org.globaroman.petshopba.model.user.UserTemp;
 
 @Entity
 @Table(name = "orders")
@@ -32,6 +33,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "usertemp_id")
+    private UserTemp userTemp;
     @Enumerated(EnumType.STRING)
     private Status status;
     private BigDecimal total;

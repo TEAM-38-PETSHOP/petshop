@@ -156,7 +156,7 @@ class OrderServiceImplTest {
         Mockito.when(orderRepository.findAllByUserId(Mockito.anyLong())).thenReturn(orders);
         Mockito.when(orderMapper.toDto(order)).thenReturn(getResponseOrderDto());
 
-        List<ResponseOrderDto> result = orderService.getAllOrder(authentication);
+        List<ResponseOrderDto> result = orderService.getAllOrderByUser(authentication);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());

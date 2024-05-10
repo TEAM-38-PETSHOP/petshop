@@ -3,9 +3,13 @@ package org.globaroman.petshopba.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
+import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
 import org.globaroman.petshopba.service.OrderService;
@@ -40,12 +44,21 @@ public class OrderController {
         return orderService.addOrder(requestDto, authentication);
     }
 
+    @PostMapping("/withoutAuth")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create order for user without auth",
+            description = "Create order for user without auth")
+    public ResponseOrderDto addOrderNoName(@Valid @RequestBody CreateOrderNoNameRequestDto requestDto) {
+        return orderService.addOrderNoName(requestDto);
+    }
+
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get all order",
+    @Operation(summary = "Get all orders for authed user",
             description = "You can get all order as history")
-    public List<ResponseOrderDto> getAllOrder(Authentication authentication) {
-        return orderService.getAllOrder(authentication);
+    public List<ResponseOrderDto> getAllOrderByUser(Authentication authentication) {
+        return orderService.getAllOrderByUser(authentication);
     }
 
     @PatchMapping("/{id}")
@@ -57,6 +70,15 @@ public class OrderController {
             @RequestBody OrderStatusDto statusDto,
             @PathVariable Long id) {
         return orderService.updateStatusToOrder(statusDto, id);
+    }
+
+    @GetMapping("/admin")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all orders for admin",
+            description = "You can get all orders. You need Role - ADMIN")
+    public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
+        return orderService.getAllOrderForAdmin(parameterDto);
     }
 
     @GetMapping("/{orderId}")

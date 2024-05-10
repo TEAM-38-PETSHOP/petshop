@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.globaroman.petshopba.config.MapperConfig;
 import org.globaroman.petshopba.dto.animal.ResponseAnimalDto;
 import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
+import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
 import org.globaroman.petshopba.dto.product.CreateRequestProductDto;
 import org.globaroman.petshopba.dto.product.ProductResponseDto;
 import org.globaroman.petshopba.model.Animal;
@@ -69,8 +70,14 @@ public interface ProductMapper {
                 .orElse(null);
     }
 
+//    @Named("productFromDto")
+//    default Product productFromDto(CartItemRequestDto requestDto) {
+//        return new Product().
+//    }
+
     @Named("getNameFromProduct")
     default String getNameFromProduct(Product product) {
+
         return product != null ? product.getName() : null;
     }
 
