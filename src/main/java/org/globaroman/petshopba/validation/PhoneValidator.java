@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class PhoneValidator implements ConstraintValidator<Phone, String> {
 
     private static final String PATTERN_OF_PHONE =
-            "^(\\+\\d{1,3}[- ]?)?\\(?\\d{3}\\)?[- ]?\\d{3}[- ]?\\d{4}$";
+            "^[\\+]?3?[\\s]?8?[\\s]?\\(?0\\d{2}?\\)?[\\s]?\\d{3}[\\s|-]?\\d{2}[\\s|-]?\\d{2}$";
 
     @Override
     public boolean isValid(String phone, ConstraintValidatorContext constraintValidatorContext) {

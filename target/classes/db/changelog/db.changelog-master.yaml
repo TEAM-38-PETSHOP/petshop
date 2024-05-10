@@ -53,3 +53,7 @@ databaseChangeLog:
       file: /db/changelog/changes/26-remove_image_from_products_table.yaml
   - include:
       file: /db/changelog/changes/27-add_field_size_to_products_tables.yaml
+  - include:
+      file: /db/changelog/changes/28-create-usertemps-table.yaml
+  - include:
+      file: /db/changelog/changes/29-modify-orders-user-id-nullable.yaml

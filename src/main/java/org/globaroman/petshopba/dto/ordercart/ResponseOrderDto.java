@@ -14,6 +14,7 @@ import org.globaroman.petshopba.model.cartorder.Status;
 public class ResponseOrderDto implements Serializable {
     private Long id;
     private Long userId;
+    private Long userTempId;
     private Status status;
     private BigDecimal total;
     private LocalDateTime orderDate;

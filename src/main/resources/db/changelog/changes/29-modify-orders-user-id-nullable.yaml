@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-orders-user-id-not-null-constraint
+      author: com.globaroman
+      changes:
+        - dropNotNullConstraint:
+            columnName: user_id
+            columnDataType: bigint
+            tableName: orders
+
+
+
+
+

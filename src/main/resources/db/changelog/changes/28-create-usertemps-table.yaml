@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-usertempss-table
+      author: org.globaroman
+      changes:
+        - createTable:
+            tableName: usertemps
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: add_fields_to_orders_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: orders
+            columns:
+              - column:
+                  name: usertemp_id
+                  type: bigint

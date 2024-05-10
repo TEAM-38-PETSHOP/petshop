@@ -21,6 +21,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         OrderItemMapper.class})
 public interface OrderMapper {
     @Mapping(source = "user", target = "userId", qualifiedByName = "idFromUser")
+    @Mapping(source = "userTemp", target = "userTempId", qualifiedByName = "idFromUserTemp")
     ResponseOrderDto toDto(Order order);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
