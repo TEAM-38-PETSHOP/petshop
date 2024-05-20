@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;import lombok.RequiredArgsConstructor;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
@@ -127,7 +128,6 @@ public class OrderServiceImpl implements OrderService {
         return orderItemMapper.toDto(orderItem);
     }
 
-
     private void sendMassageToUserAboutOrder(Order order) {
         String email = "";
         if (order.getUser() == null) {
@@ -155,7 +155,9 @@ public class OrderServiceImpl implements OrderService {
                     Product product = productRepository.findById(item.getProductId())
                             .orElseThrow(() -> {
                                 log.error("Can not find product with id: " + item.getProductId());
-                                throw new EntityNotFoundCustomException("Can not find product with id: " + item.getProductId());
+                                throw new EntityNotFoundCustomException(
+                                        "Can not find product with id: "
+                                        + item.getProductId());
                             });
 
                     CartItem cartItem = new CartItem();
@@ -166,7 +168,9 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    private Order getOrderForTemplateUsers(UserTemp user, Address address, List<CartItem> cartItems) {
+    private Order getOrderForTemplateUsers(UserTemp user,
+                                           Address address,
+                                           List<CartItem> cartItems) {
         Order order = new Order();
         order.setUserTemp(user);
         order.setOrderDate(LocalDateTime.now());
@@ -238,7 +242,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private BigDecimal getTotalCostOrder(Set<OrderItem> orderItems) {
-        System.out.println(orderItems);
+
         double sum = orderItems.stream()
                 .mapToDouble(o ->
                         o.getPrice().doubleValue() * o.getQuantity())

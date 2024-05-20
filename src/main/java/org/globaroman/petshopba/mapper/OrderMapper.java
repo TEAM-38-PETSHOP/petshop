@@ -26,6 +26,7 @@ public interface OrderMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "userTemp", ignore = true)
     Order partialUpdate(ResponseOrderDto responseOrderDto, @MappingTarget Order order);
 
     @Mapping(target = "status", constant = "PENDING")
@@ -34,6 +35,7 @@ public interface OrderMapper {
     @Mapping(target = "orderDate", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "address", ignore = true)
     @Mapping(target = "orderItems", ignore = true)
+    @Mapping(target = "userTemp", ignore = true)
     Order shoppingCartToOrder(ShoppingCart shoppingCart);
 
     default OrderItemDto orderItemToOrderItemDto(OrderItem orderItem) {
