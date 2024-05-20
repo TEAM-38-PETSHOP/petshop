@@ -2,11 +2,9 @@ package org.globaroman.petshopba.dto.ordercart;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import org.globaroman.petshopba.model.cartorder.Address;
-import org.globaroman.petshopba.validation.Phone;
-
 import java.util.List;
+import lombok.Data;
+import org.globaroman.petshopba.validation.Phone;
 
 @Data
 public class CreateOrderNoNameRequestDto {
