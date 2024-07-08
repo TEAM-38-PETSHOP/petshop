@@ -131,7 +131,8 @@ class OrderServiceImplTest {
                         + "Кількість: 1 шт.\n"
                         + "Ціна: 100.00\n"
                         + "\n"
-                        + "Загальна сума замовлення: 100.00 грн."))
+                        + "Загальна сума замовлення: 100.00 грн."
+                        + "\n\nВаш коментар: \"" + order.getAddress().getComment() + " \""))
                 .thenReturn("Email sent successfully!");
         Mockito.when(orderRepository.save(order))
                 .thenReturn(order);

@@ -6,10 +6,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
-import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,6 +52,6 @@ public class UserController {
 
     @GetMapping("/info")
     public UserResponseDto getUserInfo(Authentication authentication) {
-       return userService.getUserInfo(authentication);
+        return userService.getUserInfo(authentication);
     }
 }
