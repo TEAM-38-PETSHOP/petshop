@@ -11,4 +11,6 @@ public class AddressRequestDto {
     private String building;
     private String apartment;
     private String officeNovaPost;
+    private String comment;
+
 }

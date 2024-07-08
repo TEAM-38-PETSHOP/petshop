@@ -6,9 +6,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
+import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,5 +50,10 @@ public class UserController {
     @Operation(summary = "Delete exist an exist user")
     public void delete(@PathVariable Long id) {
         userService.deleteById(id);
+    }
+
+    @GetMapping("/info")
+    public UserResponseDto getUserInfo(Authentication authentication) {
+       return userService.getUserInfo(authentication);
     }
 }

@@ -57,3 +57,5 @@ databaseChangeLog:
       file: /db/changelog/changes/28-create-usertemps-table.yaml
   - include:
       file: /db/changelog/changes/29-modify-orders-user-id-nullable.yaml
+  - include:
+      file: /db/changelog/changes/30-add_field_comment_to_addresses_tables.yaml

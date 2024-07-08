@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_fields_to_addresses_table
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: addresses
+            columns:
+              - column:
+                  name: comment
+                  type: varchar(1000)

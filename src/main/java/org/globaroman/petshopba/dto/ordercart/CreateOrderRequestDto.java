@@ -14,4 +14,5 @@ public class CreateOrderRequestDto implements Serializable {
     private String building;
     private String apartment;
     private String officeNovaPost;
+    private String comment;
 }
