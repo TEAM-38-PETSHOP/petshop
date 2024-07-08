@@ -23,4 +23,5 @@ public class Address {
     private String apartment;
     @Column(name = "office_post")
     private String officeNovaPost;
+    private String comment;
 }

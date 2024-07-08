@@ -18,6 +18,7 @@ import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.repository.RoleRepository;
 import org.globaroman.petshopba.repository.UserRepository;
 import org.globaroman.petshopba.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserResponseDto getUserInfo(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return userMapper.toDto(user);
     }
 
     private User getUserWithRoleAndPasswordEncode(UserRegistrationRequestDto requestDto) {

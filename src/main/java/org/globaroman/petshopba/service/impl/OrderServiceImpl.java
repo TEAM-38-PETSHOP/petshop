@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
@@ -56,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public ResponseOrderDto addOrder(
             CreateOrderRequestDto requestDto,
             Authentication authentication) {
@@ -146,6 +149,7 @@ public class OrderServiceImpl implements OrderService {
                         + "Замовлення від " + order.getOrderDate().format(formatDate) + "\n"
                         + getOrderItemTextingName(order.getOrderItems()) + "\n"
                         + "Загальна сума замовлення: " + order.getTotal() + " грн."
+                        + "\n\nВаш коментар: \"" + order.getAddress().getComment() + " \""
         );
     }
 
