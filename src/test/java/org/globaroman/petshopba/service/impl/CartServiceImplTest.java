@@ -1,11 +1,15 @@
 package org.globaroman.petshopba.service.impl;
 
+import static org.mockito.Mockito.lenient;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.dto.ordercart.CreateCartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.mapper.CartItemMapper;
 import org.globaroman.petshopba.mapper.ShoppingCartMapper;
@@ -83,20 +87,26 @@ class CartServiceImplTest {
         shoppingCart.setCartItems(cartItemSet);
         Product product = getProduct();
 
-        Mockito.when(shoppingCartRepository.findByUserId(Mockito.anyLong()))
+        lenient().when(shoppingCartRepository.findByUserId(Mockito.anyLong()))
                 .thenReturn(Optional.of(shoppingCart));
-        Mockito.when(productRepository.findById(Mockito.anyLong()))
+        lenient().when(productRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(product));
 
-        Mockito.when(cartItemRepository.save(Mockito.any(CartItem.class)))
+        lenient().when(cartItemRepository.save(Mockito.any(CartItem.class)))
                 .thenReturn(cartItem);
 
-        Mockito.when(shoppingCartMapper.toShoppingCartDto(shoppingCart))
+        lenient().when(shoppingCartMapper.toShoppingCartDto(shoppingCart))
                 .thenReturn(new ShoppingCartResponseDto());
 
         CartItemRequestDto requestDto = getCartItemRequestDto();
+        List<CartItemRequestDto> requestDtos = new ArrayList<>();
+        requestDtos.add(requestDto);
 
-        ShoppingCartResponseDto result = cartService.addProduct(requestDto, authentication);
+        CreateCartItemRequestDto createCartItemRequestDtos = new CreateCartItemRequestDto();
+        createCartItemRequestDtos.setCartItemRequestDtos(requestDtos);
+
+        ShoppingCartResponseDto result = cartService.addProduct(createCartItemRequestDtos,
+                authentication);
 
         Assertions.assertNotNull(result);
     }
