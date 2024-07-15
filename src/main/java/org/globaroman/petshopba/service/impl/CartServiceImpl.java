@@ -2,10 +2,12 @@ package org.globaroman.petshopba.service.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.dto.ordercart.CreateCartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.mapper.CartItemMapper;
@@ -34,30 +36,34 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingCartResponseDto addProduct(
-            CartItemRequestDto requestDto,
+            CreateCartItemRequestDto requestDtos,
             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         ShoppingCart shoppingCart = getShoppingCartFromDbOrNew(user);
-        Product requestProduct = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> {
-                    log.error("Can't find product with id: " + requestDto.getProductId());
-                    return new EntityNotFoundCustomException("Can't find product with id: "
-                    + requestDto.getProductId());
-                });
 
-        if (isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
-            return shoppingCartMapper.toShoppingCartDto(shoppingCart);
+        List<CartItemRequestDto> cartItemRequestDtos = requestDtos.getCartItemRequestDtos();
+
+        for (CartItemRequestDto requestDto : cartItemRequestDtos) {
+            Product requestProduct = productRepository.findById(requestDto.getProductId())
+                    .orElseThrow(() -> {
+                        log.error("Can't find product with id: " + requestDto.getProductId());
+                        return new EntityNotFoundCustomException("Can't find product with id: "
+                                + requestDto.getProductId());
+                    });
+
+            if (isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
+                return shoppingCartMapper.toShoppingCartDto(shoppingCart);
+            }
+            CartItem cartItem = new CartItem();
+
+            cartItem.setProduct(requestProduct);
+            cartItem.setQuantity(requestDto.getQuantity());
+            cartItem.setShoppingCart(shoppingCart);
+
+            CartItem savedCartItem = cartItemRepository.save(cartItem);
+
+            shoppingCart.getCartItems().add(savedCartItem);
         }
-
-        CartItem cartItem = new CartItem();
-
-        cartItem.setProduct(requestProduct);
-        cartItem.setQuantity(requestDto.getQuantity());
-        cartItem.setShoppingCart(shoppingCart);
-
-        CartItem savedCartItem = cartItemRepository.save(cartItem);
-
-        shoppingCart.getCartItems().add(savedCartItem);
 
         shoppingCartRepository.save(shoppingCart);
 

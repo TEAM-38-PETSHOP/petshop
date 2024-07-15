@@ -1,12 +1,13 @@
 package org.globaroman.petshopba.service;
 
 import org.globaroman.petshopba.dto.ordercart.CartItemRequestDto;
+import org.globaroman.petshopba.dto.ordercart.CreateCartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.springframework.security.core.Authentication;
 
 public interface CartService {
     ShoppingCartResponseDto addProduct(
-            CartItemRequestDto requestDto,
+            CreateCartItemRequestDto requestDto,
             Authentication authentication);
 
     ShoppingCartResponseDto update(
