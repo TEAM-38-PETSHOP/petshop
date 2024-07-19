@@ -48,33 +48,41 @@ public class AuthenticationController {
 
     @PostMapping("/forgot-password")
     @Operation(summary = "Action user, when forgot password send email")
-    public ResponseEntity<String> forgotPassword(@RequestBody @Valid UserEmailForRecovePasswordRequestDto requestDto) {
+    public ResponseEntity<String> forgotPassword(
+            @RequestBody @Valid UserEmailForRecovePasswordRequestDto requestDto) {
         boolean isCodeSent = userService.getCodeForNewPassword(requestDto);
         if (isCodeSent) {
-            return ResponseEntity.ok("Код для відновлення паролю відправлено на вашу електронну пошту");
+            return ResponseEntity
+                    .ok("Код для відновлення паролю відправлено на вашу електронну пошту");
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Щось пішло не так. Перевірте вашу електронну пошту та введіть її знову");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Щось пішло не так. Перевірте вашу електронну пошту та введіть її знову");
         }
     }
 
     @PostMapping("/send-code")
     @Operation(summary = "Action user, when forgot password send the code, received by email")
-    public ResponseEntity<String> forgotPassword(@RequestBody @Valid CodeForNewPasswordRequestDto requestDto) {
+    public ResponseEntity<String> forgotPassword(
+            @RequestBody @Valid CodeForNewPasswordRequestDto requestDto) {
         boolean isCodeEquals = userService.compareCode(requestDto);
         if (isCodeEquals) {
             return ResponseEntity.ok("Код прийнято. Ви можете встановити новий пароль.");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Невірний код. Спробуйте ще раз.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Невірний код. Спробуйте ще раз.");
         }
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody @Valid CreateNewPasswordRequestDto requestDto) {
+    public ResponseEntity<String> resetPassword(
+            @RequestBody @Valid CreateNewPasswordRequestDto requestDto) {
         boolean isPasswordReset = userService.resetPassword(requestDto);
         if (isPasswordReset) {
-            return ResponseEntity.ok("Пароль змінено. Ви можете увіййти до свого облікового запису.");
+            return ResponseEntity
+                    .ok("Пароль змінено. Ви можете увіййти до свого облікового запису.");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Щось пішло не так. Спробуйте ще раз.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Щось пішло не так. Спробуйте ще раз.");
         }
     }
 

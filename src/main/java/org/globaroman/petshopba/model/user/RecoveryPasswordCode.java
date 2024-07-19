@@ -9,9 +9,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name="recovery_password_codes")
+@Table(name = "recovery_password_codes")
 @Data
-
 public class RecoveryPasswordCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,12 @@
 package org.globaroman.petshopba.service.impl;
 
 import jakarta.transaction.Transactional;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.user.CodeForNewPasswordRequestDto;
@@ -107,7 +105,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(requestDto.email()).orElseThrow(
                 () -> {
                     log.error("No found user by email: " + requestDto.email());
-                    return new EntityNotFoundCustomException("No found user by email: " + requestDto.email());
+                    return new EntityNotFoundCustomException("No found user by email: "
+                            + requestDto.email());
                 }
         );
 
@@ -133,7 +132,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean resetPassword(CreateNewPasswordRequestDto requestDto) {
-        Optional<RecoveryPasswordCode> codeOptional = recoveryCodeRepository.findByCode(requestDto.code());
+        Optional<RecoveryPasswordCode> codeOptional = recoveryCodeRepository
+                .findByCode(requestDto.code());
         if (codeOptional.isEmpty()) {
             return false;
         }
@@ -141,7 +141,8 @@ public class UserServiceImpl implements UserService {
         RecoveryPasswordCode recoveryPasswordCode = codeOptional.get();
         User user = userRepository.findByEmail(recoveryPasswordCode.getEmail()).orElseThrow(() -> {
             log.error("No found user by email: " + recoveryPasswordCode.getEmail());
-            return new EntityNotFoundCustomException("No found user by email: " + recoveryPasswordCode.getEmail());
+            return new EntityNotFoundCustomException("No found user by email: "
+                    + recoveryPasswordCode.getEmail());
         });
 
         user.setPassword(passwordEncoder.encode(requestDto.password()));
@@ -151,23 +152,24 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-
     private void sendMessageToUser(User user, String code) {
-            emailSenderService.sendEmail(
+        emailSenderService.sendEmail(
                     "OneGroom.com.ua",
                     user.getEmail(),
                     "Ваш код безпеки OneGroom",
                     "Вітаємо, " + user.getFirstName() + "!\n"
                             + "Ваш захисний код:\n\n"
                             + code + "\n\n"
-                            + "Щоб підтвердити вашу особу у OneGroom, нам необхідно підтвердити вашу електронну адресу."
-                            + " Вставте цей код у браузері. Його можна використати лише раз."
-            );
-        }
-
+                            + "Щоб підтвердити вашу особу у OneGroom, "
+                            + "нам необхідно підтвердити вашу електронну адресу."
+                            + "вашу електронну адресу. Вставте цей код у браузері. "
+                            + "Його можна використати лише раз."
+        );
+    }
 
     private String createCodeForRecovery() {
-        return String.format("%06d", new Random().nextInt(999999));}
+        return String.format("%06d", new Random().nextInt(999999));
+    }
 
     private User getUserWithRoleAndPasswordEncode(UserRegistrationRequestDto requestDto) {
         User user = userMapper.toModel(requestDto);
