@@ -59,3 +59,5 @@ databaseChangeLog:
       file: /db/changelog/changes/29-modify-orders-user-id-nullable.yaml
   - include:
       file: /db/changelog/changes/30-add_field_comment_to_addresses_tables.yaml
+  - include:
+      file: /db/changelog/changes/31-create-codes_for_recovery_password-table.yaml
