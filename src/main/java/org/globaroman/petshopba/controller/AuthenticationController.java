@@ -74,12 +74,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
+    @Operation(summary = "Action user, when forgot password send the code, "
+            + "received by email and new password")
     public ResponseEntity<String> resetPassword(
             @RequestBody @Valid CreateNewPasswordRequestDto requestDto) {
         boolean isPasswordReset = userService.resetPassword(requestDto);
         if (isPasswordReset) {
             return ResponseEntity
-                    .ok("Пароль змінено. Ви можете увіййти до свого облікового запису.");
+                    .ok("Пароль змінено. Ви можете увійти до свого облікового запису.");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Щось пішло не так. Спробуйте ще раз.");

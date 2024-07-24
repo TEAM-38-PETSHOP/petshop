@@ -10,9 +10,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class, uses = ProductMapper.class)
 public interface CartItemMapper {
-    @Mapping(source = "product", target = "productId", qualifiedByName = "productFromId")
-    @Mapping(source = "product", target = "productName", qualifiedByName = "getNameFromProduct")
+
     @Mapping(target = "cartItemId", source = "id")
+    @Mapping(target = "productDto", source = "product")
     CarItemResponseDto toCartItemDto(CartItem cartItem);
 
     @Mapping(target = "id", ignore = true)
