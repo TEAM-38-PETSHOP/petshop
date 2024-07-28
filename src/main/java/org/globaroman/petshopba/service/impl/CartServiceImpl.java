@@ -91,8 +91,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteById(Long cartItemId) {
-        cartItemRepository.deleteById(cartItemId);
+    public boolean deleteById(Long cartItemId) {
+        return cartItemRepository.findById(cartItemId)
+                .map(cartItem -> {
+                    cartItemRepository.deleteById(cartItemId);
+                    return true;
+                })
+                .orElse(false);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.ordercart.CreateCartItemRequestDto;
 import org.globaroman.petshopba.dto.ordercart.ShoppingCartResponseDto;
 import org.globaroman.petshopba.service.CartService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +53,15 @@ public class CartController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete cartItem",
             description = "You can delete your cartItem by its ID from cart")
-    public void delete(@PathVariable Long cartItemId) {
-        cartService.deleteById(cartItemId);
+    public ResponseEntity<String> delete(@PathVariable Long cartItemId) {
+        boolean isDelete = cartService.deleteById(cartItemId);
+        if (isDelete) {
+            return ResponseEntity.ok("CartItem was deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Something went wrong. Try again");
+        }
+
     }
 
     @GetMapping

@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
 import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.service.CategoryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,6 +28,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new category",
@@ -51,6 +53,7 @@ public class CategoryController {
         return categoryService.getById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update this category",
@@ -61,6 +64,7 @@ public class CategoryController {
         return categoryService.update(id, requestCategoryDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete category",

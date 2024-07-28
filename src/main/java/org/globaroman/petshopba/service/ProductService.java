@@ -19,7 +19,7 @@ public interface ProductService {
 
     ProductResponseDto update(Long id, CreateRequestProductDto requestProductDto);
 
-    void delete(Long id);
+    boolean delete(Long id);
 
     List<ProductResponseDto> getAllProductsByCategoryId(Long id,
                                                         Pageable pageable);

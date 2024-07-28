@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
     private final UploadImageServiceImpl upload;
     private final ProductSpecificationBuilder productSpecificationBuilder;
     private final TransliterationService transliterationService;
-
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -304,14 +303,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Long id) {
-        Product product = getProductFromDb(id);
-        List<String> urls = product.getImageUrls();
-        for (String url : urls) {
-            amazonS3Service.deleteImage(url);
-        }
-
-        productRepository.deleteById(id);
+    public boolean delete(Long id) {
+        return productRepository.findById(id).map(product -> {
+            product.getImageUrls().forEach(amazonS3Service::deleteImage);
+            productRepository.deleteById(id);
+            return true;
+        }).orElse(false);
     }
 
     private Product getProductFromDb(Long id) {
