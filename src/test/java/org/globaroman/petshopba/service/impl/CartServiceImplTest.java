@@ -141,8 +141,16 @@ class CartServiceImplTest {
     @DisplayName("Delete exist CartItem -> return Status ok")
     void deleteById_ShouldDeliteExistCartItemById_ResultOk() {
 
-        cartService.deleteById(1L);
-        Mockito.verify(cartItemRepository, Mockito.times(1)).deleteById(1L);
+        Long cartItemId = 1L;
+        CartItem cartItem = new CartItem();
+        Mockito.when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(cartItem));
+
+        // Act
+        boolean result = cartService.deleteById(cartItemId);
+
+        // Assert
+        Assertions.assertTrue(result, "The cart item should be deleted and return true");
+        Mockito.verify(cartItemRepository, Mockito.times(1)).deleteById(cartItemId);
     }
 
     @Test

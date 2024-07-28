@@ -15,7 +15,7 @@ public interface CartService {
             CartItemRequestDto requestDto,
             Authentication authentication);
 
-    void deleteById(Long cartItemId);
+    boolean deleteById(Long cartItemId);
 
     ShoppingCartResponseDto getShoppingCart(Authentication authentication);
 }

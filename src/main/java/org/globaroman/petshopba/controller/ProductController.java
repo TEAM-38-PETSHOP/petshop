@@ -11,6 +11,8 @@ import org.globaroman.petshopba.dto.product.RequestUpdateImageToProductDto;
 import org.globaroman.petshopba.service.ProductService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,6 +33,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new product",
@@ -117,6 +120,7 @@ public class ProductController {
         return productService.getRandomProducts(count);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update product",
@@ -128,6 +132,7 @@ public class ProductController {
         return productService.update(id, requestProductDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/updateImage/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update images",
@@ -139,12 +144,20 @@ public class ProductController {
         return productService.updateImageToProduct(id, requestImageDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete product",
             description = "You can delete a product")
-    public void deleteProductById(@PathVariable Long id) {
-        productService.delete(id);
+    public ResponseEntity<String> deleteProductById(@PathVariable Long id) {
+        boolean isDelete = productService.delete(id);
+
+        if (isDelete) {
+            return ResponseEntity.ok("Product was deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Something went wrong. Try again");
+        }
     }
 
     @GetMapping("/admin/updateNameId")

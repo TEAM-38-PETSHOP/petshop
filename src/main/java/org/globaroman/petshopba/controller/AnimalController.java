@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.animal.CreateAnimalRequestDto;
 import org.globaroman.petshopba.dto.animal.ResponseAnimalDto;
 import org.globaroman.petshopba.service.AnimalService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnimalController {
     private final AnimalService animalService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new animal",
@@ -50,6 +52,7 @@ public class AnimalController {
         return animalService.getAnimalById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update animal",
@@ -60,6 +63,7 @@ public class AnimalController {
         return animalService.update(id, requestDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete animal",
