@@ -3,6 +3,7 @@ package org.globaroman.petshopba.service.impl;
 import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -11,12 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.user.CodeForNewPasswordRequestDto;
 import org.globaroman.petshopba.dto.user.CreateNewPasswordRequestDto;
+import org.globaroman.petshopba.dto.user.UpdateProfileUserRequestDto;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserEmailForRecovePasswordRequestDto;
 import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.exception.RegistrationException;
+import org.globaroman.petshopba.exception.global.PasswordChangeException;
 import org.globaroman.petshopba.mapper.UserMapper;
 import org.globaroman.petshopba.model.user.RecoveryPasswordCode;
 import org.globaroman.petshopba.model.user.Role;
@@ -89,8 +92,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteById(Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        if (user.getRoles().contains(Role.RoleName.ADMIN)) {
+            userRepository.deleteById(id);
+            return;
+        }
+
+        if (Objects.equals(user.getId(), id)) {
+            userRepository.deleteById(id);
+            return;
+        }
+
+        throw new RuntimeException("You do not have permission to delete this user.");
     }
 
     @Override
@@ -150,6 +165,32 @@ public class UserServiceImpl implements UserService {
         recoveryCodeRepository.delete(recoveryPasswordCode);
 
         return true;
+    }
+
+    @Override
+    public UserResponseDto updateProfile(UpdateProfileUserRequestDto requestDto,
+                                         Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        user.setFirstName(requestDto.getFirstName());
+        user.setLastName(requestDto.getLastName());
+        user.setEmail(requestDto.getEmail());
+        user.setPhone(requestDto.getPhone());
+
+        if (requestDto.getNewPassword() != null && !requestDto.getNewPassword().isEmpty()) {
+
+            boolean isPasswordMatch = passwordEncoder.matches(requestDto.getOldPassword(),
+                    user.getPassword());
+            if (!isPasswordMatch) {
+                log.error(user.getId() + "Your password doesn't match the saved one. Try again");
+                throw new PasswordChangeException(
+                        "Your password doesn't match the saved one. Try again");
+            }
+
+            user.setPassword(passwordEncoder.encode(requestDto.getNewPassword()));
+        }
+
+        return userMapper.toDto(userRepository.save(user));
     }
 
     private void sendMessageToUser(User user, String code) {

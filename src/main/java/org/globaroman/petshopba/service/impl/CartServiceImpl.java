@@ -51,18 +51,17 @@ public class CartServiceImpl implements CartService {
                                 + requestDto.getProductId());
                     });
 
-            if (isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
-                return shoppingCartMapper.toShoppingCartDto(shoppingCart);
+            if (!isProductIntoCart(shoppingCart, requestProduct, requestDto)) {
+                CartItem cartItem = new CartItem();
+
+                cartItem.setProduct(requestProduct);
+                cartItem.setQuantity(requestDto.getQuantity());
+                cartItem.setShoppingCart(shoppingCart);
+
+                CartItem savedCartItem = cartItemRepository.save(cartItem);
+
+                shoppingCart.getCartItems().add(savedCartItem);
             }
-            CartItem cartItem = new CartItem();
-
-            cartItem.setProduct(requestProduct);
-            cartItem.setQuantity(requestDto.getQuantity());
-            cartItem.setShoppingCart(shoppingCart);
-
-            CartItem savedCartItem = cartItemRepository.save(cartItem);
-
-            shoppingCart.getCartItems().add(savedCartItem);
         }
 
         shoppingCartRepository.save(shoppingCart);
@@ -129,7 +128,7 @@ public class CartServiceImpl implements CartService {
 
         if (cartItemsMap.containsKey(requestProduct.getId())) {
             CartItem item = cartItemsMap.get(requestProduct.getId());
-            item.setQuantity(item.getQuantity() + requestDto.getQuantity());
+            item.setQuantity(requestDto.getQuantity());
             cartItemRepository.save(item);
             return true;
         }
