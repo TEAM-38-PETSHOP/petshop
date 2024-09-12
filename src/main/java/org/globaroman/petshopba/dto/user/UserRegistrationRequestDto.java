@@ -17,7 +17,6 @@ public class UserRegistrationRequestDto {
     @NotBlank
     @Email
     private String email;
-    @NotBlank
     @Phone
     @NotBlank
     private String phone;

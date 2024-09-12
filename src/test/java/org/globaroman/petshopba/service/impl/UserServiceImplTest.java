@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
@@ -38,9 +39,16 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    private User user;
+    private Authentication authentication;
+
     @BeforeEach
     void setUp() {
+
         MockitoAnnotations.openMocks(this);
+
+        authentication = new org.springframework.security
+                .authentication.UsernamePasswordAuthenticationToken(user, null);
     }
 
     @Test
@@ -134,13 +142,34 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Delete user by id method is called with correct argument")
-    void deleteById_UseValidUserId_returnSuccessfulDeleteOk() {
+    @DisplayName("Delete user by themselves -> return successful delete")
+    void deleteById_UserDeletesSelf_ReturnsSuccessfulDelete() {
         User user = new User();
         user.setId(1L);
 
-        userService.deleteById(user.getId());
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.verify(userRepository, Mockito.times(1)).deleteById(user.getId());
+        userService.deleteById(1L, authentication);
+
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("User tries to delete another user -> throws exception")
+    void deleteById_UserTriesToDeleteAnotherUser_ThrowsException() {
+        User user = new User();
+        user.setId(1L);
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
+
+        Long anotherUserId = 2L;
+
+        Assertions.assertThrows(RuntimeException.class, () ->
+                        userService.deleteById(anotherUserId, authentication),
+                "You do not have permission to delete this user.");
+
+        Mockito.verify(userRepository, Mockito.never()).deleteById(Mockito.anyLong());
     }
 }

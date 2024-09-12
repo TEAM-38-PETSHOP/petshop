@@ -3,6 +3,7 @@ package org.globaroman.petshopba.service;
 import java.util.List;
 import org.globaroman.petshopba.dto.user.CodeForNewPasswordRequestDto;
 import org.globaroman.petshopba.dto.user.CreateNewPasswordRequestDto;
+import org.globaroman.petshopba.dto.user.UpdateProfileUserRequestDto;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserEmailForRecovePasswordRequestDto;
 import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
@@ -17,7 +18,7 @@ public interface UserService {
 
     List<UserResponseDto> getAll();
 
-    void deleteById(Long id);
+    void deleteById(Long id, Authentication authentication);
 
     UserResponseDto getUserInfo(Authentication authentication);
 
@@ -26,4 +27,7 @@ public interface UserService {
     boolean compareCode(CodeForNewPasswordRequestDto requestDto);
 
     boolean resetPassword(CreateNewPasswordRequestDto requestDto);
+
+    UserResponseDto updateProfile(UpdateProfileUserRequestDto requestDto,
+                                  Authentication authentication);
 }
