@@ -23,4 +23,6 @@ public interface OrderService {
     ResponseOrderDto addOrderNoName(CreateOrderNoNameRequestDto requestDto);
 
     List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto);
+
+    String deleteOrder(Long id, Authentication authentication);
 }
