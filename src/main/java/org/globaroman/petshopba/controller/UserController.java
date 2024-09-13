@@ -56,9 +56,9 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete exist user")
-    public void delete(@PathVariable Long id,
+    public String delete(@PathVariable Long id,
                        Authentication authentication) {
-        userService.deleteById(id, authentication);
+        return userService.deleteById(id, authentication);
     }
 
     @GetMapping("/info")

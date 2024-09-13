@@ -18,7 +18,7 @@ public interface UserService {
 
     List<UserResponseDto> getAll();
 
-    void deleteById(Long id, Authentication authentication);
+    String deleteById(Long id, Authentication authentication);
 
     UserResponseDto getUserInfo(Authentication authentication);
 

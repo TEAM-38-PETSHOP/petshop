@@ -21,11 +21,15 @@ import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
 import org.globaroman.petshopba.exception.RegistrationException;
 import org.globaroman.petshopba.exception.global.PasswordChangeException;
 import org.globaroman.petshopba.mapper.UserMapper;
+import org.globaroman.petshopba.model.cartorder.Order;
+import org.globaroman.petshopba.model.cartorder.ShoppingCart;
 import org.globaroman.petshopba.model.user.RecoveryPasswordCode;
 import org.globaroman.petshopba.model.user.Role;
 import org.globaroman.petshopba.model.user.User;
+import org.globaroman.petshopba.repository.OrderRepository;
 import org.globaroman.petshopba.repository.RecoveryCodeRepository;
 import org.globaroman.petshopba.repository.RoleRepository;
+import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserRepository;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.UserService;
@@ -44,6 +48,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final OrderRepository orderRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final RecoveryCodeRepository recoveryCodeRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -92,17 +98,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id, Authentication authentication) {
+    public String deleteById(Long id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
+        Role userRole = roleRepository.findByRole(Role.RoleName.ADMIN).orElseThrow(
+                () -> {
+                    log.error("No found role: " + Role.RoleName.ADMIN);
+                    return new EntityNotFoundCustomException("No found role: "
+                            + Role.RoleName.ADMIN);
+                }
+        );
 
-        if (user.getRoles().contains(Role.RoleName.ADMIN)) {
+        if (user.getRoles().contains(userRole)) {
+            deleteOrder(id);
             userRepository.deleteById(id);
-            return;
+            return "User by id:" + id + " successfully deleted";
         }
 
         if (Objects.equals(user.getId(), id)) {
+            deleteOrder(id);
             userRepository.deleteById(id);
-            return;
+            return "User by id:" + id + " successfully deleted";
         }
 
         throw new RuntimeException("You do not have permission to delete this user.");
@@ -218,6 +233,13 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Set.of(getRoleFromDB(USER_ROLE_ID)));
 
         return user;
+    }
+
+    private void deleteOrder(Long id) {
+        Optional<ShoppingCart> carts = shoppingCartRepository.findByUserId(id);
+        carts.ifPresent(shoppingCartRepository::delete);
+        List<Order> orders = orderRepository.findByUserId(id);
+        orders.forEach(order -> orderRepository.delete(order));
     }
 
     private Role getRoleFromDB(Long id) {
