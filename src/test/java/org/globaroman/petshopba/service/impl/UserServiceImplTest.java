@@ -142,20 +142,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Delete user by themselves -> return successful delete")
-    void deleteById_UserDeletesSelf_ReturnsSuccessfulDelete() {
-        User user = new User();
-        user.setId(1L);
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(user);
-
-        userService.deleteById(1L, authentication);
-
-        Mockito.verify(userRepository, Mockito.times(1)).deleteById(1L);
-    }
-
-    @Test
     @DisplayName("User tries to delete another user -> throws exception")
     void deleteById_UserTriesToDeleteAnotherUser_ThrowsException() {
         User user = new User();

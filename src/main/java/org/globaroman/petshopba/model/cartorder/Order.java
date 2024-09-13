@@ -41,7 +41,7 @@ public class Order {
     private BigDecimal total;
     @Column(name = "order_date")
     private LocalDateTime orderDate;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
