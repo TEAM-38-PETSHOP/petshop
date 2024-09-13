@@ -83,8 +83,6 @@ public class OrderController {
     @GetMapping("/admin")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-//    @Operation(summary = "Get all orders for admin",
-//            description = "You can get all orders. You need Role - ADMIN")
     public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
         return orderService.getAllOrderForAdmin(parameterDto);
     }
