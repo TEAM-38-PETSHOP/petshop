@@ -4,9 +4,9 @@ import java.util.List;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
-import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 public interface OrderService {
@@ -22,7 +22,7 @@ public interface OrderService {
 
     ResponseOrderDto addOrderNoName(CreateOrderNoNameRequestDto requestDto);
 
-    List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto);
+    List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable);
 
     String deleteOrder(Long id, Authentication authentication);
 }

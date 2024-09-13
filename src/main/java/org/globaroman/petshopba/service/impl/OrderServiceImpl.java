@@ -13,7 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
-import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -37,6 +36,7 @@ import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserTempRepository;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.OrderService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -83,8 +83,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
-        return null;
+    public List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable) {
+        return orderRepository.findAll(pageable).stream()
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     @Override

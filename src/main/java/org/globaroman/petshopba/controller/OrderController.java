@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
-import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
 import org.globaroman.petshopba.service.OrderService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -83,8 +83,8 @@ public class OrderController {
     @GetMapping("/admin")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-    public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
-        return orderService.getAllOrderForAdmin(parameterDto);
+    public List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable) {
+        return orderService.getAllOrderForAdmin(pageable);
     }
 
     @GetMapping("/{orderId}")
