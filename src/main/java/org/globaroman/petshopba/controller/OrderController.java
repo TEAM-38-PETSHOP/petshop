@@ -15,6 +15,7 @@ import org.globaroman.petshopba.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,11 +72,19 @@ public class OrderController {
         return orderService.updateStatusToOrder(statusDto, id);
     }
 
+    @DeleteMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete order",
+            description = "You can delete the order. But only if the status is PENDING")
+    public String deleteOrder(@PathVariable Long orderId, Authentication authentication) {
+        return orderService.deleteOrder(orderId, authentication);
+    }
+
     @GetMapping("/admin")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Get all orders for admin",
-            description = "You can get all orders. You need Role - ADMIN")
+//    @Operation(summary = "Get all orders for admin",
+//            description = "You can get all orders. You need Role - ADMIN")
     public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
         return orderService.getAllOrderForAdmin(parameterDto);
     }

@@ -17,7 +17,7 @@ public interface OrderItemMapper {
     @Mapping(target = "product", ignore = true)
     OrderItem toEntity(ResponseOrderItemDto responseOrderItemDto);
 
-    @Mapping(source = "product", target = "productId", qualifiedByName = "productFromId")
+    @Mapping(source = "product", target = "productDto")
     ResponseOrderItemDto toDto(OrderItem orderItem);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

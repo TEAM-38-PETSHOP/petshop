@@ -27,12 +27,14 @@ import org.globaroman.petshopba.model.cartorder.Order;
 import org.globaroman.petshopba.model.cartorder.OrderItem;
 import org.globaroman.petshopba.model.cartorder.ShoppingCart;
 import org.globaroman.petshopba.model.cartorder.Status;
+import org.globaroman.petshopba.model.user.Role;
 import org.globaroman.petshopba.model.user.User;
 import org.globaroman.petshopba.model.user.UserTemp;
 import org.globaroman.petshopba.repository.AddressRepository;
 import org.globaroman.petshopba.repository.OrderItemRepository;
 import org.globaroman.petshopba.repository.OrderRepository;
 import org.globaroman.petshopba.repository.ProductRepository;
+import org.globaroman.petshopba.repository.RoleRepository;
 import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserTempRepository;
 import org.globaroman.petshopba.service.EmailSenderService;
@@ -88,6 +90,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String deleteOrder(Long orderId, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        Order order = getOrderById(orderId);
+
+        if (user.equals(order.getUser()) && order.getStatus().equals(Status.PENDING)) {
+            orderRepository.delete(order);
+        } else {
+            return "Order with id:" + orderId + " cannot be deleted.";
+        }
+
+        return "Order with id:" + orderId + " was successfully deleted";
+    }
+
+    @Override
     public List<ResponseOrderDto> getAllOrderByUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return orderRepository.findAllByUserId(user.getId()).stream()
@@ -97,11 +114,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseOrderDto updateStatusToOrder(OrderStatusDto statusDto, Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(
-                () -> {
-                    log.error("Can't find order with id: " + id);
-                    return new EntityNotFoundCustomException("Can't find order with id: " + id);
-                });
+        Order order = getOrderById(id);
         order.setStatus(statusDto.getStatus());
 
         return orderMapper.toDto(orderRepository.save(order));
@@ -109,13 +122,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<ResponseOrderItemDto> getOrderItensFromOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
+        Order order = getOrderById(orderId);
+        return orderMapper.orderItemsToDtos(order.getOrderItems());
+    }
+
+    private Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(
                 () -> {
                     log.error("Can't find order with id: " + orderId);
                     return new EntityNotFoundCustomException(
                             "Can't find order with id: " + orderId);
                 });
-        return orderMapper.orderItemsToDtos(order.getOrderItems());
     }
 
     @Override

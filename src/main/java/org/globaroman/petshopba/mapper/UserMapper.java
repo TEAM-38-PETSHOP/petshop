@@ -28,6 +28,13 @@ public interface UserMapper {
                 .orElse(null);
     }
 
+    @Named("phoneFromUser")
+    default String phoneFromUser(User user) {
+        return Optional.ofNullable(user)
+                .map(User::getPhone)
+                .orElse(null);
+    }
+
     @Named("idFromUserTemp")
     default Long idFromUserTemp(UserTemp userTemp) {
         return Optional.ofNullable(userTemp)

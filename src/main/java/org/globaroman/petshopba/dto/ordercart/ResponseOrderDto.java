@@ -18,6 +18,7 @@ public class ResponseOrderDto implements Serializable {
     private Status status;
     private BigDecimal total;
     private LocalDateTime orderDate;
+    private String phone;
     private Address address;
     private Set<ResponseOrderItemDto> orderItems;
 }
