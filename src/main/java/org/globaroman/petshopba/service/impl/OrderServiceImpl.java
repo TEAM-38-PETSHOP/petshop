@@ -105,6 +105,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public ResponseOrderDto updateOrderToCanceled(Long id, Authentication authentication) {
+        Order order = getOrderById(id);
+        User user = (User) authentication.getPrincipal();
+
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+
+        if (orders.contains(order)
+                && order.getStatus().equals(Status.PENDING)
+                || order.getStatus().equals(Status.PROCESSING)) {
+            order.setStatus(Status.CANCELLED);
+            return orderMapper.toDto(orderRepository.save(order));
+        } else {
+            throw new RuntimeException("Something went wrong. "
+                    + "Probably the order formation stage does "
+                    + "not allow changing the order status");
+        }
+    }
+
+    @Override
     public List<ResponseOrderDto> getAllOrderByUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return orderRepository.findAllByUserId(user.getId()).stream()

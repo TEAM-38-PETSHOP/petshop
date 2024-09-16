@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Log4j2
 public class EmailSenderServiceImpl implements EmailSenderService {
+
+    public static final String hostEmail = "globaroman@gmail.com";
+
     @Value("${mail.smtp.host}")
     private String smptHost;
     @Value("${mail.smtp.port}")

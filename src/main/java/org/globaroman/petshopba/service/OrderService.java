@@ -25,4 +25,6 @@ public interface OrderService {
     List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable);
 
     String deleteOrder(Long id, Authentication authentication);
+
+    ResponseOrderDto updateOrderToCanceled(Long id, Authentication authentication);
 }

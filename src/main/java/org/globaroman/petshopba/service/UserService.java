@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.service;
 
 import java.util.List;
+import org.globaroman.petshopba.controller.UserFeedbackDto;
 import org.globaroman.petshopba.dto.user.CodeForNewPasswordRequestDto;
 import org.globaroman.petshopba.dto.user.CreateNewPasswordRequestDto;
 import org.globaroman.petshopba.dto.user.UpdateProfileUserRequestDto;
@@ -10,6 +11,7 @@ import org.globaroman.petshopba.dto.user.UserRegistrationRequestDto;
 import org.globaroman.petshopba.dto.user.UserResponseDto;
 import org.globaroman.petshopba.exception.RegistrationException;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     UserResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException;
@@ -30,4 +32,8 @@ public interface UserService {
 
     UserResponseDto updateProfile(UpdateProfileUserRequestDto requestDto,
                                   Authentication authentication);
+
+    void handleFeedback(String message, MultipartFile[] file, Authentication authentication);
+
+    List<UserFeedbackDto> getAllFeedback();
 }

@@ -1,6 +1,7 @@
 package org.globaroman.petshopba.service.impl;
 
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -10,8 +11,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.globaroman.petshopba.controller.UserFeedbackDto;
 import org.globaroman.petshopba.dto.user.CodeForNewPasswordRequestDto;
 import org.globaroman.petshopba.dto.user.CreateNewPasswordRequestDto;
+import org.globaroman.petshopba.dto.user.FeedbackMapper;
 import org.globaroman.petshopba.dto.user.UpdateProfileUserRequestDto;
 import org.globaroman.petshopba.dto.user.UpdateRoleDto;
 import org.globaroman.petshopba.dto.user.UserEmailForRecovePasswordRequestDto;
@@ -23,20 +26,26 @@ import org.globaroman.petshopba.exception.global.PasswordChangeException;
 import org.globaroman.petshopba.mapper.UserMapper;
 import org.globaroman.petshopba.model.cartorder.Order;
 import org.globaroman.petshopba.model.cartorder.ShoppingCart;
+import org.globaroman.petshopba.model.user.Feedback;
 import org.globaroman.petshopba.model.user.RecoveryPasswordCode;
 import org.globaroman.petshopba.model.user.Role;
 import org.globaroman.petshopba.model.user.User;
+import org.globaroman.petshopba.repository.FeedBackRepository;
 import org.globaroman.petshopba.repository.OrderRepository;
 import org.globaroman.petshopba.repository.RecoveryCodeRepository;
 import org.globaroman.petshopba.repository.RoleRepository;
 import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserRepository;
+import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.EmailSenderService;
+import org.globaroman.petshopba.service.TransliterationService;
+import org.globaroman.petshopba.service.UploadImageService;
 import org.globaroman.petshopba.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +63,11 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailSenderService emailSenderService;
+    private final AmazonS3Service amazonS3Service;
+    private final UploadImageService uploadImageService;
+    private final FeedBackRepository feedBackRepository;
+    private final TransliterationService transliterationService;
+    private final FeedbackMapper feedbackMapper;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
@@ -208,6 +222,74 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
+    @Override
+    public void handleFeedback(String message, MultipartFile[] files,
+                               Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        List<String> fileUrls = new ArrayList<>();
+        Feedback feedback = new Feedback();
+        feedback.setFirstName(user.getFirstName());
+        feedback.setLastName(user.getLastName());
+        feedback.setEmail(user.getEmail());
+        feedback.setPhone(user.getPhone());
+        feedback.setMessage(message);
+
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                fileUrls.add(amazonS3Service.uploadImageFromFile(file,
+                            getStringObjectKey(file.getOriginalFilename())));
+            }
+        }
+
+        feedback.setImageUrls(fileUrls);
+
+        feedBackRepository.save(feedback);
+
+        sendMessageToUserAfterFeedback(user, feedback.getId());
+        sendMessageToManagement(user, feedback);
+    }
+
+    @Override
+    public List<UserFeedbackDto> getAllFeedback() {
+        return feedBackRepository.findAll().stream()
+                .map(feedbackMapper::toDto)
+                .toList();
+    }
+
+    private void sendMessageToManagement(User user, Feedback feedback) {
+        String imageUrls = String.join(",\n", feedback.getImageUrls());
+
+        String message = "Від: " + user.getEmail() + "\n"
+                + user.getFirstName() + " " + user.getLastName() + "\n"
+                + "Телефон: " + user.getPhone() + "\n"
+                + "Повідомлення: " + feedback.getMessage() + "\n"
+                + imageUrls;
+
+        emailSenderService.sendEmail(
+                user.getEmail(),
+                EmailSenderServiceImpl.hostEmail,
+                "Feedback N#" + feedback.getId(),
+                message);
+    }
+
+    private void sendMessageToUserAfterFeedback(User user, Long id) {
+        emailSenderService.sendEmail("OneGroom.com.ua",
+                user.getEmail(),
+                "Дякуємо за ваше звернення!",
+
+                "Шановний(а)" + user.getFirstName() + "!\n"
+                        + "Дякуємо за те, що звернулися до нас! Ми отримали ваше повідомлення"
+                        + " N " + id + " і вже працюємо над його розглядом.\n"
+                        + "Наші фахівці ознайомляться з вашим зверненням та нададуть "
+                        + "відповідь якнайшвидше."
+                        + "У разі потреби додаткової інформації, ми зв'яжемося з вами за вказаними "
+                        + "контактними даними.\n"
+                        + "Якщо у вас є ще які-небудь питання або вам потрібна додаткова допомога, "
+                        + "не соромтеся звертатися до нас.\n"
+                        + "Дякуємо за довіру і співпрацю!\n"
+                        + "З повагою, команда OneGroom!");
+    }
+
     private void sendMessageToUser(User user, String code) {
         emailSenderService.sendEmail(
                     "OneGroom.com.ua",
@@ -248,5 +330,24 @@ public class UserServiceImpl implements UserService {
                     log.error("Can't find role with id: " + id);
                     return new UsernameNotFoundException("Can't find role with id: " + id);
                 });
+    }
+
+    private String getStringObjectKey(String nameProduct) {
+        Random random = new Random();
+        int nameImage = random.nextInt(10000);
+
+        String latinLine = transliterationService.getLatinStringLine(nameProduct);
+
+        return "_" + getNameProductShort(latinLine) + "_" + nameImage + ".jpg";
+
+    }
+
+    private String getNameProductShort(String name) {
+        String[] splStr = name.split(" ");
+        if (splStr.length > 3) {
+            return splStr[0] + " " + splStr[1] + " " + splStr[2];
+        } else {
+            return name;
+        }
     }
 }

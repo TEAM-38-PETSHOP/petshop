@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -70,6 +71,14 @@ public class OrderController {
             @RequestBody OrderStatusDto statusDto,
             @PathVariable Long id) {
         return orderService.updateStatusToOrder(statusDto, id);
+    }
+
+    @PutMapping("/update-cancel/{id}")
+    @Operation(summary = "Update status order as CANCELED",
+            description = "You can update an order as CANCELED.")
+    public ResponseOrderDto updateOrderToCanceled(@PathVariable Long id,
+                                                  Authentication authentication) {
+        return orderService.updateOrderToCanceled(id, authentication);
     }
 
     @DeleteMapping("/{orderId}")
