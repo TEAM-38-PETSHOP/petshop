@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
-import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
 import org.globaroman.petshopba.service.OrderService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -72,6 +73,14 @@ public class OrderController {
         return orderService.updateStatusToOrder(statusDto, id);
     }
 
+    @PutMapping("/update-cancel/{id}")
+    @Operation(summary = "Update status order as CANCELED",
+            description = "You can update an order as CANCELED.")
+    public ResponseOrderDto updateOrderToCanceled(@PathVariable Long id,
+                                                  Authentication authentication) {
+        return orderService.updateOrderToCanceled(id, authentication);
+    }
+
     @DeleteMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete order",
@@ -83,8 +92,8 @@ public class OrderController {
     @GetMapping("/admin")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-    public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
-        return orderService.getAllOrderForAdmin(parameterDto);
+    public List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable) {
+        return orderService.getAllOrderForAdmin(pageable);
     }
 
     @GetMapping("/{orderId}")

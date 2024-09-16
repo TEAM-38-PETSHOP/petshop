@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.globaroman.petshopba.exception.DataProcessingException;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
@@ -81,13 +83,14 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public String uploadImage(String path, String objectKey) {
+    public String uploadImageFromFile(MultipartFile file, String objectKey) {
         try {
             AmazonS3 s3Client = getS3Client();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
 
-            PutObjectRequest request = new PutObjectRequest(bucketName, objectKey, new File(path));
-            s3Client.putObject(request);
-
+            s3Client.putObject(bucketName, objectKey, file.getInputStream(), metadata);
             s3Client.setObjectAcl(bucketName, objectKey, CannedAccessControlList.PublicReadWrite);
 
             GeneratePresignedUrlRequest generatePresignedUrlRequest =
@@ -96,9 +99,9 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
             return "https://" + url.getHost() + url.getPath();
 
-        } catch (SdkClientException e) {
-            log.error("Can not load image: " + path + " to S3", e);
-            throw new DataProcessingException("Can not load image: " + path + " to S3", e);
+        } catch (SdkClientException | IOException e) {
+            log.error("Can not load image to S3", e);
+            throw new DataProcessingException("Can not load image to S3", e);
         }
     }
 

@@ -13,7 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderNoNameRequestDto;
 import org.globaroman.petshopba.dto.ordercart.CreateOrderRequestDto;
 import org.globaroman.petshopba.dto.ordercart.OrderStatusDto;
-import org.globaroman.petshopba.dto.ordercart.PeriodDataParameterDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderDto;
 import org.globaroman.petshopba.dto.ordercart.ResponseOrderItemDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -37,6 +36,7 @@ import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserTempRepository;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.OrderService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -83,8 +83,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ResponseOrderDto> getAllOrderForAdmin(PeriodDataParameterDto parameterDto) {
-        return null;
+    public List<ResponseOrderDto> getAllOrderForAdmin(Pageable pageable) {
+        return orderRepository.findAll(pageable).stream()
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -100,6 +102,25 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return "Order with id:" + orderId + " was successfully deleted";
+    }
+
+    @Override
+    public ResponseOrderDto updateOrderToCanceled(Long id, Authentication authentication) {
+        Order order = getOrderById(id);
+        User user = (User) authentication.getPrincipal();
+
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+
+        if (orders.contains(order)
+                && order.getStatus().equals(Status.PENDING)
+                || order.getStatus().equals(Status.PROCESSING)) {
+            order.setStatus(Status.CANCELLED);
+            return orderMapper.toDto(orderRepository.save(order));
+        } else {
+            throw new RuntimeException("Something went wrong. "
+                    + "Probably the order formation stage does "
+                    + "not allow changing the order status");
+        }
     }
 
     @Override

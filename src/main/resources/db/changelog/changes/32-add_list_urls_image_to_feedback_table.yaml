@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: add__feedback_table
+      author: globaroman.org
+      changes:
+        - createTable:
+            tableName: feedbacks
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: phone
+                  type: VARCHAR(50)
+              - column:
+                  name: message
+                  type: TEXT
+
+  - changeSet:
+      id: add_list_urls_image_to_feedback_table
+      author: globaroman.org
+      changes:
+        - createTable:
+            tableName: feedbacks_image_urls
+            columns:
+              - column:
+                  name: feedback_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(255)
+        - addForeignKeyConstraint:
+            baseTableName: feedbacks_image_urls
+            baseColumnNames: feedback_id
+            referencedTableName: feedbacks
+            referencedColumnNames: id
+            constraintName: fk_feedback_image_urls_feedback
+            onDelete: CASCADE
+
+
