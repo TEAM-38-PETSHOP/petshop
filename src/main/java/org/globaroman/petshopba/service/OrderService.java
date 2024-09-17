@@ -27,4 +27,6 @@ public interface OrderService {
     String deleteOrder(Long id, Authentication authentication);
 
     ResponseOrderDto updateOrderToCanceled(Long id, Authentication authentication);
+
+    ResponseOrderDto renewOrder(Long orderId, Authentication authentication);
 }
