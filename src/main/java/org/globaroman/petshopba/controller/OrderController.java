@@ -73,12 +73,20 @@ public class OrderController {
         return orderService.updateStatusToOrder(statusDto, id);
     }
 
-    @PutMapping("/update-cancel/{id}")
+    @PutMapping("/update-cancel/{orderId}")
     @Operation(summary = "Update status order as CANCELED",
             description = "You can update an order as CANCELED.")
-    public ResponseOrderDto updateOrderToCanceled(@PathVariable Long id,
+    public ResponseOrderDto updateOrderToCanceled(@PathVariable Long orderId,
                                                   Authentication authentication) {
-        return orderService.updateOrderToCanceled(id, authentication);
+        return orderService.updateOrderToCanceled(orderId, authentication);
+    }
+
+    @PutMapping("/renew/{orderId}")
+    @Operation(summary = "Update status order as PENDING",
+            description = "You can renew an order and update status as PENDING")
+    public ResponseOrderDto renewOrder(@PathVariable Long orderId,
+                                       Authentication authentication) {
+        return orderService.renewOrder(orderId, authentication);
     }
 
     @DeleteMapping("/{orderId}")

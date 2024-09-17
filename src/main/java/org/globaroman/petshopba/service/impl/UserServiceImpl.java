@@ -41,6 +41,7 @@ import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.TransliterationService;
 import org.globaroman.petshopba.service.UploadImageService;
 import org.globaroman.petshopba.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +55,9 @@ public class UserServiceImpl implements UserService {
     private static final Long USER_ROLE_ID =
             (long) Role.RoleName.USER.ordinal() + 1;
     private static final int CODE_SIZE = 6;
+
+    @Value("${mail.login}")
+    private String hostEmail;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -267,7 +271,7 @@ public class UserServiceImpl implements UserService {
 
         emailSenderService.sendEmail(
                 user.getEmail(),
-                EmailSenderServiceImpl.hostEmail,
+                hostEmail,
                 "Feedback N#" + feedback.getId(),
                 message);
     }

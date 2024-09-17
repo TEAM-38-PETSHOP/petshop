@@ -7,5 +7,7 @@ public enum Status {
     DELIVERED,
     COMPLETED,
     CANCELLED,
-    REFUNDED
+    REFUNDED,
+    DELITED,
+    RENEW
 }

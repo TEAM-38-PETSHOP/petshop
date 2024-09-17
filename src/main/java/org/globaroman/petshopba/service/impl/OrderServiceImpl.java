@@ -36,6 +36,7 @@ import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserTempRepository;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.OrderService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Log4j2
 public class OrderServiceImpl implements OrderService {
+
+    @Value("${mail.login}")
+    private String hostEmail;
 
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
@@ -67,6 +71,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = getOrderFromShoppingCart(user, savedAddress);
 
         sendMassageToUserAboutOrder(order);
+        sendMassageToAdmin(user, order);
+
         return orderMapper.toDto(orderRepository.save(order));
     }
 
@@ -77,7 +83,9 @@ public class OrderServiceImpl implements OrderService {
         Address savedAddress = addressRepository.save(address);
         List<CartItem> cartItems = getCartItemsFromDto(requestDto);
         Order order = getOrderForTemplateUsers(user, savedAddress, cartItems);
+
         sendMassageToUserAboutOrder(order);
+        sendMassageToAdmin(user, order);
 
         return orderMapper.toDto(orderRepository.save(order));
     }
@@ -95,9 +103,20 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = getOrderById(orderId);
 
-        if (user.equals(order.getUser()) && order.getStatus().equals(Status.PENDING)) {
+        if (user.equals(order.getUser())
+                && order.getStatus().equals(Status.PENDING)
+                || order.getStatus().equals(Status.CANCELLED)
+                || order.getStatus().equals(Status.DELIVERED)
+                || order.getStatus().equals(Status.COMPLETED)) {
+
+            if (order.getStatus().equals(Status.PENDING)) {
+                senMessageToAdminAboutChangeStatus(user, order, Status.DELITED);
+            }
+
             orderRepository.delete(order);
+
         } else {
+
             return "Order with id:" + orderId + " cannot be deleted.";
         }
 
@@ -109,18 +128,41 @@ public class OrderServiceImpl implements OrderService {
         Order order = getOrderById(id);
         User user = (User) authentication.getPrincipal();
 
-        List<Order> orders = orderRepository.findAllByUserId(user.getId());
-
-        if (orders.contains(order)
+        if (order.getUser().equals(user)
                 && order.getStatus().equals(Status.PENDING)
                 || order.getStatus().equals(Status.PROCESSING)) {
+
             order.setStatus(Status.CANCELLED);
+            senMessageToAdminAboutChangeStatus(user, order, Status.CANCELLED);
+
             return orderMapper.toDto(orderRepository.save(order));
+
         } else {
+
             throw new RuntimeException("Something went wrong. "
                     + "Probably the order formation stage does "
                     + "not allow changing the order status");
         }
+    }
+
+    @Override
+    public ResponseOrderDto renewOrder(Long orderId, Authentication authentication) {
+        Order order = getOrderById(orderId);
+        User user = (User) authentication.getPrincipal();
+
+        if (order.getUser().equals(user)) {
+            order.setStatus(Status.PENDING);
+
+            sendMassageToUserAboutOrder(order);
+            sendMassageToAdmin(user, order);
+
+            return orderMapper.toDto(orderRepository.save(order));
+
+        } else {
+
+            throw new RuntimeException("Something went wrong!");
+        }
+
     }
 
     @Override
@@ -164,6 +206,36 @@ public class OrderServiceImpl implements OrderService {
                 }
         );
         return orderItemMapper.toDto(orderItem);
+    }
+
+    private void senMessageToAdminAboutChangeStatus(User user, Order order, Status status) {
+        emailSenderService.sendEmail(user.getEmail(),
+                hostEmail,
+                "Зміна статусу замовлення " + order.getId(),
+                "Користувач " + user.getFirstName() + " " + user.getLastName() + "\n"
+                        + user.getEmail() + " тел. " + user.getPhone() + "\n"
+                        + order.getId() + "\n"
+                + "змінив статус замовлення на " + status.name());
+    }
+
+    private void sendMassageToAdmin(User user, Order order) {
+
+        emailSenderService.sendEmail(user.getEmail(),
+                hostEmail,
+                "Нове замовлення " + order.getId(),
+                "Користувач " + user.getFirstName() + " " + user.getLastName() + "\n"
+                + user.getEmail() + " тел. " + user.getPhone() + "\n"
+                + "Замовлення N# " + order.getId());
+    }
+
+    private void sendMassageToAdmin(UserTemp user, Order order) {
+
+        emailSenderService.sendEmail(user.getEmail(),
+                hostEmail,
+                "Нове замовлення " + order.getId(),
+                "Користувач " + user.getFirstName() + " " + user.getLastName() + "\n"
+                        + user.getEmail() + " тел. " + user.getPhone() + "\n"
+                        + "Замовлення N# " + order.getId());
     }
 
     private void sendMassageToUserAboutOrder(Order order) {
