@@ -8,6 +8,6 @@ public enum Status {
     COMPLETED,
     CANCELLED,
     REFUNDED,
-    DELITED,
+    DELETED,
     RENEW
 }
