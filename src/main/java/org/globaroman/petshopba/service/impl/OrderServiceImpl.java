@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -110,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
                 || order.getStatus().equals(Status.COMPLETED)) {
 
             if (order.getStatus().equals(Status.PENDING)) {
-                senMessageToAdminAboutChangeStatus(user, order, Status.DELITED);
+                senMessageToAdminAboutChangeStatus(user, order, Status.DELETED);
             }
 
             orderRepository.delete(order);
@@ -151,18 +152,32 @@ public class OrderServiceImpl implements OrderService {
         User user = (User) authentication.getPrincipal();
 
         if (order.getUser().equals(user)) {
-            order.setStatus(Status.PENDING);
 
-            sendMassageToUserAboutOrder(order);
-            sendMassageToAdmin(user, order);
+            Order newOrder = getnstanceNewOrder(order, user);
+            Order savedOrder = orderRepository.save(newOrder);
 
-            return orderMapper.toDto(orderRepository.save(order));
+            Set<OrderItem> items = new HashSet<>();
+
+            for (OrderItem item : order.getOrderItems()) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setPrice(item.getPrice());
+                orderItem.setQuantity(item.getQuantity());
+                orderItem.setProduct(item.getProduct());
+                orderItem.setOrder(savedOrder);
+                items.add(orderItemRepository.save(orderItem));
+            }
+
+            savedOrder.setOrderItems(items);
+            orderRepository.save(savedOrder);
+
+            sendMassageToUserAboutOrder(savedOrder);
+            sendMassageToAdmin(user, savedOrder);
+
+            return orderMapper.toDto(savedOrder);
 
         } else {
-
             throw new RuntimeException("Something went wrong!");
         }
-
     }
 
     @Override
@@ -185,6 +200,18 @@ public class OrderServiceImpl implements OrderService {
     public List<ResponseOrderItemDto> getOrderItensFromOrder(Long orderId) {
         Order order = getOrderById(orderId);
         return orderMapper.orderItemsToDtos(order.getOrderItems());
+    }
+
+    private Order getnstanceNewOrder(Order order, User user) {
+        Order newOrder = new Order();
+
+        newOrder.setStatus(Status.PENDING);
+        newOrder.setOrderDate(LocalDateTime.now());
+        newOrder.setAddress(order.getAddress());
+        newOrder.setTotal(order.getTotal());
+        newOrder.setUser(user);
+
+        return newOrder;
     }
 
     private Order getOrderById(Long orderId) {
