@@ -63,3 +63,5 @@ databaseChangeLog:
       file: /db/changelog/changes/31-create-codes_for_recovery_password-table.yaml
   - include:
       file: /db/changelog/changes/32-add_list_urls_image_to_feedback_table.yaml
+  - include:
+      file: /db/changelog/changes/33-add_field_experience_to_feedback_tables.yaml

@@ -114,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
                 senMessageToAdminAboutChangeStatus(user, order, Status.DELETED);
             }
 
+            addressRepository.delete(order.getAddress());
             orderRepository.delete(order);
 
         } else {
@@ -159,10 +160,7 @@ public class OrderServiceImpl implements OrderService {
             Set<OrderItem> items = new HashSet<>();
 
             for (OrderItem item : order.getOrderItems()) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setPrice(item.getPrice());
-                orderItem.setQuantity(item.getQuantity());
-                orderItem.setProduct(item.getProduct());
+                OrderItem orderItem = getOrdenItemFromOldOrder(item);
                 orderItem.setOrder(savedOrder);
                 items.add(orderItemRepository.save(orderItem));
             }
@@ -178,6 +176,14 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new RuntimeException("Something went wrong!");
         }
+    }
+
+    private OrderItem getOrdenItemFromOldOrder(OrderItem item) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setPrice(item.getPrice());
+        orderItem.setQuantity(item.getQuantity());
+        orderItem.setProduct(item.getProduct());
+        return orderItem;
     }
 
     @Override
@@ -202,27 +208,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderItemsToDtos(order.getOrderItems());
     }
 
-    private Order getnstanceNewOrder(Order order, User user) {
-        Order newOrder = new Order();
-
-        newOrder.setStatus(Status.PENDING);
-        newOrder.setOrderDate(LocalDateTime.now());
-        newOrder.setAddress(order.getAddress());
-        newOrder.setTotal(order.getTotal());
-        newOrder.setUser(user);
-
-        return newOrder;
-    }
-
-    private Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(
-                () -> {
-                    log.error("Can't find order with id: " + orderId);
-                    return new EntityNotFoundCustomException(
-                            "Can't find order with id: " + orderId);
-                });
-    }
-
     @Override
     public ResponseOrderItemDto getOrderItemById(Long itemId) {
         OrderItem orderItem = orderItemRepository.findById(itemId).orElseThrow(
@@ -233,6 +218,39 @@ public class OrderServiceImpl implements OrderService {
                 }
         );
         return orderItemMapper.toDto(orderItem);
+    }
+
+    private Order getnstanceNewOrder(Order order, User user) {
+        Order newOrder = new Order();
+
+        newOrder.setStatus(Status.PENDING);
+        newOrder.setOrderDate(LocalDateTime.now());
+        newOrder.setAddress(
+                getAddressFromOrder(order.getAddress()));
+        newOrder.setTotal(order.getTotal());
+        newOrder.setUser(user);
+
+        return newOrder;
+    }
+
+    private Address getAddressFromOrder(Address order) {
+        Address address = new Address();
+        address.setCity(order.getCity());
+        address.setStreet(order.getStreet());
+        address.setBuilding(order.getBuilding());
+        address.setApartment(order.getApartment());
+        address.setOfficeNovaPost(order.getOfficeNovaPost());
+        address.setComment(order.getComment());
+        return addressRepository.save(address);
+    }
+
+    private Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(
+                () -> {
+                    log.error("Can't find order with id: " + orderId);
+                    return new EntityNotFoundCustomException(
+                            "Can't find order with id: " + orderId);
+                });
     }
 
     private void senMessageToAdminAboutChangeStatus(User user, Order order, Status status) {
