@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void handleFeedback(String message, MultipartFile[] files,
+    public void handleFeedback(String message, String experience, MultipartFile[] files,
                                Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<String> fileUrls = new ArrayList<>();
@@ -236,6 +236,7 @@ public class UserServiceImpl implements UserService {
         feedback.setLastName(user.getLastName());
         feedback.setEmail(user.getEmail());
         feedback.setPhone(user.getPhone());
+        feedback.setExperience(experience);
         feedback.setMessage(message);
 
         for (MultipartFile file : files) {
@@ -272,7 +273,7 @@ public class UserServiceImpl implements UserService {
         emailSenderService.sendEmail(
                 user.getEmail(),
                 hostEmail,
-                "Feedback N#" + feedback.getId(),
+                "Feedback N#" + feedback.getId() + " щодо " + feedback.getExperience(),
                 message);
     }
 

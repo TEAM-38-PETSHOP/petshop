@@ -15,6 +15,7 @@ public class UserFeedbackDto implements Serializable {
     private String lastName;
     private String email;
     private String phone;
+    private String experience;
     private String message;
     private List<String> imageUrls;
 }

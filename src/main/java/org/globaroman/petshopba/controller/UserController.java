@@ -52,9 +52,12 @@ public class UserController {
     @PostMapping("/feedbacks")
     @Operation(summary = "Feedback from an exist user's profile")
     public ResponseEntity<String> handleFeedBackFromUser(@RequestParam("message") String message,
-                                                      @RequestParam("files") MultipartFile[] files,
-                                                      Authentication authentication) {
-        userService.handleFeedback(message, files, authentication);
+                                                         @RequestParam("experience")
+                                                         String experience,
+                                                      @RequestParam("files") MultipartFile[]files,
+                                                         Authentication authentication) {
+
+        userService.handleFeedback(message, experience, files, authentication);
         return ResponseEntity.ok("Feedback received successfully!");
     }
 

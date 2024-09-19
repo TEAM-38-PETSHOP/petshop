@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_field_experience_to_feedback_tables
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: feedbacks
+            columns:
+              - column:
+                  name: experience
+                  type: varchar(50)

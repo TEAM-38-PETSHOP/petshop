@@ -29,6 +29,7 @@ public class Feedback {
     private String lastName;
     private String email;
     private String phone;
+    private String experience;
     private String message;
 
     @ElementCollection

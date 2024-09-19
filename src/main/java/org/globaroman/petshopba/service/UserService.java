@@ -33,7 +33,10 @@ public interface UserService {
     UserResponseDto updateProfile(UpdateProfileUserRequestDto requestDto,
                                   Authentication authentication);
 
-    void handleFeedback(String message, MultipartFile[] file, Authentication authentication);
+    void handleFeedback(String message,
+                        String experience,
+                        MultipartFile[] file,
+                        Authentication authentication);
 
     List<UserFeedbackDto> getAllFeedback();
 }
