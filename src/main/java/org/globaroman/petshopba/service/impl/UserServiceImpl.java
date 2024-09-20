@@ -36,10 +36,10 @@ import org.globaroman.petshopba.repository.RecoveryCodeRepository;
 import org.globaroman.petshopba.repository.RoleRepository;
 import org.globaroman.petshopba.repository.ShoppingCartRepository;
 import org.globaroman.petshopba.repository.UserRepository;
+import org.globaroman.petshopba.repository.WishListRepository;
 import org.globaroman.petshopba.service.AmazonS3Service;
 import org.globaroman.petshopba.service.EmailSenderService;
 import org.globaroman.petshopba.service.TransliterationService;
-import org.globaroman.petshopba.service.UploadImageService;
 import org.globaroman.petshopba.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -68,10 +68,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailSenderService emailSenderService;
     private final AmazonS3Service amazonS3Service;
-    private final UploadImageService uploadImageService;
     private final FeedBackRepository feedBackRepository;
     private final TransliterationService transliterationService;
     private final FeedbackMapper feedbackMapper;
+    private final WishListRepository wishListRepository;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
                             + requestDto.getEmail()
                             + " already exist");
         }
+
         User user = getUserWithRoleAndPasswordEncode(requestDto);
         return userMapper.toDto(userRepository.save(user));
     }
@@ -116,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String deleteById(Long id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Role userRole = roleRepository.findByRole(Role.RoleName.ADMIN).orElseThrow(
@@ -128,12 +130,14 @@ public class UserServiceImpl implements UserService {
 
         if (user.getRoles().contains(userRole)) {
             deleteOrder(id);
+            deleteWishLIst(user);
             userRepository.deleteById(id);
             return "User by id:" + id + " successfully deleted";
         }
 
         if (Objects.equals(user.getId(), id)) {
             deleteOrder(id);
+            deleteWishLIst(user);
             userRepository.deleteById(id);
             return "User by id:" + id + " successfully deleted";
         }
@@ -150,13 +154,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean getCodeForNewPassword(UserEmailForRecovePasswordRequestDto requestDto) {
 
-        User user = userRepository.findByEmail(requestDto.email()).orElseThrow(
-                () -> {
-                    log.error("No found user by email: " + requestDto.email());
-                    return new EntityNotFoundCustomException("No found user by email: "
-                            + requestDto.email());
-                }
-        );
+        User user = getUserFromDBbyEmail(requestDto.email());
 
         String code = createCodeForRecovery();
 
@@ -164,8 +162,6 @@ public class UserServiceImpl implements UserService {
         recoveryPasswordCode.setEmail(user.getEmail());
         recoveryPasswordCode.setCode(code);
         recoveryCodeRepository.save(recoveryPasswordCode);
-
-        CodeForNewPasswordRequestDto responseDto = new CodeForNewPasswordRequestDto(code);
 
         sendMessageToUser(user, code);
 
@@ -187,11 +183,7 @@ public class UserServiceImpl implements UserService {
         }
 
         RecoveryPasswordCode recoveryPasswordCode = codeOptional.get();
-        User user = userRepository.findByEmail(recoveryPasswordCode.getEmail()).orElseThrow(() -> {
-            log.error("No found user by email: " + recoveryPasswordCode.getEmail());
-            return new EntityNotFoundCustomException("No found user by email: "
-                    + recoveryPasswordCode.getEmail());
-        });
+        User user = getUserFromDBbyEmail(recoveryPasswordCode.getEmail());
 
         user.setPassword(passwordEncoder.encode(requestDto.password()));
         userRepository.save(user);
@@ -231,6 +223,7 @@ public class UserServiceImpl implements UserService {
                                Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<String> fileUrls = new ArrayList<>();
+
         Feedback feedback = new Feedback();
         feedback.setFirstName(user.getFirstName());
         feedback.setLastName(user.getLastName());
@@ -259,6 +252,23 @@ public class UserServiceImpl implements UserService {
         return feedBackRepository.findAll().stream()
                 .map(feedbackMapper::toDto)
                 .toList();
+    }
+
+    private User getUserFromDBbyEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> {
+                    log.error("No found user by email: " + email);
+                    return new EntityNotFoundCustomException("No found user by email: "
+                            + email);
+                }
+        );
+    }
+
+    private void deleteWishLIst(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        wishListRepository.deleteByUser(user);
     }
 
     private void sendMessageToManagement(User user, Feedback feedback) {
