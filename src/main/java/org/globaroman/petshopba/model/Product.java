@@ -61,6 +61,8 @@ public class Product {
     private String instructionWhyBuy;
     @Column(name = "entry_date")
     private LocalDateTime entryDate;
+    @Column(name = "is_available")
+    private boolean isAvailable;
 
     @ManyToMany
     @JoinTable(

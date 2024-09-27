@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.globaroman.petshopba.dto.wishlist.CreateWishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishListResponseDto;
 import org.globaroman.petshopba.exception.EntityNotFoundCustomException;
@@ -31,32 +32,31 @@ public class WishListServiceImpl implements WishListService {
     private final WishListMapper wishListMapper;
 
     @Override
-    public WishListResponseDto addProduct(WishItemRequestDto requestDto,
+    public WishListResponseDto addProduct(CreateWishItemRequestDto requestDto,
                                           Authentication authentication) {
 
         User user = (User) authentication.getPrincipal();
 
         WishList wishList = getWishLIstFromDbOrNew(user);
 
-        Product requestProduct = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> {
-                    log.error("Can't find product with id: " + requestDto.getProductId());
-                    return new EntityNotFoundCustomException(
-                            "Can't find product with id: " + requestDto.getProductId());
-                });
+        for (WishItemRequestDto dto : requestDto.getWishItemRequestDtos()) {
+            Product requestProduct = productRepository.findById(dto.getProductId())
+                    .orElseThrow(() -> {
+                        log.error("Can't find product with id: " + dto.getProductId());
+                        return new EntityNotFoundCustomException(
+                                "Can't find product with id: " + dto.getProductId());
+                    });
 
-        if (isProduct(wishList, requestProduct)) {
-            return wishListMapper.toDto(wishList);
+            if (isProduct(wishList, requestProduct)) {
+                continue;
+            }
+
+            WishItem wishItem = new WishItem();
+            wishItem.setProduct(requestProduct);
+            wishItem.setWishList(wishList);
+
+            wishList.getWishItems().add(wishItem); // не зберігаємо відразу
         }
-
-        WishItem wishItem = new WishItem();
-
-        wishItem.setProduct(requestProduct);
-        wishItem.setWishList(wishList);
-
-        WishItem savedWishItem = wishItemRepository.save(wishItem);
-
-        wishList.getWishItems().add(savedWishItem);
 
         wishListRepository.save(wishList);
 

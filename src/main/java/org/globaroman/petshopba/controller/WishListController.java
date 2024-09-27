@@ -3,7 +3,7 @@ package org.globaroman.petshopba.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.globaroman.petshopba.dto.wishlist.WishItemRequestDto;
+import org.globaroman.petshopba.dto.wishlist.CreateWishItemRequestDto;
 import org.globaroman.petshopba.dto.wishlist.WishListResponseDto;
 import org.globaroman.petshopba.service.WishListService;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class WishListController {
     @Operation(summary = "Add new product - create wish list",
             description = "You can create wish list and add new product to your wish list")
     public WishListResponseDto addProductCreateCart(
-            @RequestBody WishItemRequestDto requestDto,
+            @RequestBody CreateWishItemRequestDto requestDto,
             Authentication authentication) {
         return wishListService.addProduct(requestDto, authentication);
     }

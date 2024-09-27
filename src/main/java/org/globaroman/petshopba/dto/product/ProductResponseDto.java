@@ -31,6 +31,7 @@ public class ProductResponseDto implements Serializable {
     private String compositionExpiration;
     private String instruction;
     private String instructionWhyBuy;
+    private boolean isAvailable;
     private LocalDateTime entryDate;
     private List<ResponseAnimalDto> animals;
     private List<ResponseCategoryDto> categories;
