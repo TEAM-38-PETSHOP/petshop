@@ -26,6 +26,7 @@ public class CreateRequestProductDto implements Serializable {
     private String compositionExpiration;
     private String instruction;
     private String instructionWhyBuy;
+    private boolean isAvailable;
     private List<Long> animalsId;
     private List<Long> categoriesId;
 }
