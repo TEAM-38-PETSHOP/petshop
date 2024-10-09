@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_fields_weight_clazz_color_ets_to_products
+      author: org.globaroman
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: clazz
+                  type: varchar(500)
+              - column:
+                  name: weight
+                  type: varchar(50)
+              - column:
+                  name: season
+                  type: varchar(505)
+              - column:
+                  name: color
+                  type: varchar(50)
+              - column:
+                  name: destination
+                  type: varchar(500)
+              - column:
+                  name: age_animal
+                  type: varchar(50)
+
