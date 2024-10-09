@@ -67,3 +67,5 @@ databaseChangeLog:
       file: /db/changelog/changes/33-add_field_experience_to_feedback_tables.yaml
   - include:
       file: /db/changelog/changes/34-add_fields_is_avaible_to_product_table.yaml
+  - include:
+      file: /db/changelog/changes/35-add_fields_weight_clazz_color_ets_to_products.yaml

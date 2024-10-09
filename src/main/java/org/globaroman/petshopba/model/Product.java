@@ -50,6 +50,7 @@ public class Product {
     private String season;
     private String color;
     private String destination;
+    @Column(name = "age_animal")
     private String ageAnimal;
     private String packaging;
     @Column(name = "product_size")
