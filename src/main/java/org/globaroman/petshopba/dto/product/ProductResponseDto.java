@@ -22,6 +22,12 @@ public class ProductResponseDto implements Serializable {
     private String groupProduct;
     private String breedSize;
     private String type;
+    private String clazz;
+    private String weight;
+    private String season;
+    private String color;
+    private String destination;
+    private String ageAnimal;
     private String packaging;
     private String productSize;
     private String description;

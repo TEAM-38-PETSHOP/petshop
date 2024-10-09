@@ -45,6 +45,12 @@ public class Product {
     @Column(name = "breed_size")
     private String breedSize;
     private String type;
+    private String clazz;
+    private String weight;
+    private String season;
+    private String color;
+    private String destination;
+    private String ageAnimal;
     private String packaging;
     @Column(name = "product_size")
     private String productSize;
