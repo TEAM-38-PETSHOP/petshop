@@ -53,8 +53,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Long id) {
-        categoryRepository.deleteById(id);
+    public boolean delete(Long id) {
+        return categoryRepository.findById(id)
+                .map(c -> {
+                    categoryRepository.deleteById(id);
+                    return true;
+                }).orElse(false);
     }
 
     private Category getCategoryFromDb(Long id) {

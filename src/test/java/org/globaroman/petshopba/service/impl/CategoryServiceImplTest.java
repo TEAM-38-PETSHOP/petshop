@@ -114,7 +114,8 @@ class CategoryServiceImplTest {
     @DisplayName("Delete the exist category -> get successful result")
     void delete_Category_ShouldDeleteExistCategoryAsResponseDto() {
         Category category = getCategory();
-
+        Mockito.when(categoryRepository.findById(category.getId()))
+                .thenReturn(Optional.of(category));
         categoryService.delete(category.getId());
 
         Mockito.verify(categoryRepository, Mockito.times(1)).deleteById(1L);
