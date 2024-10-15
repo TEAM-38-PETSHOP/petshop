@@ -1,5 +1,6 @@
 package org.globaroman.petshopba.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Category {
     @Column(name = "category_name_id")
     private String categoryNameId;
     private String description;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Product> products;
 
     public Category(Long id) {

@@ -304,11 +304,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean delete(Long id) {
-        return productRepository.findById(id).map(product -> {
-            product.getImageUrls().forEach(amazonS3Service::deleteImage);
-            productRepository.deleteById(id);
-            return true;
-        }).orElse(false);
+        return productRepository.findById(id).map(
+                product -> {
+                    product.getImageUrls()
+                            .forEach(amazonS3Service::deleteImage);
+                    productRepository.deleteById(id);
+                    return true;
+                }
+        ).orElse(false);
     }
 
     private Product getProductFromDb(Long id) {

@@ -8,6 +8,7 @@ import org.globaroman.petshopba.dto.category.CreateRequestCategoryDto;
 import org.globaroman.petshopba.dto.category.ResponseCategoryDto;
 import org.globaroman.petshopba.service.CategoryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +70,15 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete category",
             description = "You can delete this category by its ID")
-    public void deleteCategoryById(@PathVariable Long id) {
-        categoryService.delete(id);
+    public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
+
+        boolean isDelete = categoryService.delete(id);
+
+        if (isDelete) {
+            return ResponseEntity.ok("Category was deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Something went wrong. Try again");
+        }
     }
 }
